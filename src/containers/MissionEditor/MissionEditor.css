@@ -1,0 +1,24 @@
+.missionEditor {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #ccc;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  background-color: #3861F4;
+  color: #fff;
+}
+
+.section {
+  margin: 20px 55px 20px;
+}
+
+.sectionHeader {
+  color: #3861F4;
+  font-size: 1.25em;
+  font-weight: normal;
+  margin-bottom: 6px;
+}

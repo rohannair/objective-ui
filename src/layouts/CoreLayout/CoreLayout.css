@@ -1,0 +1,40 @@
+@import '../../styles/globals';
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  background-color: $secondary;
+  display: flex;
+  width: 15%;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+
+  a {
+    display: block;
+
+    &:link,
+    &:visited {
+      padding: 10px;
+    }
+
+    &:hover{
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.body {
+  display: flex;
+  width: calc(85%);
+  padding: 40px;
+}

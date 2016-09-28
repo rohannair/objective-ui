@@ -1,0 +1,25 @@
+$primary: #3861F4;
+$secondary: #344055;
+$background: #F5F3F0;
+
+:global {
+  html,
+  body {
+    min-height: 100%;
+    font-family: Roboto, sans-serif;
+  }
+
+  a {
+
+    &:link,
+    &:visited {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    &:hover {
+
+    }
+  }
+
+}

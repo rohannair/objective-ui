@@ -1,0 +1,17 @@
+@import '../../../styles/globals';
+
+.header {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+}
+
+.logo {
+  align-items: center;
+  color: #fff;
+  font-family: 'Gotham';
+  font-weight: bold;
+  text-transform: uppercase;
+}

@@ -1,0 +1,36 @@
+.section {
+  padding: 75px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: #2E404E;
+}
+
+.sectionSplash {
+  composes: section;
+  padding: 150px 40px;
+  color: #fff;
+}
+
+.heading {
+  font-size: 2.25rem;
+}
+
+.splashHeading {
+  font-size: 3rem;
+  border-bottom: 1px solid #fff;
+  padding: 0 100px 15px;
+  margin-bottom: 15px;
+}
+
+.sub {
+  font-size: 1.125rem;
+  margin-bottom: 20px;
+}
+
+.splashSub {
+  font-size: 2.25rem;
+  padding-bottom: 20px;
+}
