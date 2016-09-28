@@ -9,6 +9,7 @@ import PublishedLayout from 'layouts/PublishedLayout';
 // Containers
 import Dashboard from 'containers/Dashboard';
 import MissionEditor from 'containers/MissionEditor';
+import MissionViewer from 'containers/MissionViewer';
 
 export default (store, history) => {
   return (
@@ -16,7 +17,8 @@ export default (store, history) => {
       <Route path="/" component={ CoreLayout }>
         <IndexRoute component={ Dashboard } />
         <Route path="dashboard" component={ Dashboard } />
-        <Route path="missions" component={ MissionEditor } />
+        <Route path="missions/edit" component={ MissionEditor } />
+        <Route path="missions/view" component={ MissionViewer } />
       </Route>
     </Router>
   )

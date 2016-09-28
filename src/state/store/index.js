@@ -6,7 +6,11 @@ import createReducer from 'state/reducers';
 import createLogger from 'redux-logger';
 
 const sagaMiddleware = createSagaMiddleware();
-const loggerMiddleware = (__DEV__) ? createLogger() : (() => noop => noop);
+const loggerMiddleware = (__DEV__)
+? createLogger({
+  stateTransformer: state => state && state.toJS()
+})
+: (() => noop => noop);
 
 const devtools = window.devToolsExtension || (() => noop => noop);
 

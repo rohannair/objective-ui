@@ -13,7 +13,7 @@
 }
 
 .section {
-  margin: 20px 55px 20px;
+  margin: 20px 55px 48px;
 }
 
 .sectionHeader {
@@ -21,4 +21,27 @@
   font-size: 1.25em;
   font-weight: normal;
   margin-bottom: 6px;
+}
+
+.okrSection {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+  padding-bottom: 20px;
+  /* border-bottom: 1px solid #EEE; */
+}
+
+.okrObjective,
+.okrResults {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 0 30px 6px 0;
+}
+
+.okrObjective {
+}
+
+.okrResults {
+
 }

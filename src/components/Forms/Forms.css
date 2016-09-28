@@ -1,0 +1,23 @@
+@define-mixin $form {
+  border-bottom: 1px solid #DBDBDB;
+  font-size: 1rem;
+  transition: border-bottom-color 0.4s ease;
+  padding: 8px 1px 8px;
+  width: 100%;
+  margin-bottom: 6px;
+
+  &:focus {
+    border-bottom-color: #3861F4;
+    outline: none;
+  }
+}
+
+.textInput {
+  @mixin $form;
+  line-height: 1;
+}
+
+.textArea {
+  @mixin $form;
+  line-height: 1.5;
+}

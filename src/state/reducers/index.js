@@ -1,9 +1,10 @@
 import { fromJS } from 'immutable';
 import { combineReducers } from 'redux-immutable';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { reducer as formReducer } from 'redux-form';
 
 import globalReducer from './global.reducer';
-import publishedKitReducer from './publishedKit.reducer';
+import missionReducer from './missions.reducer';
 
 // Initial routing state
 const routeInitialState = fromJS({
@@ -27,6 +28,7 @@ export default function createReducer() {
   return combineReducers({
     route: routeReducer,
     global: globalReducer,
-    publishedKit: publishedKitReducer
+    mission: missionReducer,
+    form: formReducer
   })
 }
