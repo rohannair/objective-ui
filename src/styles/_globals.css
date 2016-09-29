@@ -25,4 +25,8 @@ $background: #F5F3F0;
   li > ul {
     margin-left: 2rem;
   }
+
+  img {
+    width: 100%;
+  }
 }
