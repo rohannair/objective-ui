@@ -26,29 +26,9 @@
 .divider {
   width: 100%;
   border: 1px solid #f0f0f0;
+  margin-bottom: 10px;
 }
 
 .section {
   margin-bottom: 10px;
-}
-
-li {
-  list-style: none;
-  padding: 0.2rem 0;
-  font-weight: 100;
-}
-
-ul li ul li {
-  list-style: circle;
-  padding: 5px 0;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 0.3rem;
-}
-
-p {
-  line-height: 140%;
-  margin-bottom: 0.3rem;
-  font-weight: 100;
 }

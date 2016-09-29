@@ -23,11 +23,33 @@ $background: #F5F3F0;
     }
   }
 
-  li > ul {
-    margin-left: 2rem;
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    line-height: 140%;
+    margin-bottom: 0.3rem;
+    font-weight: 100;
   }
 
   img {
     width: 100%;
   }
+
+  li {
+    list-style: none;
+    padding: 0.2rem 0;
+    font-weight: 100;
+  }
+
+  li > ul {
+    margin-left: 2rem;
+  }
+
+  ul li ul li {
+    list-style: circle;
+    padding: 5px 0;
+  }
+
 }
