@@ -1,7 +1,10 @@
 .missionCard {
-  border: 1px solid #808080;
+  border: 1px solid #f0f0f0;
   border-radius: 4px;
   max-width: 500px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  background-color: #fff;
 }
 
 .header {
@@ -20,9 +23,24 @@
   padding: 10px;
 }
 
+.divider {
+  width: 100%;
+  border: 1px solid #f0f0f0;
+}
+
+.section {
+  margin-bottom: 10px;
+}
+
 li {
   list-style: none;
   padding: 0.2rem 0;
+  font-weight: 100;
+}
+
+ul li ul li {
+  list-style: circle;
+  padding: 5px 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -32,4 +50,5 @@ h1, h2, h3, h4, h5, h6 {
 p {
   line-height: 140%;
   margin-bottom: 0.3rem;
+  font-weight: 100;
 }
