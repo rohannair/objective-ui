@@ -2,45 +2,60 @@ import React from 'react';
 import Immutable from 'immutable';
 import { connect } from 'react-redux';
 
+// Deps
+import Card from 'components/Card';
+
+import styles from './MissionViewer.css';
+
 const MissionView = props =>
-  <div>
-    <h1>{ props.mission.get('name')}</h1>
-    <h2>Objective</h2>
-    <p>{props.mission.get('description')}</p>
+  <div className={ styles.missionCard }>
+    <div className={ styles.header }>
+      <div className={ styles.avatar }>
+        <img src="https://avatars.io/twitter/raykanani" />
+      </div>
+      <div className={ styles.profileDetails }>
+        <h4>Ray Kanani</h4>
+        <h5>{ props.mission.get('name')}</h5>
+      </div>
+    </div>
+    <Card>
+      <h4>Objective</h4>
+      <p>{props.mission.get('description')}</p>
 
-    <h2>Duration</h2>
-    <p>{props.mission.get('duration')}</p>
+      <h4>Duration</h4>
+      <p>{props.mission.get('duration')}</p>
 
-    <h2>Objectives and Key Results</h2>
-    <ul>
-      { props.mission.get('okrs').map(o =>
-        <li key={o.get('id')}>
-          {o.get('objective')}
-          <ul>
-            {
-              o.get('keyResults').map((r,i) =>
-                <li key={`${o.get('id')}-${i}`}>{r}</li>)
-            }
-          </ul>
-        </li>)
-      }
-    </ul>
+      <h4>Objectives and Key Results</h4>
+      <ul>
+        { props.mission.get('okrs').map(o =>
+          <li key={o.get('id')}>
+            {o.get('objective')}
+            <ul>
+              {
+                o.get('keyResults').map((r,i) =>
+                  <li key={`${o.get('id')}-${i}`}>{r}</li>)
+              }
+            </ul>
+          </li>)
+        }
+      </ul>
 
-    <h2>Personal Objectives</h2>
-    <ul>
-      {
-        props.mission.get('objectives').map(o =>
-          <li key={o.get('id')}>{o.get('name')}</li>)
-      }
-    </ul>
+      <h4>Personal Objectives</h4>
+      <ul>
+        {
+          props.mission.get('objectives').map(o =>
+            <li key={o.get('id')}>{o.get('name')}</li>)
+        }
+      </ul>
 
-    <h2>Resources</h2>
-    <ul>
-      {
-        props.mission.get('resources').map(o =>
-          <li key={o.get('id')}>{o.get('name')}</li>)
-      }
-    </ul>
+      <h4>Resources</h4>
+      <ul>
+        {
+          props.mission.get('resources').map(o =>
+            <li key={o.get('id')}>{o.get('name')}</li>)
+        }
+      </ul>
+    </Card>
   </div>
 
 const mapStateToProps = state => ({
