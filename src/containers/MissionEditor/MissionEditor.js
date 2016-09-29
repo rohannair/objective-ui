@@ -59,7 +59,7 @@ const MissionEditor = (props) => {
   return (
     <div className={ styles.missionEditor }>
       <h2 className={ styles.header }>
-        { `New Mission - ${mission.get('name')}` }
+        Mission editor
       </h2>
 
       <Card>
