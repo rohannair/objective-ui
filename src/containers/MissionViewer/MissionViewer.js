@@ -21,7 +21,7 @@ const MissionView = props =>
     <div className={ styles.divider }></div>
     <Card>
       <div className={ styles.section }>
-        <h4>Objective</h4>
+        <h4>Description</h4>
         <p>{props.mission.get('description')}</p>
       </div>
 
