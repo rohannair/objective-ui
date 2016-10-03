@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
@@ -5,12 +7,12 @@ import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import Root from 'containers/Root'
+import Root from './containers/Root';
 const ROOT_NODE = document.getElementById('app');
 
-import reducers from 'state/reducers';
-import configureStore from 'state/store';
-import configureRoutes from 'routes/index';
+import reducers from './state/reducers';
+import configureStore from './state/store';
+import configureRoutes from './routes/index';
 import { fromJS } from 'immutable';
 
 const store = configureStore({}, browserHistory);
@@ -32,7 +34,7 @@ let render = () => {
     </HotLoaderContainer>,
     ROOT_NODE
   );
-}
+};
 
 if (__DEV__) {
   if (module.hot) {
@@ -40,16 +42,16 @@ if (__DEV__) {
     const renderError = error => {
       const RedBox = require('redbox-react').default;
       ReactDOM.render(<RedBox error={error} />, ROOT_NODE);
-    }
+    };
 
     render = () => {
       try {
-        renderApp()
-      } catch(error) {
-        console.error(error)
-        renderApp()
+        renderApp();
+      } catch (error) {
+        console.error(error);
+        renderApp();
       }
-    }
+    };
 
     module.hot.accept('containers/Root', () => {
       const NextRoot = require('containers/Root').default;
@@ -61,7 +63,7 @@ if (__DEV__) {
           </HotLoaderContainer>,
           ROOT_NODE
         );
-      }
+      };
 
       setTimeout(() => {
         render();

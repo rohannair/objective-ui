@@ -8,5 +8,5 @@ const PORT = process.env.PORT || '8080';
 devServer.listen(PORT, HOST, (err) => {
   if (err) return console.error(err);
 
-  debug(`⚡  Server running at ${chalk.white(`${HOST}:${PORT}`)}`);
+  debug(`🐑 💨 💨  App running at ${chalk.white(`${HOST}:${PORT}`)}`);
 })

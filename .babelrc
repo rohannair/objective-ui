@@ -1,28 +1,14 @@
 {
   "presets": [
-    ["es2015", { "modules": false }],
     "react",
+    "es2015",
     "stage-0"
   ],
-
-  "env": {
-    "development": {
-      "plugins": [
-        "transform-runtime",
-        "transform-object-rest-spread",
-        "transform-class-properties",
-        "react-hot-loader/babel",
-        "babel-plugin-lodash"
-      ]
-    },
-    "production": {
-      "plugins": [
-        "transform-runtime",
-        "transform-object-rest-spread",
-        "transform-class-properties",
-        "transform-remove-console",
-        "babel-plugin-lodash"
-      ]
-    }
-  }
+  "plugins": [
+    "transform-regenerator",
+    "transform-object-rest-spread",
+    "transform-class-properties",
+    "react-hot-loader/babel",
+    "babel-plugin-lodash"
+  ]
 }

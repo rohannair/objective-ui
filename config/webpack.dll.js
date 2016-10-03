@@ -4,10 +4,10 @@ const basePath    = path.join(__dirname, '..');
 
 module.exports = {
   entry: {
-    vendor: [
-      path.join(basePath, 'src', 'vendors.js')
-    ]
+    vendor: [path.join(basePath, 'src', 'vendors.js')]
   },
+
+  devtool: 'source-map',
 
   output: {
     path: path.join(basePath, 'dist', 'dll'),
@@ -20,11 +20,17 @@ module.exports = {
       path: path.join(basePath, 'dll', '[name]-manifest.json'),
       name: '[name]',
       context: path.resolve('basePath', 'src')
+    }),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
     })
   ],
 
   resolve: {
     root: path.resolve(basePath, 'src'),
-    modules: [ 'node_modules' ]
+    modulesDirectories: [ 'node_modules' ]
   }
 }

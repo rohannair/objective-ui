@@ -6,4 +6,4 @@ const defaultState = fromJS({
 
 export default (state = defaultState, action) => {
   return state;
-}
+};

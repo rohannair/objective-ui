@@ -1,48 +1,40 @@
 const webpack            = require('webpack');
 const path               = require('path');
+
 const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
-const ExtractText        = require('extract-text-webpack-plugin');
 const HtmlPlugin         = require('html-webpack-plugin');
 const Harddisk           = require('html-webpack-harddisk-plugin');
-const HappyPack          = require('happypack');
 const isProd             = process.env.NODE_ENV === 'production';
 const basePath           = path.join(__dirname, '..');
 
-module.exports = [
-  new webpack.DllReferencePlugin({
-    context: path.join(basePath, 'src'),
-    manifest: require('../dll/vendor-manifest.json')
-  }),
-  new HappyPack({
-    loaders: ['babel'],
-    threads: 4,
-    verbose: false
-  }),
-  new ExtractText({
-    filename: '[name].[id].style.css',
-    allChunks: true
-  }),
+const plugins = [
   new CaseSensitivePaths(),
-  new webpack.HotModuleReplacementPlugin(),
-  new HtmlPlugin({
-    cache: true,
-    inject: true,
-    template: path.join(basePath, 'src', 'index.html'),
-    alwaysWriteToDisk: true
-  }),
-  new webpack.optimize.DedupePlugin(),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    filename: 'vendor.bundle.js',
-    minChunks: Infinity
-  }),
+  new webpack.optimize.OccurenceOrderPlugin(),
+  new webpack.NoErrorsPlugin(),
   new webpack.DefinePlugin({
-    'process.env': {
-      'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
-    },
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     __DEV__: !isProd
   }),
-  new Harddisk()
+]
+
+const prodPlugins = [
+  new HtmlPlugin({
+    chunksSortMode : 'dependency',
+    template: path.join(basePath, 'src', 'index.html'),
+    inject: 'body',
+    minify: { collapseWhitespace: true }
+  }),
+  new webpack.optimize.UglifyJsPlugin({
+    compressor: { warnings: false }
+  }),
+  new webpack.optimize.DedupePlugin(),
+]
+
+
+const devPlugins = [
+  new webpack.HotModuleReplacementPlugin(),
+
 ];
 
-
+module.exports = plugins
+  .concat(isProd ? prodPlugins : devPlugins);

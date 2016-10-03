@@ -5,6 +5,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import globalReducer from './global.reducer';
 import missionReducer from './missions.reducer';
+import missionListReducer from './missionList.reducer';
 
 // Initial routing state
 const routeInitialState = fromJS({
@@ -13,13 +14,13 @@ const routeInitialState = fromJS({
 
 // Merge route into global application state
 function routeReducer(state = routeInitialState, action) {
-  switch(action.type) {
-    case LOCATION_CHANGE:
-      return state.merge({
-        locationBeforeTransitions: action.payload,
-      });
-    default:
-      return state;
+  switch (action.type) {
+  case LOCATION_CHANGE:
+    return state.merge({
+      locationBeforeTransitions: action.payload,
+    });
+  default:
+    return state;
   }
 }
 
@@ -29,6 +30,7 @@ export default function createReducer() {
     route: routeReducer,
     global: globalReducer,
     mission: missionReducer,
+    missionList: missionListReducer,
     form: formReducer
-  })
+  });
 }

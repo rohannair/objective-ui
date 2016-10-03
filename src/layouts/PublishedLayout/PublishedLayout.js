@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import 'ress';
 import classes from './PublishedLayout.css';
 
-import Header from 'components/Global/Header';
+import Header from '../../components/Global/Header';
 
 const PublishedLayout = ({ children }) =>
   <div className={classes.mainContainer}>
@@ -20,6 +20,6 @@ const PublishedLayout = ({ children }) =>
 
 PublishedLayout.propTypes = {
   children: PropTypes.element.isRequired
-}
+};
 
 export default PublishedLayout;

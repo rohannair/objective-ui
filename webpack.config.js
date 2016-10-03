@@ -1,24 +1,23 @@
 const webpack     = require('webpack');
 const path        = require('path');
 
-const plugins     = require('./plugins');
-const postcss     = require('./postcss');
+const plugins     = require('./config/plugins');
+const postcss     = require('./config/postcss');
+
 const isProd      = process.env.NODE_ENV === 'production';
-const basePath    = path.join(__dirname, '..');
+const basePath    = __dirname;
 
 const ExtractText = require('extract-text-webpack-plugin');
-const packages    = require('../package.json');
+const packages    = require('./package.json');
 
 module.exports = {
   bail: isProd,
   cache: !isProd,
   debug: !isProd,
-  devtool: isProd ? 'hidden-source-map' : 'eval',
-  target: 'web',
+  devtool: '#cheap-module-inline-source-map',
 
   entry: {
     bundle: [
-      'babel-polyfill',
       'webpack-hot-middleware/client?reload=true',
       'react-hot-loader/patch',
       path.join(basePath, 'src', 'index.js')
@@ -29,11 +28,18 @@ module.exports = {
     configFile: path.join(basePath, '.eslintrc')
   },
 
-  output: {
+  output: isProd
+  ? {
     path: path.join(basePath, 'dist'),
     publicPath: '/',
-    filename: isProd ? '[name].[hash].js' : '[name].js',
-    chunkFilename: '[name].js'
+    filename: '[name].[hash].js',
+    chunkFilename: '[name].js',
+    sourceMapFilename: '[name].[hash].js.map',
+  }
+  : {
+    path: path.join(basePath, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/public/'
   },
 
   module: {
@@ -42,32 +48,32 @@ module.exports = {
         test: /\.jsx?$/,
         include: [path.join(basePath, 'src')],
         exclude: [path.join(basePath, 'node_modules')],
-        loader: 'happypack/loader',
+        loader: 'babel',
         query: {
           cacheDirectory: true
         }
       },
       {
         test: /\.css$/,
-        loader: ExtractText.extract({
-          fallbackLoader: 'style',
-          loader: ['css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]', 'postcss']})
+        loader: 'style!css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss'
       },
       {
         test: /\.scss$/,
-        loader: ExtractText.extract({
-          fallbackLoader: 'style',
-          loader: ['css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]', 'postcss', 'sass-loader']})
+        loader: 'style!css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass-loader'
       }
     ]
   },
 
   resolve: {
     extensions: ['', '.js'],
-    modules: [
-      path.join(basePath, 'src'),
-      'node_modules'
-    ]
+    root: path.resolve(__dirname, 'src'),
+    modulesDirectories: ['./node_modules']
+  },
+
+  stats: {
+    colors: true,
+    timings: true,
+    reasons: true
   },
 
   postcss,

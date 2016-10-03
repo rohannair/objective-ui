@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 // Styles
-import 'ress';
+// import 'ress';
 import classes from './CoreLayout.css';
 
-import Header from 'components/Global/Header';
+import Header from '../../components/Global/Header';
 
 const CoreLayout = ({ children }) =>
   <div className={classes.mainContainer}>
@@ -15,6 +15,7 @@ const CoreLayout = ({ children }) =>
         <Link to={'/missions'}>Missions</Link>
       </nav>
     </header>
+
     <div className={classes.body}>
       { children }
     </div>
@@ -22,6 +23,6 @@ const CoreLayout = ({ children }) =>
 
 CoreLayout.propTypes = {
   children: PropTypes.element.isRequired
-}
+};
 
 export default CoreLayout;

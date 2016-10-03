@@ -8,7 +8,7 @@ const Section = props => {
 
   const sectionClasses = props.splash
   ? styles.sectionSplash
-  : styles.section
+  : styles.section;
 
   return (
     <div className={ sectionClasses } style= {{ backgroundColor: props.bgColor }}>
@@ -33,6 +33,6 @@ Section.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
   splash: PropTypes.bool,
-}
+};
 
 export default Section;

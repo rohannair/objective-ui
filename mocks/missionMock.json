@@ -1,4 +1,4 @@
-export default {
+export {
   id: 'dc9aa126-49b9-49ca-a20f-77f213b0ac76',
   name: 'Marketing Design Tour',
   description: 'Support the Marketing Team\'s creative initiatives while developing a style guide and a design system for the full company',
