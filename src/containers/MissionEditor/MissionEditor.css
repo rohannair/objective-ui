@@ -1,15 +1,18 @@
 .missionEditor {
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  background-color: #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  overflow: hidden;
 }
 
 .header {
   display: flex;
   flex-direction: row;
-  background-color: #3861F4;
+  background-color: #828D9A;
   color: #fff;
+  padding: 10px 15px;
 }
 
 .section {
@@ -17,9 +20,9 @@
 }
 
 .sectionHeader {
-  color: #3861F4;
+  color: #344055;
   font-size: 1.25em;
-  font-weight: normal;
+  font-weight: bold;
   margin-bottom: 6px;
 }
 

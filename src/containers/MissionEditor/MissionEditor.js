@@ -23,7 +23,7 @@ const Section = ({ children, name }) =>
   </div>;
 
 const TextSection = (struct, dispatch, key) =>
-  <Section name={`Mission ${key.charAt(0).toUpperCase() + key.slice(1)}`}>
+  <Section name={`${key.charAt(0).toUpperCase() + key.slice(1)}`}>
     <div className={ styles.sectionBody }>
       <TextInput
         placeholder = "Please type here"
@@ -58,9 +58,9 @@ const MissionEditor = (props) => {
 
   return (
     <div className={ styles.missionEditor }>
-      <h1 className={ styles.header }>
-        { `New Mission - ${mission.get('name')}` }
-      </h1>
+      <h2 className={ styles.header }>
+        Mission editor
+      </h2>
 
       <Card>
         { Input('name') }

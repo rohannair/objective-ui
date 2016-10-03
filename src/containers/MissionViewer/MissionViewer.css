@@ -1,0 +1,34 @@
+.missionCard {
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  max-width: 500px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  background-color: #fff;
+}
+
+.header {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.header .avatar {
+  max-width: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.header .profileDetails {
+  padding: 10px;
+}
+
+.divider {
+  width: 100%;
+  border: 1px solid #f0f0f0;
+  margin-bottom: 10px;
+}
+
+.section {
+  margin-bottom: 10px;
+}
