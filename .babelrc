@@ -8,6 +8,7 @@
   "env": {
     "development": {
       "plugins": [
+        "transform-runtime",
         "transform-object-rest-spread",
         "transform-class-properties",
         "react-hot-loader/babel",
@@ -16,6 +17,7 @@
     },
     "production": {
       "plugins": [
+        "transform-runtime",
         "transform-object-rest-spread",
         "transform-class-properties",
         "transform-remove-console",

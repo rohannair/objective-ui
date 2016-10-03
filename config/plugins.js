@@ -14,7 +14,9 @@ module.exports = [
     manifest: require('../dll/vendor-manifest.json')
   }),
   new HappyPack({
-    loaders: ['babel']
+    loaders: ['babel'],
+    threads: 4,
+    verbose: false
   }),
   new ExtractText({
     filename: '[name].[id].style.css',

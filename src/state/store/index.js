@@ -5,6 +5,8 @@ import createSagaMiddleware from 'redux-saga';
 import createReducer from 'state/reducers';
 import createLogger from 'redux-logger';
 
+import rootSaga from 'state/sagas';
+
 const sagaMiddleware = createSagaMiddleware();
 const loggerMiddleware = (__DEV__)
 ? createLogger({
@@ -22,6 +24,7 @@ export default function configureStore(initialState = {}, history) {
     sagaMiddleware,
     routerMiddleware(history),
     loggerMiddleware,
+    createSagaMiddleware,
   ];
 
   const enhancers = [
@@ -37,6 +40,7 @@ export default function configureStore(initialState = {}, history) {
 
   // Extensions
   store.runSaga = sagaMiddleware.run;
+  store.runSaga(rootSaga);
 
   // Make reducers hot reloadable
   if (__DEV__ && module.hot) {

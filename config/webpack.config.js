@@ -13,11 +13,12 @@ module.exports = {
   bail: isProd,
   cache: !isProd,
   debug: !isProd,
-  devtool: isProd ? 'hidden-source-map' : 'cheap-module-eval-source-map',
+  devtool: isProd ? 'hidden-source-map' : 'eval',
   target: 'web',
 
   entry: {
     bundle: [
+      'babel-polyfill',
       'webpack-hot-middleware/client?reload=true',
       'react-hot-loader/patch',
       path.join(basePath, 'src', 'index.js')

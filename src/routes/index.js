@@ -11,16 +11,13 @@ import Dashboard from 'containers/Dashboard';
 import MissionEditor from 'containers/MissionEditor';
 import MissionViewer from 'containers/MissionViewer';
 
-export default (store, history) => {
-  return (
-    <Router history={ history } render={ applyRouterMiddleware(useScroll()) }>
-      <Route path="/" component={ CoreLayout }>
-        <IndexRoute component={ Dashboard } />
-        <Route path="dashboard" component={ Dashboard } />
-        <Route path="missions/edit" component={ MissionEditor } />
-        <Route path="missions/view" component={ MissionViewer } />
-      </Route>
-    </Router>
-  )
-};
-
+export default (store, history) => (
+  <Router history={ history } render={ applyRouterMiddleware(useScroll()) }>
+    <Route path="/" component={ CoreLayout }>
+      <IndexRoute component={ Dashboard } />
+      <Route path="dashboard" component={ Dashboard } />
+      <Route path="missions/edit" component={ MissionEditor } />
+      <Route path="missions/view" component={ MissionViewer } />
+    </Route>
+  </Router>
+);
