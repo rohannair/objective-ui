@@ -14,5 +14,7 @@ function callApi(endpoint) {
     .catch(err => console.error(err));
 }
 
-export const fetchMission = id => callApi(`missions/${id}`);
-export const fetchMissionList = (limit, offset) => callApi(`missions?limit=${limit}&offset=${offset}`);
+export const fetchMission = id =>
+  callApi(`missions/${id}`);
+export const fetchMissionList = (limit, offset) =>
+  callApi(`missions?limit=${limit}&offset=${offset}`);

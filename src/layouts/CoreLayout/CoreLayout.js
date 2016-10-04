@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 // Styles
-// import 'ress';
+import 'ress';
 import classes from './CoreLayout.css';
 
 import Header from '../../components/Global/Header';
@@ -12,7 +12,7 @@ const CoreLayout = ({ children }) =>
     <header className={classes.header}>
       <Header />
       <nav className={classes.nav}>
-        <Link to={'/missions'}>Missions</Link>
+        <Link to={'/missions'}>M</Link>
       </nav>
     </header>
 

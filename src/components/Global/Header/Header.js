@@ -4,8 +4,8 @@ import { IndexLink } from 'react-router';
 
 const Header = (props) => {
   const logoNode = props.noNav
-  ? <span>Quartermaster</span>
-  : <IndexLink to="/" className={styles.logo}>Quartermaster</IndexLink>;
+  ? <span>Q</span>
+  : <IndexLink to="/" className={styles.logo}>Q</IndexLink>;
 
   return (
     <header className={styles.header}>

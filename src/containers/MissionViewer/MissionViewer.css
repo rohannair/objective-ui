@@ -1,32 +1,52 @@
+.missionViewer {
+  width: 100%;
+  display: flex;
+  padding: 40px;
+}
+
 .missionCard {
-  border: 1px solid #f0f0f0;
-  border-radius: 4px;
-  max-width: 500px;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  background-color: #fff;
+  display: flex;
+  width: calc(1/4 - 30px);
+  margin-right: 30px;
+}
+
+.header,
+.body,
+.footer {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
 }
 
 .header {
-  padding: 15px;
-  display: flex;
   align-items: center;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.header .avatar {
+.body {
+  flex-direction: column;
+  transition: height 0.25s ease;
+}
+
+.body__collapsed {
+  @extend .body;
+  height: 0;
+  display: none;
+}
+
+.footer {
+  padding: 10px 20px;
+  background-color: red;
+}
+
+.avatar {
   max-width: 60px;
   border-radius: 50%;
   overflow: hidden;
 }
 
-.header .profileDetails {
+.profileDetails {
   padding: 10px;
-}
-
-.divider {
-  width: 100%;
-  border: 1px solid #f0f0f0;
-  margin-bottom: 10px;
 }
 
 .section {

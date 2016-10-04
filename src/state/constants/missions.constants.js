@@ -1,4 +1,5 @@
 export const UPDATE_FIELD = 'app/UPDATE_FIELD';
+export const ADD_FIELD = 'app/ADD_FIELD';
 
 export const GET_MISSION_ATTEMPT = 'app/GET_MISSION_ATTEMPT';
 export const GET_MISSION_SUCCESS = 'app/GET_MISSION_SUCCESS';

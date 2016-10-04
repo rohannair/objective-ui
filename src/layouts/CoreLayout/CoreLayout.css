@@ -1,13 +1,16 @@
 @import '../../styles/globals';
 
 .mainContainer {
+  display: flex;
+  flex-direction: row;
   min-height: 100vh;
 }
 
 .header {
   display: flex;
+  flex-direction: column;
   background-color: $secondary;
-  height: 60px;
+  width: 60px;
 }
 
 .nav {
@@ -30,5 +33,7 @@
 
 .body {
   display: flex;
-  padding: 40px;
+  width: calc(100% - 60px);
+  margin-top: 40px;
+  background-color: #EEEEEE;
 }

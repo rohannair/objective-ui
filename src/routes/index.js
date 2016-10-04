@@ -4,7 +4,6 @@ import useScroll from 'react-router-scroll/lib/useScroll';
 
 // Layouts
 import CoreLayout from '../layouts/CoreLayout';
-import PublishedLayout from '../layouts/PublishedLayout';
 
 // Containers
 import Dashboard from '../containers/Dashboard';

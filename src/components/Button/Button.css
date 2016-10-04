@@ -1,0 +1,59 @@
+@import '../../styles/globals';
+
+.button {
+  background-color: #FFF;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+
+  color: rgba(0,0,0,0.87);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: .03em;
+  line-height: 1.125;
+  text-transform: uppercase;
+
+  transition: all .2s ease-in-out;
+  height: 36px;
+  padding: 0 26px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  user-select: none;
+
+  &:hover {
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+  }
+
+  &:active {
+    box-shadow: 0 0 2px rgba(0,0,0,0.4);
+  }
+}
+
+.primary {
+  @extend .button;
+  background-color: $secondary;
+  color: $background;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.secondary {
+  @extend .button;
+  background-color: $primary;
+  color: $background;
+
+  &:hover {
+    color: #fff;
+  }
+}
