@@ -13,7 +13,7 @@ import MissionViewer from '../containers/MissionViewer';
 export default (store, history) => (
   <Router history={ history } render={ applyRouterMiddleware(useScroll()) }>
     <Route path="/" component={ CoreLayout }>
-      <IndexRoute component={ Dashboard } />
+      <IndexRoute component={ MissionViewer } />
       <Route path="dashboard" component={ Dashboard } />
 
       <Route path="missions" component={ MissionViewer } />

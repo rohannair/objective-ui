@@ -1,10 +1,18 @@
-export const UPDATE_FIELD = 'app/UPDATE_FIELD';
-export const ADD_FIELD = 'app/ADD_FIELD';
+const ATTEMPT = 'ATTEMPT';
+const SUCCESS = 'SUCCESS';
+const ERROR = 'ERROR';
 
-export const GET_MISSION_ATTEMPT = 'app/GET_MISSION_ATTEMPT';
-export const GET_MISSION_SUCCESS = 'app/GET_MISSION_SUCCESS';
-export const GET_MISSION_ERROR = 'app/GET_MISSION_ERROR';
+const createActions = base =>
+  [ATTEMPT, SUCCESS, ERROR]
+    .reduce((acc, type) => {
+    acc[type] = `${base}_${type}`;
+    return acc
+  }, {});
 
-export const GET_MISSION_LIST_ATTEMPT = 'app/GET_MISSION_LIST_ATTEMPT';
-export const GET_MISSION_LIST_SUCCESS = 'app/GET_MISSION_LIST_SUCCESS';
-export const GET_MISSION_LIST_ERROR = 'app/GET_MISSION_ERROR';
+// Mission fields
+export const UPDATE_FIELD = createActions('app/UPDATE_FIELD');
+export const ADD_FIELD = createActions('app/ADD_FIELD');
+
+// Mission whole
+export const GET_MISSION = createActions('app/GET_MISSION');
+export const GET_MISSION_LIST = createActions('app/GET_MISSION_LIST');

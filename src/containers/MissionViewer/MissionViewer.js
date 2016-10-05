@@ -46,12 +46,16 @@ class MissionView extends Component {
 
     const MissionCards = missionList.map(mission => {
       const user = mission.users && mission.users[0];
+      const userimg = user.firstName.toLowerCase() === 'ray'
+      ? 'https://avatars.io/twitter/raykanani'
+      : 'https://avatars.io/twitter/elonmusk';
+
       return (
         <div key={ mission.id } className={ styles.missionCard }>
           <Card>
             <div className={ styles.header }>
               <div className={ styles.avatar }>
-                <img src={ user.img || 'http://placehold.it/200x200'} />
+                <img src={ userimg } />
               </div>
               <div className={ styles.profileDetails }>
                 <h4>{`${user.firstName} ${user.lastName}`}</h4>
@@ -59,7 +63,7 @@ class MissionView extends Component {
               </div>
             </div>
 
-            <div className={ collapsed ? styles.body : styles.body__collapsed }>
+            <div className={ styles.body }>
               <div className={ styles.section }>
                 <h4>Description</h4>
                 <p>{ mission.description }</p>
@@ -108,8 +112,10 @@ class MissionView extends Component {
               </div>
             </div>
             <div className={ styles.footer }>
-              <Link to={`/missions/edit/${mission.id}`}>Edit</Link>
-              <Button onClick={() => this.setState({collapsed: !collapsed})}>{ collapsed ? 'Collapse' : 'Expand'}</Button>
+              <Link to={`/missions/edit/${mission.id}`}>
+                <Button primary onClick={() => {}}>Edit
+                </Button>
+              </Link>
             </div>
           </Card>
         </div>

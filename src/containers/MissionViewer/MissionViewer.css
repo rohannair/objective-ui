@@ -1,12 +1,13 @@
 .missionViewer {
   width: 100%;
   display: flex;
+  // justify-content: space-between;
   padding: 40px;
 }
 
 .missionCard {
   display: flex;
-  width: calc(1/4 - 30px);
+  width: 33.333%;
   margin-right: 30px;
 }
 
@@ -36,7 +37,6 @@
 
 .footer {
   padding: 10px 20px;
-  background-color: red;
 }
 
 .avatar {

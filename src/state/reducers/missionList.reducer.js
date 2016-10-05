@@ -6,7 +6,7 @@ const defaultState = new List();
 export default (state = defaultState, action) => {
 
   switch (action.type) {
-  case ACTION.GET_MISSION_LIST_SUCCESS:
+  case ACTION.GET_MISSION_LIST.SUCCESS:
     return state.merge(new List([...action.missions.missions]));
 
   default:

@@ -51,7 +51,10 @@ const ListSection = (struct, dispatch, key) =>
               value={c.get('name')}
               onChange = {e => {
                 e.stopPropagation();
-                dispatch(updateField([key, i, 'name'], e.target.value));
+                dispatch(updateField(struct.get('id'), [key, i], {
+                  ...c.toJSON(),
+                  name: e.target.value
+                }));
               }}
             />
           </li>
@@ -65,7 +68,7 @@ const ListSection = (struct, dispatch, key) =>
           e.preventDefault();
           e.stopPropagation();
 
-          dispatch(addField([key], ''));
+          dispatch(addField(struct.get('id'), [key], ''));
         }}
       >+ Add {key.slice(0, key.length - 1)}</span>
     </div>
@@ -111,7 +114,7 @@ class MissionEditor extends Component {
                 e.preventDefault();
                 e.stopPropagation();
 
-                dispatch(updateField([key, i, 'name'], ''));
+                dispatch(updateField(mission.get(id), [key, i], e.target.value));
               }}
             >+ Add key result</span>
           </div>
