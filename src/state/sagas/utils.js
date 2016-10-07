@@ -8,3 +8,8 @@ export function* fetchEntity(entity, apiFn, id, url) {
     yield put(entity.failure(id, error));
   }
 }
+
+/////////// Debounceing ///////////
+export function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve,ms));
+}

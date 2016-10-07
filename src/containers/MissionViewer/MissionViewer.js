@@ -45,10 +45,15 @@ class MissionView extends Component {
     }
 
     const MissionCards = missionList.map(mission => {
-      const user = mission.users && mission.users[0];
-      const userimg = user.firstName.toLowerCase() === 'ray'
-      ? 'https://avatars.io/twitter/raykanani'
-      : 'https://avatars.io/twitter/elonmusk';
+      const user = mission.users.length > 0
+      ? mission.users[0]
+      : {
+        firstName: '',
+        lastName: '',
+        role: null
+      };
+
+      const userimg = user.img || `//placehold.it/250x250/${((1<<24)*Math.random()|0).toString(16)}`;
 
       return (
         <div key={ mission.id } className={ styles.missionCard }>

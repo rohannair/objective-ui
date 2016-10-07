@@ -3,6 +3,7 @@ import Immutable, { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { partial } from 'ramda';
+import debounce from 'lodash/debounce';
 
 // Deps
 import Card from '../../components/Card';

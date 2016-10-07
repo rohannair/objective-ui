@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router, Route, IndexRoute, browserHistory, applyRouterMiddleware } from 'react-router';
-import useScroll from 'react-router-scroll/lib/useScroll';
+// import useScroll from 'react-router-scroll/lib/useScroll';
 
 // Layouts
 import CoreLayout from '../layouts/CoreLayout';
@@ -11,7 +11,7 @@ import MissionEditor from '../containers/MissionEditor';
 import MissionViewer from '../containers/MissionViewer';
 
 export default (store, history) => (
-  <Router history={ history } render={ applyRouterMiddleware(useScroll()) }>
+  <Router history={ history }>
     <Route path="/" component={ CoreLayout }>
       <IndexRoute component={ MissionViewer } />
       <Route path="dashboard" component={ Dashboard } />

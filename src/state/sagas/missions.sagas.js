@@ -3,7 +3,9 @@ import { call, put, take, fork } from 'redux-saga/effects';
 
 import * as missionActions from '../constants/missions.constants';
 import * as api from '../services/api';
-import { fetchEntity } from './utils';
+import { fetchEntity, delay } from './utils';
+
+const DEBOUNCE_TIME = 250;
 
 const fetchMission = fetchEntity.bind(null, api.fetchMission);
 
