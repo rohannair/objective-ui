@@ -10,7 +10,8 @@ import styles from './MissionViewer.css';
 
 // Actions
 import {
-  getMissionList
+  getMissionList,
+  newMission
 } from '../../state/actions/missions.actions';
 
 class MissionView extends Component {
@@ -129,10 +130,18 @@ class MissionView extends Component {
 
     return (
       <div className={styles.missionViewer}>
+        <div className={styles.controlBar}>
+          <Button primary onClick={ this._addNewMission }>New Mission</Button>
+        </div>
         { MissionCards }
       </div>
     );
-  }
+  };
+
+  _addNewMission = (e) => {
+    e.preventDefault();
+    this.props.dispatch(newMission());
+  };
 }
 
 const mapStateToProps = state => ({

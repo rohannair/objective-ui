@@ -34,7 +34,9 @@ const TextSection = (struct, dispatch, key) =>
         value = { struct.get(key) }
         onChange = {e => {
           e.stopPropagation();
-          dispatch(updateField([key], e.target.value));
+          dispatch(updateField(struct.get('id'), [key], {
+            [key]: e.target.value
+          }));
         }}
       />
     </div>

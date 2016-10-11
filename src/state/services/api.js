@@ -40,8 +40,16 @@ export const fetchMissionList = (limit, offset) =>
 
 export const updateMissionField = (payload) => {
   const { id, field, data } = payload;
-  return postApi(`missions/${id}/${field[0]}/${data.id}`, omit(data, ['id']));
+
+  const url = data.id
+  ? `missions/${id}/${field[0]}/${data.id}`
+  : `missions/${id}?field=${field[0]}`; // If a regular field
+
+  return postApi(url, omit(data, ['id']));
 };
 
 export const addMissionField = (payload) =>
   callApi(`missions/${payload.id}/${payload.field[0]}/add`);
+
+export const newMission = () =>
+  callApi(`missions/new`);

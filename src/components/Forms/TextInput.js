@@ -19,7 +19,7 @@ TextInput.propTypes = {
 TextInput.defaultProps = {
   placeholder: 'Please enter text',
   value: '',
-  onChange: () => console.info('text changed')
+  onChange: (e) => console.info('text changed')
 };
 
 export default TextInput;

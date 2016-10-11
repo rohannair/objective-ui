@@ -1,13 +1,20 @@
 .missionViewer {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   padding: 40px;
+}
+
+.controlBar {
+  width: 100%;
+  text-align: right;
+  margin-bottom: 15px
 }
 
 .missionCard {
   display: flex;
-  width: 33.333%;
-  margin-right: 30px;
+  width: calc((100% - 90px) / 4);
+  margin: 0 30px 30px 0;
 }
 
 .header,

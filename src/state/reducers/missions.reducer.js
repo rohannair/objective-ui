@@ -7,6 +7,12 @@ const defaultState = fromJS({});
 export default (state = defaultState, action) => {
 
   switch (action.type) {
+  case ACTION.NEW_MISSION.ATTEMPT:
+    return state.merge({ loading: false, ...action.payload });
+
+  case ACTION.NEW_MISSION.SUCCESS:
+    return state.merge({ loading: true, ...action.payload });
+
   case ACTION.UPDATE_FIELD.SUCCESS:
     return state.mergeIn(action.payload.field, action.payload.updated);
 

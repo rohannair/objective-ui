@@ -1,5 +1,6 @@
 import { takeEvery, takeLatest  } from 'redux-saga';
 import { call, put, take, fork } from 'redux-saga/effects';
+import { push } from 'react-router-redux';
 
 import * as missionActions from '../constants/missions.constants';
 import * as api from '../services/api';
@@ -33,17 +34,25 @@ function* updateMissionField(payload) {
   }
 }
 
+function* newMission() {
+  try {
+    const mission = yield api.newMission();
+    yield put({
+      type: missionActions.NEW_MISSION.SUCCESS,
+      payload: { ...mission }
+    });
+  } catch(e) {
+    yield put({
+      type: missionActions.NEW_MISSION.ERROR,
+      message: e.message
+    })
+  }
+}
+
 export function* watchGetMission() {
   while (true) {
     const { payload } = yield take(missionActions.GET_MISSION.ATTEMPT);
     yield fork(getMission, payload.id, true);
-  }
-}
-
-export function* watchUpdateMission() {
-  while (true) {
-    const { payload } = yield take(missionActions.UPDATE_FIELD.ATTEMPT);
-    yield fork(updateMissionField, payload, true);
   }
 }
 
@@ -62,9 +71,30 @@ function* addMissionField(payload) {
   }
 }
 
+export function* watchUpdateMission() {
+  while(true) {
+    const { payload } = yield take(missionActions.UPDATE_FIELD.ATTEMPT);
+    yield fork(updateMissionField, payload, true);
+  }
+}
+
 export function* watchAddMissionField() {
-  while (true) {
+  while(true) {
     const { payload } = yield take(missionActions.ADD_FIELD.ATTEMPT);
     yield fork(addMissionField, payload, true);
+  }
+}
+
+export function* watchNewMission() {
+  while(true) {
+    yield take(missionActions.NEW_MISSION.ATTEMPT);
+    yield fork(newMission, {}, true);
+  }
+}
+
+export function* watchNewMissionSuccess() {
+  while(true) {
+    const { payload: { mission: { id } }} = yield take(missionActions.NEW_MISSION.SUCCESS);
+    yield put(push(`/missions/edit/${id}`));
   }
 }

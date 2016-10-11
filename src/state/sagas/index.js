@@ -10,7 +10,9 @@ import { fetchEntity } from './utils';
 import {
   watchGetMission,
   watchUpdateMission,
-  watchAddMissionField
+  watchAddMissionField,
+  watchNewMission,
+  watchNewMissionSuccess
 } from './missions.sagas';
 
 import {
@@ -30,6 +32,8 @@ export default function* root() {
     fork(watchGetMission),
     fork(watchGetMissionList),
     fork(watchUpdateMission),
-    fork(watchAddMissionField)
+    fork(watchAddMissionField),
+    fork(watchNewMission),
+    fork(watchNewMissionSuccess)
   ];
 }
