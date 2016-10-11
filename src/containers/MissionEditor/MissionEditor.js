@@ -94,11 +94,20 @@ class MissionEditor extends Component {
     const ListContainer = partial(ListSection, [mission, dispatch]);
 
     const okrs = mission.get('targets')
-      .map(c =>
+      .map((c, idx) =>
         <div key={ c.get('id') } className={ styles.okrSection }>
           <div className={ styles.okrObjective }>
             <label className={ styles.okrObjectiveLabel }>Objective</label>
-            <TextInput value={ c.get('objective') } />
+            <TextInput
+              value={ c.get('objective') }
+              onChange={ e => {
+                e.stopPropagation();
+                dispatch(updateField(c.get('id'), ['targets', idx], {
+                  ...c.toJSON(),
+                  objective: e.target.value
+                }))
+              }}
+            />
           </div>
 
           <ul className={ styles.okrResults }>
@@ -106,7 +115,18 @@ class MissionEditor extends Component {
               c.get('keyResults')
               .map((o, i) =>
                 <li key={`${c.get('id')}-${i}}`} className={ styles.okrResult}>
-                  <TextInput value={o} />
+                  <TextInput
+                    value={o}
+                    onChange={ e => {
+                      e.stopPropagation();
+                      console.log(c)
+                      dispatch(updateField(c.get('id'), ['targets', idx], {
+                        ...c.toJSON(),
+                        keyResults: c.get('keyResults')
+                          .update(i, () => e.target.value)
+                      }))
+                    }}
+                  />
                 </li>)
             }
           </ul>
@@ -117,7 +137,11 @@ class MissionEditor extends Component {
                 e.preventDefault();
                 e.stopPropagation();
 
-                dispatch(updateField(mission.get(id), [key, i], e.target.value));
+                dispatch(updateField(c.get('id'), ['targets', idx], {
+                  ...c.toJSON(),
+                  keyResults: c.get('keyResults')
+                  .update(c.get('keyResults').size, () => '')
+                }))
               }}
             >+ Add key result</span>
           </div>
@@ -138,7 +162,12 @@ class MissionEditor extends Component {
 
           <Section name="Objectives and Key Results">
             { okrs }
-            <Button primary onClick={() =>{}} >Add OKR</Button>
+            <Button primary onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+
+              dispatch(addField(mission.get('id'), ['targets']));
+            }} >Add OKR</Button>
           </Section>
 
           { ListContainer('objectives') }
