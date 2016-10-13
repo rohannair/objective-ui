@@ -16,7 +16,7 @@ const CoreLayout = ({ children }) =>
       </nav>
     </header>
 
-    <div className={classes.body}>
+    <div className={ classes.body }>
       { children }
     </div>
   </div>;

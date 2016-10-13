@@ -10,6 +10,14 @@ $background: #F5F3F0;
     background-color: #FFF;
   }
 
+  /*html {
+    overflow: hidden;
+  }
+
+  body {
+    overflow: visible;
+  }*/
+
   a {
 
     &:link,

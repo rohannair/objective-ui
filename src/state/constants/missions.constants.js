@@ -1,13 +1,9 @@
-const ATTEMPT = 'ATTEMPT';
-const SUCCESS = 'SUCCESS';
-const ERROR = 'ERROR';
-
-const createActions = base =>
-  [ATTEMPT, SUCCESS, ERROR]
-    .reduce((acc, type) => {
-    acc[type] = `${base}_${type}`;
-    return acc
-  }, {});
+import {
+  createActions,
+  ATTEMPT,
+  SUCCESS,
+  ERROR
+} from './utils'
 
 // Mission fields
 export const UPDATE_FIELD = createActions('app/UPDATE_FIELD');

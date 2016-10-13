@@ -15,9 +15,7 @@
 
   transition: all .2s ease-in-out;
   height: 36px;
-  padding: 0 26px;
-  margin-top: 6px;
-  margin-bottom: 6px;
+  padding: 0 20px;
 
   border: none;
   border-radius: 2px;
@@ -56,4 +54,15 @@
   &:hover {
     color: #fff;
   }
+}
+
+/////////////// Sizes ///////////////
+.sm {
+  padding: 0 12px;
+}
+
+
+/////////////// Sizes ///////////////
+.right {
+  margin-left: auto;
 }

@@ -1,15 +1,16 @@
 import React, { Component, PropTypes } from 'react';
-import Immutable, { Map } from 'immutable';
+import Immutable, { List, Map } from 'immutable';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { partial } from 'ramda';
 import debounce from 'lodash/debounce';
 
 // Deps
-import Card from '../../components/Card';
 import Button from '../../components/Button';
+import Card from '../../components/Card';
 import TextInput from '../../components/Forms/TextInput';
 import TextArea from '../../components/Forms/TextArea';
+import Modal from '../../components/Modal';
 
 // Actions
 import {
@@ -42,56 +43,107 @@ const TextSection = (struct, dispatch, key) =>
     </div>
   </Section>;
 
-const ListSection = (struct, dispatch, key) =>
-  <Section name={`${key.charAt(0).toUpperCase() + key.slice(1)}`}>
-    <ol className={ styles.listSection }>
-      {
-        struct.get(key)
-        .map((c, i) =>
-          <li key={c.get('id') || `${key}-${i}`} className={ styles.listItem }>
-            <TextInput
-              placeholder = {`Enter ${key.charAt(0).toUpperCase() + key.slice(1)}`}
-              value={c.get('name')}
-              onChange = {e => {
-                e.stopPropagation();
-                dispatch(updateField(struct.get('id'), [key, i], {
-                  ...c.toJSON(),
-                  name: e.target.value
-                }));
-              }}
-            />
-          </li>
-        )
-      }
-    </ol>
-    <div className={ styles.okrFooter }>
-      <span
-        className={ styles.okrFooterButton }
-        onClick = {e => {
-          e.preventDefault();
-          e.stopPropagation();
+const ListSection = (struct, dispatch, key) => {
+  let d = debounce(dispatch, 1000)
+  return (
+    <Section name={`${key.charAt(0).toUpperCase() + key.slice(1)}`}>
+      <ol className={ styles.listSection }>
+        {
+          struct.get(key)
+          .map((c, i) =>
+            <li key={c.get('id') || `${key}-${i}`} className={ styles.listItem }>
+              <TextInput
+                placeholder = {`Enter ${key.charAt(0).toUpperCase() + key.slice(1)}`}
+                // value={c.get('name')}
+                onChange = {e => {
+                  e.stopPropagation();
+                  d(updateField(struct.get('id'), [key, i], {
+                    ...c.toJSON(),
+                    name: e.target.value
+                  }));
+                }}
+              />
+            </li>
+          )
+        }
+      </ol>
+      <div className={ styles.okrFooter }>
+        <span
+          className={ styles.okrFooterButton }
+          onClick = {e => {
+            e.preventDefault();
+            e.stopPropagation();
 
-          dispatch(addField(struct.get('id'), [key], ''));
-        }}
-      >+ Add {key.slice(0, key.length - 1)}</span>
-    </div>
-  </Section>;
+            dispatch(addField(struct.get('id'), [key], ''));
+          }}
+        >+ Add {key.slice(0, key.length - 1)}</span>
+      </div>
+   </Section>
+  )
+}
 
 class MissionEditor extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: true
+    }
+  }
+
   componentWillMount() {
     const { id } = this.props.params;
     this.props.dispatch(getMission(id));
   }
 
   render() {
-    const { mission, dispatch } = this.props;
-
-    if (Object.keys(mission.toJSON()).length === 0) {
-      return <div>Loading...</div>
+    const { dispatch, mission, users } = this.props;
+    if (mission.size === 0) {
+      return <div className={ styles.missionEditor }>Loading...</div>
     }
 
     const TextContainer = partial(TextSection, [mission, dispatch]);
     const ListContainer = partial(ListSection, [mission, dispatch]);
+
+    const user = !(mission.get('users').isEmpty())
+    ? mission.get('users').get(0)
+    : Map({});
+
+    const getAssignUserModal = () => {
+      // document.body.style.overflow = this.state.modalVisible
+      //   ? 'hidden'
+      //   : 'visible';
+
+      if (this.state.modalVisible) {
+        return (
+          <Modal closeModal={() => this.setState({ modalVisible: false })}>
+            <div className={styles.userPicker}>
+              Search for a user
+              <form className={styles.userPickerForm}>
+                <TextInput />
+                <Button primary>Search</Button>
+              </form>
+                Search Results:
+              <div className={styles.userPickerDropdown}>
+                {
+                  users.map(val => {
+                    const fullName = `${val.firstName} ${val.lastName}`;
+                    return (
+                      <div key={val.id} className={styles.userPickerItem}>
+                        <div className={styles.userPickerInfo}>
+                        <img src={val.img} alt={ fullName } className={styles.userPickerImg} />
+                        <span className={styles.userPickerName}>{ fullName }</span>
+                        </div>
+                        <Button primary size="sm" right>Assign</Button>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            </div>
+          </Modal>
+        );
+      }
+    };
 
     const okrs = mission.get('targets')
       .map((c, idx) =>
@@ -151,11 +203,16 @@ class MissionEditor extends Component {
     return (
       <div className={ styles.missionEditor }>
         <h2 className={ styles.header }>
-          Mission Editor - {mission.get('name')}
+          <div className={ styles.innerHeader }>
+            <span>Mission Editor - {mission.get('name')}</span>
+            <div className={styles.userPickerButton}>
+              { this._returnUserImage(user) }
+            </div>
+              { getAssignUserModal() }
+          </div>
         </h2>
 
         <div className={styles.body}>
-
           { TextContainer('name') }
           { TextContainer('description') }
           { TextContainer('duration') }
@@ -173,12 +230,18 @@ class MissionEditor extends Component {
           { ListContainer('objectives') }
           { ListContainer('resources') }
 
-          <div className={ styles.footer }>
-            <Button onClick={() => alert('Saved!')}>Save Mission</Button>
-          </div>
         </div>
       </div>
     );
+  };
+
+  _returnUserImage = (user) => {
+    if (user.isEmpty())
+      return 'Unassigned';
+    if (user.get('img'))
+      return <img className={styles.avatar} src={ `${user.get('img')}/small` } />;
+
+    return `${user.get('firstName')} ${user.get('lastName')}`;
   }
 }
 
@@ -191,7 +254,30 @@ MissionEditor.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  mission: state.get('mission')
+  mission: state.get('mission'),
+  users: new List([
+    {
+      id: (Math.random()),
+      firstName: 'Rohan Nair',
+      lastName: '',
+      role: 'user',
+      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
+    },
+    {
+      id: (Math.random()),
+      firstName: 'Ray Kanani',
+      lastName: '',
+      role: 'user',
+      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
+    },
+    {
+      id: (Math.random()),
+      firstName: 'Stu Peters',
+      lastName: '',
+      role: 'user',
+      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
+    }
+  ])
 });
 
 export default connect(mapStateToProps)(MissionEditor);
