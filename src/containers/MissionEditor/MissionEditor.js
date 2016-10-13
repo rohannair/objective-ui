@@ -86,7 +86,7 @@ class MissionEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: true
+      modalVisible: false
     }
   }
 
@@ -116,13 +116,14 @@ class MissionEditor extends Component {
       if (this.state.modalVisible) {
         return (
           <Modal closeModal={() => this.setState({ modalVisible: false })}>
-            <div className={styles.userPicker}>
+            <div className={styles.userPicker} onClick={e => e.stopPropagation()}>
               Search for a user
-              <form className={styles.userPickerForm}>
+              <div className={styles.userPickerForm}>
                 <TextInput />
                 <Button primary>Search</Button>
-              </form>
-                Search Results:
+              </div>
+
+              Search Results:
               <div className={styles.userPickerDropdown}>
                 {
                   users.map(val => {
@@ -133,7 +134,8 @@ class MissionEditor extends Component {
                         <img src={val.img} alt={ fullName } className={styles.userPickerImg} />
                         <span className={styles.userPickerName}>{ fullName }</span>
                         </div>
-                        <Button primary size="sm" right>Assign</Button>
+                        <Button primary size="sm" right
+                        onClick={e => this.setState({ modalVisible: false })}>Assign</Button>
                       </div>
                     );
                   })
@@ -205,7 +207,7 @@ class MissionEditor extends Component {
         <h2 className={ styles.header }>
           <div className={ styles.innerHeader }>
             <span>Mission Editor - {mission.get('name')}</span>
-            <div className={styles.userPickerButton}>
+            <div className={styles.userPickerButton} onClick={() => this.setState({ modalVisible: true })}>
               { this._returnUserImage(user) }
             </div>
               { getAssignUserModal() }
@@ -229,7 +231,6 @@ class MissionEditor extends Component {
 
           { ListContainer('objectives') }
           { ListContainer('resources') }
-
         </div>
       </div>
     );

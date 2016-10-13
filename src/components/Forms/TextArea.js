@@ -6,7 +6,7 @@ const TextArea = (props) =>
     type="text"
     className = { styles.textArea }
     placeholder = { props.placeholder }
-    value = { props.value}
+    value = { props.value }
     onChange = { props.onChange }
   />;
 
@@ -18,7 +18,6 @@ TextArea.propTypes = {
 
 TextArea.defaultProps = {
   placeholder: 'Please enter text',
-  value: '',
   onChange: (e) => console.info('text changed')
 };
 

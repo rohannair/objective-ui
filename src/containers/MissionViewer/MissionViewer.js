@@ -6,6 +6,10 @@ import { Link } from 'react-router';
 // Deps
 import Card from '../../components/Card';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
+import TextInput from '../../components/Forms/TextInput';
+import TextArea from '../../components/Forms/TextArea';
+
 import styles from './MissionViewer.css';
 
 // Actions
@@ -18,7 +22,9 @@ class MissionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      collapsed: false
+      collapsed: false,
+      modalVisible: false,
+      modalCIVisible: false,
     }
   }
 
@@ -41,6 +47,27 @@ class MissionView extends Component {
     const { missionList } = this.props;
     const { collapsed } = this.state;
 
+    const getCheckInModal = () => {
+      if (this.state.modalVisible) {
+        return (
+          <Modal closeModal={() => this.setState({ modalVisible: false })}>
+            <div className={styles.checkinModal} onClick={e => e.stopPropagation()}>
+              Add a Check-In
+              <div className={styles.checkinModalForm}>
+                Title:
+                <TextInput />
+              </div>
+              <div className={styles.checkinModalForm}>
+                Update:
+                <TextArea />
+              </div>
+              <Button primary onClick={e => this.setState({ modalVisible: false })}>Save</Button>
+            </div>
+          </Modal>
+        );
+      }
+    };
+
     if (missionList.size === 0) {
       return <div>Loading...</div>
     }
@@ -59,6 +86,7 @@ class MissionView extends Component {
       return (
         <div key={ mission.id } className={ styles.missionCard }>
           <Card>
+            { getCheckInModal() }
             <div className={ styles.header }>
               <div className={ styles.avatar }>
                 <img src={ userimg } />
@@ -116,12 +144,24 @@ class MissionView extends Component {
                   }
                 </ul>
               </div>
+
+              <div className={ styles.section }>
+                <h4>{ mission.checkIns.length } Check Ins</h4>
+                {
+                  mission.checkIns.map( val =>
+                    <div key={val.id}><button  className={styles.fakeLink} onClick={ (e) => this.setState({ modalCIVisible: true })}>{ val.name }</button></div>)
+                }
+                { this._showCheckInModal(missionList.get(1).checkIns[0]) }
+              </div>
+
             </div>
             <div className={ styles.footer }>
               <Link to={`/missions/edit/${mission.id}`}>
-                <Button primary onClick={() => {}}>Edit
+                <Button onClick={() => {}}>Edit
                 </Button>
               </Link>
+                <Button primary onClick={e => this.setState({ modalVisible: true })}>New Check-In
+                </Button>
             </div>
           </Card>
         </div>
@@ -142,6 +182,23 @@ class MissionView extends Component {
     e.preventDefault();
     this.props.dispatch(newMission());
   };
+
+  _showCheckInModal = (val) => {
+    console.info(this.state.modalCIVisible, val);
+    if (this.state.modalCIVisible) {
+      return (
+        <Modal closeModal={() => this.setState({modalCIVisible: false})}>
+          <div>
+            <h2>{ val.name }</h2>
+            <p>{ val.body }</p>
+          </div>
+          <div>
+            <Button primary onClick={() => this.setState({modalCIVisible: false})}>Close</Button>
+          </div>
+        </Modal>
+      )
+    }
+  }
 }
 
 const mapStateToProps = state => ({
