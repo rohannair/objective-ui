@@ -44,9 +44,26 @@ const TextSection = (struct, dispatch, key) =>
   </Section>;
 
 const ListSection = (struct, dispatch, key) => {
+  let name = key === 'objectives'
+  ? `Personal Objectives`
+  : `${key.charAt(0).toUpperCase() + key.slice(1)}`;
+
+  let resourcesLink = key === 'resources'
+  ? <span
+    style={ { marginRight: '20px' }}
+      className={ styles.okrFooterButton }
+      onClick = {e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        alert(`This doesn't work yet!`);
+      }}
+    >+ Add People Resource</span>
+  : undefined;
+
   let d = debounce(dispatch, 1000)
   return (
-    <Section name={`${key.charAt(0).toUpperCase() + key.slice(1)}`}>
+    <Section name={name}>
       <ol className={ styles.listSection }>
         {
           struct.get(key)
@@ -54,7 +71,7 @@ const ListSection = (struct, dispatch, key) => {
             <li key={c.get('id') || `${key}-${i}`} className={ styles.listItem }>
               <TextInput
                 placeholder = {`Enter ${key.charAt(0).toUpperCase() + key.slice(1)}`}
-                // value={c.get('name')}
+                value={c.get('name')}
                 onChange = {e => {
                   e.stopPropagation();
                   d(updateField(struct.get('id'), [key, i], {
@@ -68,6 +85,7 @@ const ListSection = (struct, dispatch, key) => {
         }
       </ol>
       <div className={ styles.okrFooter }>
+         { resourcesLink }
         <span
           className={ styles.okrFooterButton }
           onClick = {e => {
@@ -239,8 +257,8 @@ class MissionEditor extends Component {
   _returnUserImage = (user) => {
     if (user.isEmpty())
       return 'Unassigned';
-    if (user.get('img'))
-      return <img className={styles.avatar} src={ `${user.get('img')}/small` } />;
+    // if (user.get('img'))
+      // return <img className={styles.avatar} src={ `${user.get('img')}/small` } />;
 
     return `${user.get('firstName')} ${user.get('lastName')}`;
   }

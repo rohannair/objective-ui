@@ -81,7 +81,7 @@ class MissionView extends Component {
         role: null
       };
 
-      const userimg = user.img || `//placehold.it/250x250/${((1<<24)*Math.random()|0).toString(16)}`;
+      const userimg = user.img || `//placehold.it/250x250/eee?text=\?`;
 
       return (
         <div key={ mission.id } className={ styles.missionCard }>

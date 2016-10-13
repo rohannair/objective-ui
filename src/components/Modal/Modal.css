@@ -28,7 +28,6 @@
   border-radius: 3px;
   color: $secondary;
   display: flex;
-  // height: 360px;
   flex-direction: column;
   flex-wrap: wrap;
   padding: 40px;
