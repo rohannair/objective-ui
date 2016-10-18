@@ -20,14 +20,6 @@ $top: 100;
     position: relative;
   }
 
-  /*html {
-    overflow: hidden;
-  }
-
-  body {
-    overflow: visible;
-  }*/
-
   a {
 
     &:link,

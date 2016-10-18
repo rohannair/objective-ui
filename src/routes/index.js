@@ -8,15 +8,17 @@ import CoreLayout from '../layouts/CoreLayout';
 // Containers
 import Dashboard from '../containers/Dashboard';
 import MissionEditor from '../containers/MissionEditor';
-import MissionViewer from '../containers/MissionViewer';
+import MissionList from '../containers/MissionList';
+import MissionView from '../containers/MissionView';
 
 export default (store, history) => (
   <Router history={ history }>
     <Route path="/" component={ CoreLayout }>
-      <IndexRoute component={ MissionViewer } />
+      <IndexRoute component={ Dashboard } />
       <Route path="dashboard" component={ Dashboard } />
 
-      <Route path="missions" component={ MissionViewer } />
+      <Route path="missions" component={ MissionList } />
+      <Route path="missions/:id" component={ MissionView } />
       <Route path="missions/edit/:id" component={ MissionEditor } />
     </Route>
   </Router>

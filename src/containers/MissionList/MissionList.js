@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import dateFormat from 'dateformat';
 
 // Deps
 import Card from '../../components/Card';
@@ -10,7 +11,7 @@ import Modal from '../../components/Modal';
 import TextInput from '../../components/Forms/TextInput';
 import TextArea from '../../components/Forms/TextArea';
 
-import styles from './MissionViewer.css';
+import styles from './MissionList.css';
 
 // Actions
 import {
@@ -18,7 +19,7 @@ import {
   newMission
 } from '../../state/actions/missions.actions';
 
-class MissionView extends Component {
+class MissionList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,26 +89,15 @@ class MissionView extends Component {
           <Card>
             { getCheckInModal() }
             <div className={ styles.header }>
-              <div className={ styles.avatar }>
-                <img src={ userimg } />
-              </div>
-              <div className={ styles.profileDetails }>
-                <h4>{`${user.firstName} ${user.lastName}`}</h4>
-                <h5>{ mission.name} - {mission.duration}</h5>
+              <img className={ styles.avatar} src={ userimg } />
+              <div className={ styles.mission }>
+                { mission.name}
+                <div className={ styles.endDate }>Ends: { dateFormat(mission.endAt, 'longDate') }</div>
               </div>
             </div>
 
             <div className={ styles.body }>
-              <div className={ styles.section }>
-                <h4>Description</h4>
-                <p>{ mission.description }</p>
-              </div>
-
-              <div className={ styles.section }>
-                <h4>Duration</h4>
-                <p>{ mission.duration }</p>
-              </div>
-
+              {/*}
               <div className={ styles.section }>
                 <h4>Objectives and Key Results</h4>
                 <ul>
@@ -144,12 +134,13 @@ class MissionView extends Component {
                   }
                 </ul>
               </div>
+              {*/}
 
               <div className={ styles.section }>
-                <h4>{ mission.checkIns.length } Check Ins</h4>
+                <h4>Updates</h4>
                 {
                   mission.checkIns.map( val =>
-                    <div key={val.id}><button  className={styles.fakeLink} onClick={ (e) => this.setState({ modalCIVisible: true })}>{ val.name }</button></div>)
+                    <div key={val.id}><button className={styles.fakeLink} onClick={ (e) => this.setState({ modalCIVisible: true })}>*</button></div>)
                 }
                 { this._showCheckInModal(missionList.get(1).checkIns[0]) }
               </div>
@@ -171,9 +162,22 @@ class MissionView extends Component {
     return (
       <div className={styles.missionViewer}>
         <div className={styles.controlBar}>
-          <Button primary onClick={ this._addNewMission }>New Mission</Button>
+          <div className={styles.macroContainer}>
+          </div>
+          <div className={styles.buttonContainer}>
+            <Button
+              onClick={ ()=>{} }
+            >Analytics</Button>
+            &nbsp;&nbsp;
+            <Button
+              primary
+              onClick={ this._addNewMission }
+            >New</Button>
+          </div>
         </div>
-        { MissionCards }
+        <div className={styles.cardContainer}>
+          { MissionCards }
+        </div>
       </div>
     );
   };
@@ -205,4 +209,4 @@ const mapStateToProps = state => ({
   missionList: state.get('missionList')
 });
 
-export default connect(mapStateToProps)(MissionView);
+export default connect(mapStateToProps)(MissionList);

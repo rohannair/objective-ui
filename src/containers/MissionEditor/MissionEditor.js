@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { partial } from 'ramda';
 import debounce from 'lodash/debounce';
+import dateFormat from 'dateformat';
 
 // Deps
 import Button from '../../components/Button';
@@ -11,6 +12,8 @@ import Card from '../../components/Card';
 import TextInput from '../../components/Forms/TextInput';
 import TextArea from '../../components/Forms/TextArea';
 import Modal from '../../components/Modal';
+
+import { formatTitle } from '../../utils';
 
 // Actions
 import {
@@ -27,10 +30,11 @@ const Section = ({ children, name }) =>
     { children }
   </div>;
 
-const TextSection = (struct, dispatch, key) =>
-  <Section name={`${key.charAt(0).toUpperCase() + key.slice(1)}`}>
+const TextSection = (struct, dispatch, key, inputType) =>
+  <Section name={formatTitle(key, ' ')}>
     <div className={ styles.sectionBody }>
       <TextInput
+        inputType = { inputType }
         placeholder = "Please type here"
         value = { struct.get(key) }
         onChange = {e => {
@@ -235,7 +239,22 @@ class MissionEditor extends Component {
         <div className={styles.body}>
           { TextContainer('name') }
           { TextContainer('description') }
-          { TextContainer('duration') }
+
+          <Section name="End Date">
+            <div className={ styles.sectionBody }>
+              <TextInput
+                inputType = 'date'
+                placeholder = "Please type here"
+                value = { dateFormat(new Date(mission.get('endAt')), 'yyyy-mm-dd') }
+                onChange = {e => {
+                  e.stopPropagation();
+                  dispatch(updateField(mission.get('id'), ['endAt'], {
+                    ['endAt']: e.target.value
+                  }));
+                }}
+              />
+            </div>
+          </Section>
 
           <Section name="Objectives and Key Results">
             { okrs }
