@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import styles from './Forms.css';
 
 const TextInput = (props) => {
-  console.info(props)
   return (
     <input
       type={props.inputType}

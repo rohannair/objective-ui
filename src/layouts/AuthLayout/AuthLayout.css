@@ -1,0 +1,14 @@
+@import '../../styles/globals';
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.body {
+  display: flex;
+  width: 100%;
+  background-color: #EEEEEE;
+}

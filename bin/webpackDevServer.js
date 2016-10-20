@@ -19,7 +19,10 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 debug('⌛  Webpack bundling assets for the first time...');
 
-app.use('/api', proxy('http://localhost:3000', {}));
+app.use('/api', proxy('http://localhost:3000', {
+  preserveHostHdr: true
+}));
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(basePath, 'index.html'));
 });

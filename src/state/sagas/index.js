@@ -19,6 +19,10 @@ import {
   watchGetMissionList
 } from './missionList.sagas';
 
+import {
+  watchLoginAttempt
+} from './auth.sagas';
+
 function* watchLogin() {
   while (true) {
     const { username, password } = yield take(loginActions.ATTEMPT);
@@ -28,12 +32,12 @@ function* watchLogin() {
 
 export default function* root() {
   yield [
-    fork(watchLogin),
     fork(watchGetMission),
     fork(watchGetMissionList),
     fork(watchUpdateMission),
     fork(watchAddMissionField),
     fork(watchNewMission),
-    fork(watchNewMissionSuccess)
+    fork(watchNewMissionSuccess),
+    fork(watchLoginAttempt)
   ];
 }

@@ -23,7 +23,7 @@
       "command": "nodemon ./bin/server",
       "env": {
         "NODE_ENV": "development",
-        "DEBUG": "app:*,webpack:*"
+        "DEBUG": "app:*,webpack:*,koa-generic-session:*"
       }
     }
   },
@@ -74,6 +74,7 @@
   "dependencies": {
     "babel-polyfill": "~6.13.0",
     "classnames": "~2.2.5",
+    "cookies-js": "^1.2.2",
     "dateformat": "^1.0.12",
     "immutability-helper": "~2.0.0",
     "immutable": "~3.8.1",

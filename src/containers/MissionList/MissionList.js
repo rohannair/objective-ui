@@ -188,7 +188,6 @@ class MissionList extends Component {
   };
 
   _showCheckInModal = (val) => {
-    console.info(this.state.modalCIVisible, val);
     if (this.state.modalCIVisible) {
       return (
         <Modal closeModal={() => this.setState({modalCIVisible: false})}>

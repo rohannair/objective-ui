@@ -1,9 +1,4 @@
-import {
-  createActions,
-  ATTEMPT,
-  SUCCESS,
-  ERROR
-} from './utils'
+import { createActions } from './utils';
 
 // Mission fields
 export const UPDATE_FIELD = createActions('app/UPDATE_FIELD');
