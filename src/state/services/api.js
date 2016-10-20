@@ -3,7 +3,6 @@ import 'isomorphic-fetch';
 import { Schema, arrayOf, normalize } from 'normalizr';
 import camelCase from 'lodash/camelCase';
 import omit from 'lodash/omit';
-import Cookies from 'cookies-js';
 
 const API_ROOT = '//localhost:8080/api/v1/';
 
@@ -22,8 +21,6 @@ function postApi(endpoint, body) {
   ? API_ROOT + endpoint
   : endpoint;
 
-  const token = Cookies.get('token');
-
   return fetch(fullUrl, {
     method: 'POST',
     headers: {
@@ -34,16 +31,6 @@ function postApi(endpoint, body) {
     body: JSON.stringify(body)
   })
   .then(response => response.json())
-  .then(response => {
-    if (response.token) {
-      Cookies.set(token, response.token, { expires: response.expires })
-    }
-    return omit(response, [token, expires]);
-  })
-  .catch(err => {
-    if (err.status === 401) console.log('Kill cookie'); // TODO: kill token here
-    return console.error(err);
-  });
 }
 
 export const fetchMission = id =>

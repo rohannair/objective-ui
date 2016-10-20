@@ -13,13 +13,17 @@ import MissionEditor from '../containers/MissionEditor';
 import MissionList from '../containers/MissionList';
 import MissionView from '../containers/MissionView';
 
+// Utils
+import { requireAuth, checkAuth } from '../utils/auth';
+
 export default (store, history) => (
   <Router history={ history }>
-    <Route path="/auth" component={ AuthLayout }>
+    <Route path="/auth" component={ AuthLayout } onEnter={ checkAuth }>
       <IndexRoute component={ Login } />
       <Route path="/login" component={ Login } />
     </Route>
-    <Route path="/" component={ CoreLayout }>
+
+    <Route path="/" component={ CoreLayout } onEnter={ requireAuth }>
       <IndexRoute component={ Dashboard } />
       <Route path="dashboard" component={ Dashboard } />
 

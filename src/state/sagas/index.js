@@ -20,7 +20,8 @@ import {
 } from './missionList.sagas';
 
 import {
-  watchLoginAttempt
+  watchLoginAttempt,
+  watchLoginSuccess
 } from './auth.sagas';
 
 function* watchLogin() {
@@ -38,6 +39,7 @@ export default function* root() {
     fork(watchAddMissionField),
     fork(watchNewMission),
     fork(watchNewMissionSuccess),
-    fork(watchLoginAttempt)
+    fork(watchLoginAttempt),
+    fork(watchLoginSuccess)
   ];
 }
