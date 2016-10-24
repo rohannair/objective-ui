@@ -13,9 +13,15 @@ const fetchMission = fetchEntity.bind(null, api.fetchMission);
 function* getMission(id) {
   try {
     const mission = yield api.fetchMission(id);
-    yield put({type: missionActions.GET_MISSION.SUCCESS, mission});
+    yield put({
+      type: missionActions.GET_MISSION.SUCCESS,
+      mission
+    });
   } catch (e) {
-    yield put({type: missionActions.GET_MISSION.ERROR, message: e.message });
+    yield put({
+      type: missionActions.GET_MISSION.ERROR,
+      message: e.message
+    });
   }
 }
 

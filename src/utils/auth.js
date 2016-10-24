@@ -2,7 +2,7 @@ import Cookies from 'cookies-js';
 
 const hasToken = (store) => {
   // TODO: Verify that this actually should work this way
-  if (Cookies.get('token')) {
+  if (Cookies.get('qm.tid')) {
     return true;
   }
   return false;
@@ -26,5 +26,6 @@ const checkAuth = (nextState, replace) => {
 };
 
 module.exports = {
-  requireAuth, checkAuth
+  requireAuth,
+  checkAuth
 };

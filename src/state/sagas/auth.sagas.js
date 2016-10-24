@@ -5,7 +5,6 @@ import Cookies from 'cookies-js';
 
 import * as authActions from '../constants/auth.constants';
 import * as api from '../services/api';
-import { fetchEntity } from './utils';
 
 function* getToken(payload) {
   try {
@@ -13,7 +12,6 @@ function* getToken(payload) {
     if (auth.status) {
       throw new Error(auth.message);
     } else {
-      Cookies.set('token', auth.user)
       yield put({ type: authActions.LOGIN.SUCCESS, auth });
     }
   } catch (e) {
