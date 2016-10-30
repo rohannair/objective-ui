@@ -6,6 +6,8 @@ import { reducer as formReducer } from 'redux-form';
 import globalReducer from './global.reducer';
 import missionReducer from './missions.reducer';
 import missionListReducer from './missionList.reducer';
+import userListReducer from './userList.reducer';
+import userReducer from './user.reducer';
 
 // Initial routing state
 const routeInitialState = fromJS({
@@ -31,6 +33,8 @@ export default function createReducer() {
     global: globalReducer,
     mission: missionReducer,
     missionList: missionListReducer,
-    form: formReducer
+    form: formReducer,
+    user: userReducer,
+    users: userListReducer
   });
 }

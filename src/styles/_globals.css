@@ -24,7 +24,7 @@ $top: 100;
 
     &:link,
     &:visited {
-      color: #fff;
+      color: $primary;
       text-decoration: none;
     }
 

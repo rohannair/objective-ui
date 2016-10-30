@@ -148,30 +148,7 @@ MissionView.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  mission: state.get('mission'),
-  users: new List([
-    {
-      id: (Math.random()),
-      firstName: 'Rohan Nair',
-      lastName: '',
-      role: 'user',
-      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
-    },
-    {
-      id: (Math.random()),
-      firstName: 'Ray Kanani',
-      lastName: '',
-      role: 'user',
-      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
-    },
-    {
-      id: (Math.random()),
-      firstName: 'Stu Peters',
-      lastName: '',
-      role: 'user',
-      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
-    }
-  ])
+  mission: state.get('mission')
 });
 
 export default connect(mapStateToProps)(MissionView);

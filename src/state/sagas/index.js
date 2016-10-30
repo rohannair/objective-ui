@@ -20,9 +20,17 @@ import {
 } from './missionList.sagas';
 
 import {
+  watchGetUserList
+} from './userList.sagas';
+
+import {
   watchLoginAttempt,
   watchLoginSuccess
 } from './auth.sagas';
+
+import {
+  watchGetUser
+} from './user.sagas';
 
 function* watchLogin() {
   while (true) {
@@ -40,6 +48,8 @@ export default function* root() {
     fork(watchNewMission),
     fork(watchNewMissionSuccess),
     fork(watchLoginAttempt),
-    fork(watchLoginSuccess)
+    fork(watchLoginSuccess),
+    fork(watchGetUserList),
+    fork(watchGetUser)
   ];
 }

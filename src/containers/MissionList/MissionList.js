@@ -27,22 +27,22 @@ class MissionList extends Component {
       modalVisible: false,
       modalCIVisible: false,
     }
-  }
+  };
 
   static propTypes = {
     missionList: PropTypes.instanceOf(Immutable.List)
-  }
+  };
 
   static defaultProps = {
     missionList: new Immutable.List()
-  }
+  };
 
   componentWillMount() {
     this.props.dispatch(getMissionList({
       limit: 10,
       offset: 0
     }));
-  }
+  };
 
   render() {
     const { missionList } = this.props;
@@ -201,7 +201,7 @@ class MissionList extends Component {
         </Modal>
       )
     }
-  }
+  };
 }
 
 const mapStateToProps = state => ({

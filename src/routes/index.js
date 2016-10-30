@@ -12,6 +12,8 @@ import Login from '../containers/Login';
 import MissionEditor from '../containers/MissionEditor';
 import MissionList from '../containers/MissionList';
 import MissionView from '../containers/MissionView';
+import UserList from '../containers/UserList';
+import UserEditor from '../containers/UserEditor';
 
 // Utils
 import { requireAuth, checkAuth } from '../utils/auth';
@@ -30,6 +32,9 @@ export default (store, history) => (
       <Route path="missions" component={ MissionList } />
       <Route path="missions/:id" component={ MissionView } />
       <Route path="missions/edit/:id" component={ MissionEditor } />
+
+      <Route path="users" component={ UserList } />
+      <Route path="users/:id" component={ UserEditor } />
     </Route>
   </Router>
 );

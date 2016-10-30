@@ -78,4 +78,8 @@ export const addMissionField = (payload) =>
 export const newMission = () =>
   callApi(`missions/new`);
 
+export const fetchUserList = (limit, offset, sort, order) =>
+  callApi(`users?limit=${limit}&offset=${offset}`);
 
+export const fetchUser = (id) =>
+  callApi(`users/${id}`);
