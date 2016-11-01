@@ -14,7 +14,7 @@ module.exports = {
   bail: isProd,
   cache: !isProd,
   debug: !isProd,
-  devtool: '#cheap-module-inline-source-map',
+  devtool: 'cheap-module-eval-source-map',
 
   entry: {
     bundle: [

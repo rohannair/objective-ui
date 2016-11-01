@@ -3,7 +3,7 @@ import { fromJS, List } from 'immutable';
 import * as ACTION from '../constants/users.constants';
 
 const defaultState = new fromJS({
-  user: null
+  squads: new List()
 });
 
 export default (state = defaultState, action) => {

@@ -74,7 +74,7 @@ class MissionList extends Component {
     }
 
     const MissionCards = missionList.map(mission => {
-      const user = mission.users.length > 0
+      const user = mission.users && mission.users.length > 0
       ? mission.users[0]
       : {
         firstName: '',
