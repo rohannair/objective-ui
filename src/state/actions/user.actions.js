@@ -6,3 +6,4 @@ export const getUser = (id) => ({
   type: GET_USER.ATTEMPT,
   payload: { id }
 });
+

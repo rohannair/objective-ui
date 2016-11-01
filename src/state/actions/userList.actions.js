@@ -1,8 +1,14 @@
 import {
-  GET_USER_LIST
+  GET_USER_LIST,
+  INVITE_USER
 } from '../constants/users.constants';
 
 export const getUsers = ({ limit = 25, offset = 0, sort, order }) => ({
   type: GET_USER_LIST.ATTEMPT,
   payload: { limit, offset, sort, order }
+});
+
+export const inviteUser = (payload) => ({
+  type: INVITE_USER.ATTEMPT,
+  payload
 });

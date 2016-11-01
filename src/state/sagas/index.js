@@ -20,7 +20,8 @@ import {
 } from './missionList.sagas';
 
 import {
-  watchGetUserList
+  watchGetUserList,
+  watchInviteUser
 } from './userList.sagas';
 
 import {
@@ -50,6 +51,7 @@ export default function* root() {
     fork(watchLoginAttempt),
     fork(watchLoginSuccess),
     fork(watchGetUserList),
-    fork(watchGetUser)
+    fork(watchGetUser),
+    fork(watchInviteUser)
   ];
 }

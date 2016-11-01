@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import TextInput from 'components/Forms/TextInput';
 import Button from 'components/Button';
 
+import { validateEmail } from 'utils';
 import { tryLogin } from 'state/actions/auth.actions';
 
 class Login extends Component {

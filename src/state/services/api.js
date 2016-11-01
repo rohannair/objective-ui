@@ -83,3 +83,5 @@ export const fetchUserList = (limit, offset, sort, order) =>
 
 export const fetchUser = (id) =>
   callApi(`users/${id}`);
+
+export const inviteUser = payload => postApi(`user/invite`, payload);

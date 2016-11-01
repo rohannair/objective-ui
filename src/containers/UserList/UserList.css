@@ -85,3 +85,17 @@
 .squads {
   border-right: 1px solid #f0f0f0;
 }
+
+.addUserModal {
+  padding-top: 10px;
+}
+
+.modal__item {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.modal__label {
+  color: $primary;
+  font-weight: normal;
+}

@@ -16,7 +16,9 @@ const Modal = p => {
   const outerClasses = cx({
     noBg: p.noBg,
     outerModal: true
-  })
+  });
+
+  console.warn('Modal component is deprecated. Use Skylight instead');
 
   return (
     <div className={styles.outerModal} onClick={p.closeModal}>

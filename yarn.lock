@@ -5713,6 +5713,10 @@ react-side-effect@1.0.2:
   dependencies:
     fbjs "0.1.0-alpha.10"
 
+react-skylight:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/react-skylight/-/react-skylight-0.4.1.tgz#07d1af6dea0a50a5d8122a786a8ce8bc6bdf2241"
+
 react-toolbox@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/react-toolbox/-/react-toolbox-1.1.2.tgz#f00f9780a5842183598771e47d7f6c6f61f989ad"

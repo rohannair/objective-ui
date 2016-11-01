@@ -126,7 +126,7 @@ class MissionEditor extends Component {
     const TextContainer = partial(TextSection, [mission, dispatch]);
     const ListContainer = partial(ListSection, [mission, dispatch]);
 
-    const user = !(mission.get('users').isEmpty())
+    const user = mission.get('user') && !(mission.get('users').isEmpty())
     ? mission.get('users').get(0)
     : Map({});
 

@@ -10,15 +10,28 @@ import dateFormat from 'dateformat';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import Pill from '../../components/Pill';
+import SkyLight from 'react-skylight';
+import TextInput from '../../components/Forms/TextInput';
+
+import { validateEmail } from '../../utils';
 
 // Actions
 import {
-  getUsers
+  getUsers,
+  inviteUser
 } from '../../state/actions/userList.actions';
 
 class UserList extends Component {
   constructor(props) {
     super(props);
+    this.userListDefaultState = {
+      newUser: {
+        email: '',
+        jobTitle: ''
+      }
+    };
+
+    this.state = { ...this.userListDefaultState };
   };
 
   componentWillMount() {
@@ -28,30 +41,48 @@ class UserList extends Component {
 
   render() {
     const { users } = this.props;
-    const userItems = users.get('results').map(user => {
-      const userimg = user.img || `//placehold.it/250x250/eee?text=\?`;
+    const userItems = users.get('results')
+      // .filter(user => user.pending === false)
+      .map(user => {
+        const userimg = user.img || `//placehold.it/250x250/eee?text=\?`;
+        const nameBox = user.firstName && user.lastName
+        ? `${user.firstName } ${user.lastName }`
+        : user.email;
 
-      return (
-        <div key={user.id} className={styles.listItem}>
-          <Card>
-            <div className={ styles.header }>
-              <img className={ styles.avatar} src={ userimg } />
-              <h3>{ `${user.firstName} ${user.lastName}` }</h3>
-              <small>{ user.jobTitle }</small>
-            </div>
+        const titleBox = user.pending
+        ? <Pill>Invited</Pill>
+        : user.jobTitle || 'No title';
 
-            <div className={ styles.body }>
-              <p className={styles.squads}>{ this._returnSquadPill(user.squads) }</p>
-              <p className={styles.missions}>{ this._returnMissionPill(user.missions) }</p>
-            </div>
+        return (
+          <div key={user.id} className={styles.listItem}>
+            <Card>
+              <div className={ styles.header }>
+                <img className={ styles.avatar} src={ userimg } />
+                <h3>{ nameBox }</h3>
+                <small>{ titleBox }</small>
+              </div>
 
-            <div className={ styles.footer }>
-              <Link to={`users/${user.id}`}>View User File</Link>
-            </div>
-          </Card>
-        </div>
-      );
-    });
+              <div className={ styles.body }>
+                <p className={styles.squads}>{ this._returnSquadPill(user.squads) }</p>
+                <p className={styles.missions}>{ this._returnMissionPill(user.missions) }</p>
+              </div>
+
+              <div className={ styles.footer }>
+                <Link to={`users/${user.id}`}>View user</Link>
+              </div>
+            </Card>
+          </div>
+        );
+      });
+
+    const skylightStyles = {
+      width: '40%',
+      height: 'static',
+      marginLeft: '-20%',
+      marginTop: '0',
+      top: '20%',
+      padding: '30px'
+    };
 
     return (
       <div className={styles.UserList}>
@@ -62,7 +93,7 @@ class UserList extends Component {
             &nbsp;&nbsp;
             <Button
               primary
-              onClick={ this._inviteUser }
+              onClick={ this._showInviteUserModal }
             >Invite User</Button>
           </div>
         </div>
@@ -70,20 +101,84 @@ class UserList extends Component {
           { userItems }
         </div>
 
+        <SkyLight
+          hideOnOverlayClicked
+          title="Invite New User"
+          ref="dialog"
+          dialogStyles={ skylightStyles }
+          afterClose={this._clearState}
+        >
+          <form className={styles.addUserModal} onSubmit={ this._validateInviteUserInputs }>
+            <label className={styles.modal__item}>
+              <h3 className={styles.modal__label}>Email</h3>
+              <TextInput
+                type='email'
+                placeholder='Please enter email'
+                value={this.state.newUser.email}
+                onChange={ e => this.setState({
+                  newUser: {
+                    ...this.state.newUser,
+                    email: e.target.value
+                  }
+                })}
+                />
+            </label>
+
+            <label className={styles.modal__item}>
+              <h3 className={styles.modal__label}>Job Title</h3>
+              <TextInput
+                placeholder='Please enter Job Title'
+                value={this.state.newUser.jobTitle}
+                onChange={ e => this.setState({
+                  newUser: {
+                    ...this.state.newUser,
+                    jobTitle: e.target.value
+                  }
+                })}
+                />
+            </label>
+            <Button primary onClick={ this._validateInviteUserInputs }>Send Invite</Button>
+          </form>
+        </SkyLight>
+
       </div>
     );
   };
 
-  _inviteUser = e => e.preventDefault();
+  _clearState = () => this.setState({
+    ...this.userListDefaultState
+  });
 
-  _returnMissionPill = ({length: count}) => {
+  _showInviteUserModal = (e) => {
+    e.preventDefault();
+    this.refs.dialog.show();
+  };
+
+  _validateInviteUserInputs = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const { newUser: { email, jobTitle } } = this.state;
+    const { dispatch } = this.props;
+
+    if (!validateEmail(email) || !jobTitle) return console.error('Not an email!');
+
+    // Dispatch action
+    dispatch(inviteUser({ email, jobTitle }));
+
+    // Close Modal
+    this.refs.dialog.hide();
+  };
+
+  _returnMissionPill = (missions) => {
+    const count = missions && missions.length || 0;
     if (count === 0) return <Pill danger>No Missions</Pill>;
     return <Pill warning>{`${count} ${count === 1 ? 'mission' : 'missions'}`}</Pill>;
   };
 
   _returnSquadPill = (squads) => {
-    const count = squads.length;
-    if (count === 0) return <Pill danger>Not assigned to a squad</Pill>;
+    const count = squads && squads.length || 0;
+    if (count === 0) return <Pill danger>No Squads</Pill>;
     return count > 1
       ? <Pill info>{`In ${count} squads`}</Pill>
       : <Pill info>{ squads[0].name }</Pill>;

@@ -19,6 +19,13 @@ export default (state = defaultState, action) => {
       results: new List(action.users.results)
     }));
 
+  case ACTION.INVITE_USER.SUCCESS:
+    return state.updateIn(['results'], arr => arr.push({
+      ...action.body.user,
+      missions: [],
+      squads: []
+    }));
+
   default:
     return state;
   }
