@@ -23,9 +23,14 @@ import classNames from 'classnames/bind';
 
 let cx = classNames.bind(styles);
 
-const ${componentName} = (props) => {
+const ${componentName} = p => {
+  const classname = cx({
+    [styles.${componentName}]: true
+  });
+
   return (
-    <div className="${componentName}">
+    <div className={classname}>
+      { p.children }
     </div>
   );
 };
