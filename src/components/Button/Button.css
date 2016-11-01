@@ -1,6 +1,6 @@
 @import '../../styles/globals';
 
-.button {
+@define-extend regularbutton {
   background-color: #FFF;
   display: inline-block;
   overflow: hidden;
@@ -26,41 +26,40 @@
   vertical-align: middle;
   white-space: nowrap;
   user-select: none;
-
-  &:hover {
-    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
-  }
-
-  &:active {
-    box-shadow: 0 0 2px rgba(0,0,0,0.4);
-  }
 }
 
 .primary {
-  @extend .button;
+  @extend regularbutton;
   background-color: $secondary;
   color: $background;
 
   &:hover {
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
     color: #fff;
   }
 }
 
 .secondary {
-  @extend .button;
+  @extend regularbutton;
   background-color: $primary;
   color: $background;
 
   &:hover {
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
     color: #fff;
   }
+}
+
+.link {
+  @extend regularbutton;
+  background-color: transparent;
+  color: $secondary;
 }
 
 /////////////// Sizes ///////////////
 .sm {
   padding: 0 12px;
 }
-
 
 /////////////// Sizes ///////////////
 .right {

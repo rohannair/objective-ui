@@ -9,6 +9,7 @@ import dateFormat from 'dateformat';
 // Deps
 import Card from '../../components/Card';
 import Button from '../../components/Button';
+import Pill from '../../components/Pill';
 
 // Actions
 import {
@@ -29,10 +30,6 @@ class UserList extends Component {
     const { users } = this.props;
     const userItems = users.get('results').map(user => {
       const userimg = user.img || `//placehold.it/250x250/eee?text=\?`;
-      const squadCount = user.squads.length;
-      const squadDiv = squadCount > 1
-      ? `In ${squadCount} squads`
-      : user.squads[0].name;
 
       return (
         <div key={user.id} className={styles.listItem}>
@@ -40,11 +37,16 @@ class UserList extends Component {
             <div className={ styles.header }>
               <img className={ styles.avatar} src={ userimg } />
               <h3>{ `${user.firstName} ${user.lastName}` }</h3>
-              <p>{ user.email }</p>
-              <p className={styles.squads}>{ squadDiv }</p>
+              <small>{ user.jobTitle }</small>
             </div>
+
+            <div className={ styles.body }>
+              <p className={styles.squads}>{ this._returnSquadPill(user.squads) }</p>
+              <p className={styles.missions}>{ this._returnMissionPill(user.missions) }</p>
+            </div>
+
             <div className={ styles.footer }>
-              <Link to={`users/${user.id}`}>Edit</Link>
+              <Link to={`users/${user.id}`}>View User File</Link>
             </div>
           </Card>
         </div>
@@ -60,7 +62,7 @@ class UserList extends Component {
             &nbsp;&nbsp;
             <Button
               primary
-              onClick={ this._addNewMission }
+              onClick={ this._inviteUser }
             >Invite User</Button>
           </div>
         </div>
@@ -70,6 +72,21 @@ class UserList extends Component {
 
       </div>
     );
+  };
+
+  _inviteUser = e => e.preventDefault();
+
+  _returnMissionPill = ({length: count}) => {
+    if (count === 0) return <Pill danger>No Missions</Pill>;
+    return <Pill warning>{`${count} ${count === 1 ? 'mission' : 'missions'}`}</Pill>;
+  };
+
+  _returnSquadPill = (squads) => {
+    const count = squads.length;
+    if (count === 0) return <Pill danger>Not assigned to a squad</Pill>;
+    return count > 1
+      ? <Pill info>{`In ${count} squads`}</Pill>
+      : <Pill info>{ squads[0].name }</Pill>;
   };
 }
 

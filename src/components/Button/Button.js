@@ -8,9 +8,9 @@ const Button = p => {
   const className = cx({
     [styles.primary]: p.primary,
     [styles.secondary]: p.secondary,
-    [styles.button]: true,
     [styles.sm]: p.size === 'sm',
     [styles.right]: p.right,
+    [styles.link]: p.link || (!p.primary && !p.secondary)
   });
 
   return (

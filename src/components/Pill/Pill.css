@@ -1,0 +1,32 @@
+@import '../../styles/mixins';
+
+@define-extend pill {
+  flex-flow: 0;
+  font-size: 0.7rem;
+  padding: 3px 5px;
+  text-align: center;
+  background-color: #CCC;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 3px;
+}
+
+.success {
+  @extend pill;
+  @mixin success;
+}
+
+.info {
+  @extend pill;
+  @mixin info;
+}
+
+.warning {
+  @extend pill;
+  @mixin warning;
+}
+
+.danger {
+  @extend pill;
+  @mixin danger;
+}

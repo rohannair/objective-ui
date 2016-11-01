@@ -66,12 +66,22 @@
   margin: 0 0 10px 0;
 }
 
+.body {
+  flex-direction: row;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  justify-content: baseline;
+  align-items: baseline;
+}
+
+.missions,
 .squads {
-  background-color: #ccc;
-  padding: 2px 10px;
-  border: 1px solid #bbb;
-  border-radius: 3px;
-  font-size: 0.75rem;
-  color: #666;
-  font-weight: bold;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: calc(50% - 1px);
+}
+
+.squads {
+  border-right: 1px solid #f0f0f0;
 }
