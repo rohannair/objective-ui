@@ -19,12 +19,15 @@ import SkyLight from 'react-skylight';
 // Modals
 import NewSquadModal from './Modals/NewSquadModal';
 import NewMissionModal from './Modals/NewMissionModal';
+import NewUserOKRModal from './Modals/NewUserOKRModal';
 import AddSquadMember from './Modals/AddSquadMember';
 
 import {
   getSquadList,
   newSquadMission,
-  addUserToSquad
+  addUserToSquad,
+  createSquad,
+  newUserOKR
 } from '../../state/actions/squadList.actions';
 
 import {
@@ -35,11 +38,20 @@ class SquadList extends Component {
   constructor(props) {
     super(props);
 
-    this.defaultMissionState = {
-      objective: '',
+    this.defaultObjectiveState = {
+      name: '',
       keyResults: [ '' ],
       timeline: '',
       squadId: ''
+    };
+
+    this.defaultUserOKRState = {
+      name: '',
+      keyResults: [ '' ],
+      resources: [ '' ],
+      timeline: '',
+      squadId: '',
+      userId: ''
     };
 
     this.defaultSquadState = {
@@ -53,9 +65,10 @@ class SquadList extends Component {
     };
 
     this.state = {
-      mission: this.defaultMissionState,
+      objective: this.defaultObjectiveState,
       squad: this.defaultSquadState,
-      assign: this.defaultAssignState
+      assign: this.defaultAssignState,
+      user: this.defaultUserOKRState
     };
 
   }
@@ -78,9 +91,10 @@ class SquadList extends Component {
     const squadList = squads.map(squadItem => {
       const objective = squadItem.objectives && squadItem.objectives.length > 0
       ? <Objective data={squadItem.objectives[0]} />
-      : <Button transparent onClick={this._showNewMissionModal.bind(this, squadItem.id)}>Add Squad Objective</Button>;
+      : <Button transparent onClick={this._showNewObjectiveModal.bind(this, squadItem.id)}>Add Squad Objective</Button>;
+
       const members = squadItem.users.map(u =>
-        <User key={u.id} data={u} leader={u.id === squadItem.leader} />
+        <User key={u.id} data={u} leader={u.id === squadItem.leader} squadId={squadItem.id} showOKRModal={this._showNewUserOKRModal}/>
         );
 
       return (
@@ -129,15 +143,152 @@ class SquadList extends Component {
           ref="newSquadDialog"
           afterClose={ () => this.setState({ squad: this.defaultSquadState }) }
         >
-          <NewSquadModal />
+          <NewSquadModal
+            name={this.state.squad.name}
+            onChangeName={(name) => {
+              this.setState({
+                squad: {
+                  ...this.state.squad,
+                  name
+                }
+              })
+            }}
+            onSave={() => {
+              const { squad } = this.state;
+              const { dispatch } = this.props;
+
+              dispatch(createSquad({ name: squad.name }));
+              this.refs.newSquadDialog.hide();
+            }}
+          />
         </SkyLight>
 
         <SkyLight hideOnOverlayClicked dialogStyles={ skylightStyles }
           title="New OKR"
-          ref="newMissionDialog"
-          afterClose={ () => this.setState({ mission: this.defaultMissionState }) }
+          ref="newOKRDialog"
+          afterClose={ () => this.setState({ objective: this.defaultObjectiveState }) }
         >
-          <NewMissionModal />
+          <NewMissionModal
+            name={this.state.objective.name}
+            onChangeName={name =>
+              this.setState({
+                objective: {
+                  ...this.state.objective,
+                  name
+                }
+              })
+            }
+            keyResults={this.state.objective.keyResults}
+            onChangeKeyResults={(val, i) => {
+              const { keyResults } = this.state.objective;
+              this.setState({
+                objective: {
+                  ...this.state.objective,
+                  keyResults: [
+                    ...keyResults.slice(0, i),
+                    val,
+                    ...keyResults.slice(i + 1)
+                  ]
+                }
+              })
+            }}
+            onAddKeyResult={() => {
+              const { keyResults } = this.state.objective;
+              this.setState({
+                objective: {
+                  ...this.state.objective,
+                  keyResults: [ ...keyResults, '' ]
+                }
+              })
+            }}
+            timeline={this.state.objective.timeline}
+            onChangeTimeline={timeline =>
+              this.setState({
+                objective: {
+                  ...this.state.objective,
+                  timeline
+                }
+              })
+            }
+            onSubmit={this._createObjective}
+          />
+        </SkyLight>
+
+        <SkyLight hideOnOverlayClicked dialogStyles={ skylightStyles }
+          title="New OKR"
+          ref="newUserOKRDialog"
+          afterClose={ () => this.setState({ user: this.defaultUserOKRState }) }
+        >
+          <NewUserOKRModal
+            name={this.state.user.name}
+            userId={this.state.user.userId}
+            onChangeName={name =>
+              this.setState({
+                user: {
+                  ...this.state.user,
+                  name
+                }
+              })
+            }
+
+            keyResults={this.state.user.keyResults}
+            onChangeKeyResults={(val, i) => {
+              const { keyResults } = this.state.user;
+              this.setState({
+                user: {
+                  ...this.state.user,
+                  keyResults: [
+                    ...keyResults.slice(0, i),
+                    val,
+                    ...keyResults.slice(i + 1)
+                  ]
+                }
+              })
+            }}
+            onAddKeyResult={() => {
+              const { keyResults } = this.state.user;
+              this.setState({
+                user: {
+                  ...this.state.user,
+                  keyResults: [ ...keyResults, '' ]
+                }
+              })
+            }}
+
+            resources={this.state.user.resources}
+            onChangeResources={(val, i) => {
+              const { resources } = this.state.user;
+              this.setState({
+                user: {
+                  ...this.state.user,
+                  resources: [
+                    ...resources.slice(0, i),
+                    val,
+                    ...resources.slice(i + 1)
+                  ]
+                }
+              })
+            }}
+            onAddResource={() => {
+              const { resources } = this.state.user;
+              this.setState({
+                user: {
+                  ...this.state.user,
+                  resources: [ ...resources, '' ]
+                }
+              })
+            }}
+            timeline={this.state.user.timeline}
+            onChangeTimeline={timeline =>
+              this.setState({
+                user: {
+                  ...this.state.user,
+                  timeline
+                }
+              })
+            }
+            onSubmit={this._createUserOKR}
+          />
         </SkyLight>
 
         <SkyLight hideOnOverlayClicked dialogStyles={ skylightStyles }
@@ -155,14 +306,23 @@ class SquadList extends Component {
     );
   };
 
+  _showNewUserOKRModal = (squadId, userId) => {
+    this.setState({
+      user: {
+        ...this.state.user,
+        squadId,
+        userId
+      }
+    }, () => this.refs.newUserOKRDialog.show());
+  };
+
   _showAssignUserModal = (id) => {
     this.setState({
       squad: {
         ...this.state.assign,
         squadId: id
       }
-    });
-    this.refs.assignUserDialog.show();
+    }, () => this.refs.assignUserDialog.show());
   };
 
   _showNewSquadModal = (e) => {
@@ -170,38 +330,60 @@ class SquadList extends Component {
     this.refs.newSquadDialog.show();
   };
 
-  _showNewMissionModal = (id) => {
+  _showNewObjectiveModal = (id) => {
     this.setState({
-      mission: {
-        ...this.state.mission,
+      objective: {
+        ...this.state.objective,
         squadId: id
       }
     });
-    this.refs.newMissionDialog.show();
+    this.refs.newOKRDialog.show();
   };
 
-  _createMission = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  _createObjective = () => {
     const { dispatch } = this.props;
-    const { mission: { objective, keyResults, timeline, squadId } } = this.state;
+    const { objective: { name, keyResults, timeline, squadId } } = this.state;
 
-    const mission = {
-      objective,
+    const objective = {
+      name,
       timeline,
       squadId,
       keyResults: keyResults.filter(kr => !!kr),
     };
 
     // TODO: proper validation messaging
-    if (!mission.objective
-        || !mission.keyResults.length > 0
-        || !mission.timeline) {
+    if (!objective.name
+        || !objective.keyResults.length > 0
+        || !objective.timeline) {
       return console.error('Failed validation');
     }
+    this.refs.newOKRDialog.hide();
+    return dispatch(newSquadMission(objective));
+  };
 
-    return dispatch(newSquadMission(mission));
+  _createUserOKR = () => {
+    const { dispatch } = this.props;
+    const { user: {
+      name, keyResults, timeline, squadId, userId, resources
+    } } = this.state;
+
+    const objective = {
+      name,
+      timeline,
+      squadId,
+      userId,
+      keyResults: keyResults.filter(kr => !!kr),
+      resources: resources.filter(r => !!r),
+    };
+
+    // TODO: proper validation messaging
+    if (!objective.name
+        || !objective.keyResults.length > 0
+        || !objective.timeline) {
+      return console.error('Failed validation');
+    }
+    this.refs.newUserOKRDialog.hide();
+    return dispatch(newUserOKR(objective));
   };
 
   _searchForUser = (val) => {

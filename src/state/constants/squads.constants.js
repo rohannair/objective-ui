@@ -1,6 +1,8 @@
 import { createActions } from './utils';
 
 export const GET_SQUAD_LIST = createActions('app/GET_SQUAD_LIST');
-export const NEW_MISSION = createActions('app/NEW_SQUAD_MISSION');
+export const NEW_MISSION = createActions('app/NEW_SQUAD_OKR');
+export const NEW_SQUAD = createActions('app/NEW_SQUAD');
 
 export const ASSIGN_USER_TO_SQUAD = createActions('app/ASSIGN_USER_TO_SQUAD');
+export const NEW_USER_OKR = createActions('app/NEW_USER_OKR');

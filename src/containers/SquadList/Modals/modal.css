@@ -1,3 +1,5 @@
+@import '../../../styles/globals';
+
 .innerModal {
   padding: 20px 0 0;
   font-size: 0.9rem;
@@ -10,7 +12,7 @@
 }
 
 .modal__label {
-  color: $primary;
+  color: $secondary;
   font-weight: normal;
 }
 
@@ -38,5 +40,12 @@
 }
 
 .buttonContainer {
+  margin-left: auto;
+}
+
+.addButton {
+  font-size: 0.75rem;
+  color: $primary;
+  cursor: pointer;
   margin-left: auto;
 }

@@ -16,3 +16,12 @@
   font-size: 0.85rem;
   margin: 0 0 15px;
 }
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+}
+
+/* WTF */

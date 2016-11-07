@@ -30,7 +30,7 @@ const Modal = (props) => {
   : undefined;
 
   return (
-    <form className={styles.innerModal}>
+    <div className={styles.innerModal}>
       <label className={styles.modal__item}>
         <h5 className={styles.modal__label}>Search for user</h5>
         <TextInput
@@ -42,7 +42,7 @@ const Modal = (props) => {
         />
       </label>
       { users }
-    </form>
+    </div>
   );
 };
 

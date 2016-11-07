@@ -15,7 +15,7 @@ export default (p) => {
       <label className={styles.modal__item}>
         <h3 className={styles.modal__label}>Objective</h3>
         <TextInput
-          placeholder='Please enter objective'
+          placeholder='Objective'
           value={ p.name }
           onChange={e => {
             e.preventDefault();
@@ -29,7 +29,7 @@ export default (p) => {
           { p.keyResults.map((r, i) =>
             <TextInput
               key={`kr-${i}`}
-              placeholder='Enter a measurable Key Result'
+              placeholder='A Measurable Key Result'
               value={ r }
               onChange={e => {
                 e.preventDefault();
@@ -50,13 +50,37 @@ export default (p) => {
       <label className={styles.modal__item}>
         <h3 className={styles.modal__label}>Timeline</h3>
         <TextInput
-          placeholder='Please timeline'
+          placeholder='Timeline'
           value={ p.timeline }
           onChange={e => {
             e.preventDefault();
             p.onChangeTimeline(e.target.value);
           }}
         />
+      </label>
+
+      <label className={styles.modal__item}>
+        <h3 className={styles.modal__label}>Resources</h3>
+        { p.resources.map((r, i) =>
+          <TextInput
+            key={`kr-${i}`}
+            placeholder='A resource'
+            value={ r }
+            onChange={e => {
+              e.preventDefault();
+              p.onChangeResources(e.target.value, i);
+            }}
+            />
+        )}
+        <div className={styles.addButton} onClick={ e => {
+          e.stopPropagation();
+          if (p.resources.length === 3 ) {
+            // TODO: Have error messaging here
+            return;
+          }
+          p.onAddResource();
+        }}>Add Resource</div>
+
       </label>
       <Button primary onClick={onSubmit}>Save OKR</Button>
     </form>

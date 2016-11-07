@@ -8,7 +8,10 @@ import { fetchEntity } from './utils';
 function* getSquadList() {
   try {
     const squads = yield api.fetchSquadList();
-    yield put({ type: squadActions.GET_SQUAD_LIST.SUCCESS, squads });
+    yield put({
+      type: squadActions.GET_SQUAD_LIST.SUCCESS,
+      squads
+    });
   } catch (e) {
     yield put({
       type: squadActions.GET_SQUAD_LIST.ERROR,
@@ -19,7 +22,7 @@ function* getSquadList() {
 
 function* createSquadMission(payload) {
   try {
-    const mission = yield api.createSquadMission(payload);
+    const {mission} = yield api.createSquadMission(payload);
     yield put({ type: squadActions.NEW_MISSION.SUCCESS, mission });
   } catch (e) {
     yield put({
@@ -59,6 +62,55 @@ export function* assignUserToSquad(payload) {
 }
 
 export function* watchAssignUserToSquad() {
-  const { payload } = yield take(squadActions.ASSIGN_USER_TO_SQUAD.ATTEMPT);
-  yield fork(assignUserToSquad, payload, true);
+  while (true) {
+    const { payload } = yield take(squadActions.ASSIGN_USER_TO_SQUAD.ATTEMPT);
+    yield fork(assignUserToSquad, payload, true);
+  }
+}
+
+function* createSquad(payload) {
+  try {
+    const { squad } = yield api.createSquad(payload);
+    yield put({
+      type: squadActions.NEW_SQUAD.SUCCESS,
+      squad
+    });
+  } catch (e) {
+    yield put({
+      type: squadActions.NEW_SQUAD.ERROR,
+      message: e.message
+    });
+  }
+}
+
+export function* watchCreateSquad() {
+  while(true) {
+    const { payload } = yield take(squadActions.NEW_SQUAD.ATTEMPT);
+    yield fork(createSquad, payload, true);
+  }
+}
+
+
+function* createUserOKR(payload) {
+  try {
+    const { user, userId, squadId } = yield api.createUserOKR(payload);
+    yield put({
+      type: squadActions.NEW_USER_OKR.SUCCESS,
+      user,
+      userId,
+      squadId
+    });
+  } catch (e) {
+    yield put({
+      type: squadActions.NEW_USER_OKR.SUCCESS,
+      message: e.message
+    });
+  }
+}
+
+export function* watchCreateUserOKR() {
+  while(true) {
+    const { payload } = yield take(squadActions.NEW_USER_OKR.ATTEMPT);
+    yield fork(createUserOKR, payload, true);
+  }
 }
