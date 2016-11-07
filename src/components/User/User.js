@@ -43,11 +43,11 @@ const User = p => {
   const moreDropdown = p.openMenu
   ? <div className={styles.moreDropdown}>
     <ul>
-      <li onClick={p.onEditClick}>
+      { /* <li onClick={p.onEditClick}>
         <i className="zmdi zmdi-edit"></i>
         &nbsp;&nbsp;
         Edit Objective
-      </li>
+      </li> */}
       <li onClick={(e) => {
         e.preventDefault();
 
@@ -61,7 +61,9 @@ const User = p => {
         &nbsp;&nbsp;
         Add Checkin
       </li>
-      <li>
+      <li onClick={(e) => {
+        p.viewCheckIn(p.data.objectives[0].check_ins);
+      }}>
         <i className="zmdi zmdi-comment"></i>
         &nbsp;&nbsp;
         View Checkins <Pill info>{checkInCount}</Pill>

@@ -61,3 +61,23 @@
   cursor: pointer;
   margin-left: auto;
 }
+
+.checkin {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 10px;
+}
+
+.checkin__header {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+
+  h3 {
+    margin-bottom: 0;
+  }
+
+  em {
+    font-size: 0.85em;
+  }
+}
+
+.checkin__body {}

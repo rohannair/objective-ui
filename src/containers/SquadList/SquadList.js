@@ -22,6 +22,7 @@ import AddSquadMember from './Modals/AddSquadMember';
 import NewMissionModal from './Modals/NewMissionModal';
 import NewSquadModal from './Modals/NewSquadModal';
 import NewUserOKRModal from './Modals/NewUserOKRModal';
+import ViewCheckIns from './Modals/ViewCheckIns';
 
 import {
   getSquadList,
@@ -80,7 +81,8 @@ class SquadList extends Component {
       assign: this.defaultAssignState,
       user: this.defaultUserOKRState,
       checkIn: this.defaultCheckInState,
-      openMenu: ''
+      openMenu: '',
+      checkInUser: ''
     };
 
   }
@@ -117,6 +119,7 @@ class SquadList extends Component {
           openMenu={u.id === this.state.openMenu}
           squadId={squadItem.id}
           showOKRModal={this._showNewUserOKRModal}
+          viewCheckIn={this._showViewCheckInModal}
         />
         );
 
@@ -349,6 +352,16 @@ class SquadList extends Component {
             onSubmit={this._addNewCheckin}
            />
         </SkyLight>
+
+        <SkyLight hideOnOverlayClicked dialogStyles={ skylightStyles }
+          title="View Check Ins"
+          ref="viewCheckInDialog"
+          afterClose={ () => this.setState({ checkInData: [] }) }
+        >
+          <ViewCheckIns
+            data={this.state.checkInData}
+          />
+        </SkyLight>
       </div>
     );
   };
@@ -366,6 +379,7 @@ class SquadList extends Component {
     }
 
     dispatch(addCheckIn(checkIn));
+    this.refs.newCheckInDialog.hide()
   };
 
   _assignUserToSquad = (userId) => {
@@ -476,6 +490,12 @@ class SquadList extends Component {
       }
     });
     this.refs.newOKRDialog.show();
+  };
+
+  _showViewCheckInModal = (data) => {
+    this.setState({
+      checkInData: data
+    }, () => this.refs.viewCheckInDialog.show());
   };
 
   _toggleUserOKRMenu = (id) => this.setState({ openMenu: id });
