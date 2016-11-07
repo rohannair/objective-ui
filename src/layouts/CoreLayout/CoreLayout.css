@@ -20,7 +20,8 @@
   color: #fff;
 
   a {
-    display: block;
+    display: flex;
+    flex-direction: column;
 
     &:link,
     &:visited {
@@ -32,6 +33,10 @@
     &:hover{
       background-color: rgba(255, 255, 255, 0.3);
     }
+
+    i {
+      margin-bottom: 5px;
+    }
   }
 }
 
@@ -39,12 +44,10 @@
   text-transform: uppercase;
   font-size: 0.65rem;
   letter-spacing: 0.1px;
-  line-height: 0.5rem;
+  line-height: 1;
   opacity: 0;
   transition: opacity 0.25s ease;
 }
-
-.nav__legend {}
 
 .nav a:hover .nav__legend {
   opacity: 1;

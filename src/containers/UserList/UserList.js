@@ -62,11 +62,6 @@ class UserList extends Component {
                 <small>{ titleBox }</small>
               </div>
 
-              <div className={ styles.body }>
-                <p className={styles.squads}>{ this._returnSquadPill(user.squads) }</p>
-                <p className={styles.missions}>{ this._returnMissionPill(user.missions) }</p>
-              </div>
-
               <div className={ styles.footer }>
                 <Link to={`users/${user.id}`}>View user</Link>
               </div>

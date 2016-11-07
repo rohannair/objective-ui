@@ -37,9 +37,9 @@
 }
 
 .listItem {
-  // margin-bottom: 30px;
-  width: calc((100% - 120px) / 4);
+  width: calc((100% - 120px) / 3);
   margin-right: 30px;
+  margin-bottom: 30px;
 }
 
 .header,

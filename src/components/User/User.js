@@ -5,12 +5,14 @@ import Button from '../../components/Button';
 import Pill from '../Pill';
 
 const User = p => {
-  if (!user || !user.objectives) {
+  if (!(p.data && p.data.objectives)) {
     return <div></div>
   }
 
   const user = p.data;
-  const checkInCount = user.objectives[0].check_ins.length;
+  const checkInCount = user.objectives.length > 0
+  ? user.objectives[0].check_ins.length
+  : NaN;
 
   const leaderBadge = false || p.leader
   ? <Pill info>Leader</Pill>
@@ -66,7 +68,9 @@ const User = p => {
         Add Checkin
       </li>
       <li onClick={(e) => {
-        p.viewCheckIn(p.data.objectives[0].check_ins);
+        if (p.data.objectives.length > 0) {
+          p.viewCheckIn(p.data.objectives[0].check_ins)
+        }
       }}>
         <i className="zmdi zmdi-comment"></i>
         &nbsp;&nbsp;
