@@ -24,6 +24,7 @@ export default (store, history) => (
     <Route path="/auth" component={ AuthLayout } onEnter={ checkAuth }>
       <IndexRoute component={ Login } />
       <Route path="/login" component={ Login } />
+      <Route path="/logout" component={ Login } />
     </Route>
 
     <Route path="/" component={ CoreLayout } onEnter={ requireAuth }>

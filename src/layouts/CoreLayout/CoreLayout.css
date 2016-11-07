@@ -11,6 +11,8 @@
   flex-direction: column;
   background-color: $secondary;
   width: 60px;
+  position: fixed;
+  height: 100%;
 }
 
 .nav {
@@ -23,7 +25,8 @@
     &:link,
     &:visited {
       color: #fff;
-      padding: 20px;
+      padding: 15px 10px;
+      text-align: center;
     }
 
     &:hover{
@@ -32,9 +35,31 @@
   }
 }
 
+.nav__legend {
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.1px;
+  line-height: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.nav__legend {}
+
+.nav a:hover .nav__legend {
+  opacity: 1;
+}
+
+.bottomNav {
+  @extend .nav;
+  margin-top: auto;
+}
+
 .body {
   display: flex;
   width: calc(100% - 60px);
   margin-top: 40px;
+  margin-left: 60px;
   background-color: #EEEEEE;
 }
+

@@ -12,8 +12,22 @@ const CoreLayout = ({ children }) =>
     <header className={classes.header}>
       <Header />
       <nav className={classes.nav}>
-        <Link to={'/squads'}>S</Link>
-        <Link to={'/users'}>U</Link>
+        <Link to={'/squads'}>
+          <i className="zmdi zmdi-tab" />
+          <span className={classes.nav__legend}>Squads</span>
+        </Link>
+        <Link to={'/users'}>
+          <i className="zmdi zmdi-account" />
+          <span className={classes.nav__legend}>Users</span>
+        </Link>
+      </nav>
+      <nav className={classes.bottomNav}>
+        <Link to={'/logout'}>
+          <i className="zmdi zmdi-sign-in" />
+          <span className={classes.nav__legend}>
+            Log Out
+          </span>
+        </Link>
       </nav>
     </header>
 
