@@ -4,12 +4,23 @@ import styles from './User.css';
 import Button from '../../components/Button';
 import Pill from '../Pill';
 
-
 const User = p => {
   const user = p.data;
+  const checkInCount = user.objectives[0].check_ins.length;
+
   const leaderBadge = false || p.leader
   ? <Pill info>Leader</Pill>
   : undefined;
+
+  const openOKRMenu = (e) => {
+    e.preventDefault();
+    p.onMenuClick(p.data.id);
+  };
+
+  const closeOKRMenu = (e) => {
+    e.preventDefault();
+    p.onMenuClick('');
+  };
 
   const objective = user.objectives.length > 0
   ? user.objectives
@@ -25,9 +36,39 @@ const User = p => {
   : <div className={styles.buttonContainer}>
       <Button transparent onClick={ e => {
         e.preventDefault();
-        p.showOKRModal(p.squadId, p.data.id)
+        p.showOKRModal(p.squadId, p.data.id);
       }}>Add Objective</Button>
     </div>;
+
+  const moreDropdown = p.openMenu
+  ? <div className={styles.moreDropdown}>
+    <ul>
+      <li onClick={p.onEditClick}>
+        <i className="zmdi zmdi-edit"></i>
+        &nbsp;&nbsp;
+        Edit Objective
+      </li>
+      <li onClick={(e) => {
+        e.preventDefault();
+
+        // TODO: fix this hacker
+        const { id } = user.objectives
+          .filter(o => o.squadId === p.squadId)[0];
+
+        p.onNewCheckinClick(id, p.data.id);
+      }}>
+        <i className="zmdi zmdi-comment-edit"></i>
+        &nbsp;&nbsp;
+        Add Checkin
+      </li>
+      <li>
+        <i className="zmdi zmdi-comment"></i>
+        &nbsp;&nbsp;
+        View Checkins <Pill info>{checkInCount}</Pill>
+      </li>
+    </ul>
+  </div>
+  : undefined;
 
   return (
     <div className={styles.user}>
@@ -36,6 +77,12 @@ const User = p => {
         <div className={styles.headerInfo}>
           <h4>{`${user.firstName} ${user.lastName}`} { leaderBadge }</h4>
           <p>{user.jobTitle}</p>
+        </div>
+        <div className={styles.moreBar}>
+          <div className={styles.more__action} onMouseEnter={openOKRMenu} onMouseLeave={closeOKRMenu}>
+            <i className="zmdi zmdi-more-vert"></i>
+            { moreDropdown }
+          </div>
         </div>
       </div>
       <div className={styles.body}>

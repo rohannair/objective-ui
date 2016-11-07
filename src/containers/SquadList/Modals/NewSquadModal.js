@@ -19,7 +19,7 @@ export default (p) => {
           value={ p.name }
           onChange={(e) => {
             e.preventDefault();
-            p.onChangeName(e.target.value)
+            p.onChangeName(e.target.value);
           }}
         />
       </label>

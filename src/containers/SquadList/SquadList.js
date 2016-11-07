@@ -17,17 +17,19 @@ import User from '../../components/User';
 import SkyLight from 'react-skylight';
 
 // Modals
-import NewSquadModal from './Modals/NewSquadModal';
-import NewMissionModal from './Modals/NewMissionModal';
-import NewUserOKRModal from './Modals/NewUserOKRModal';
+import AddNewCheckIn from './Modals/AddNewCheckIn';
 import AddSquadMember from './Modals/AddSquadMember';
+import NewMissionModal from './Modals/NewMissionModal';
+import NewSquadModal from './Modals/NewSquadModal';
+import NewUserOKRModal from './Modals/NewUserOKRModal';
 
 import {
   getSquadList,
   newSquadMission,
   addUserToSquad,
   createSquad,
-  newUserOKR
+  newUserOKR,
+  addCheckIn
 } from '../../state/actions/squadList.actions';
 
 import {
@@ -64,11 +66,21 @@ class SquadList extends Component {
       squadId: ''
     };
 
+    this.defaultCheckInState = {
+      name: '',
+      body: '',
+      completed: false,
+      objectiveId: '',
+      userId: ''
+    };
+
     this.state = {
       objective: this.defaultObjectiveState,
       squad: this.defaultSquadState,
       assign: this.defaultAssignState,
-      user: this.defaultUserOKRState
+      user: this.defaultUserOKRState,
+      checkIn: this.defaultCheckInState,
+      openMenu: ''
     };
 
   }
@@ -94,7 +106,18 @@ class SquadList extends Component {
       : <Button transparent onClick={this._showNewObjectiveModal.bind(this, squadItem.id)}>Add Squad Objective</Button>;
 
       const members = squadItem.users.map(u =>
-        <User key={u.id} data={u} leader={u.id === squadItem.leader} squadId={squadItem.id} showOKRModal={this._showNewUserOKRModal}/>
+        <User
+          key={u.id}
+          data={u}
+          leader={u.id === squadItem.leader}
+          onCheckInClick={() => {}}
+          onEditClick={this._editUserObjective}
+          onNewCheckinClick={this._showCheckInModal}
+          onMenuClick={this._toggleUserOKRMenu}
+          openMenu={u.id === this.state.openMenu}
+          squadId={squadItem.id}
+          showOKRModal={this._showNewUserOKRModal}
+        />
         );
 
       return (
@@ -151,7 +174,7 @@ class SquadList extends Component {
                   ...this.state.squad,
                   name
                 }
-              })
+              });
             }}
             onSave={() => {
               const { squad } = this.state;
@@ -190,7 +213,7 @@ class SquadList extends Component {
                     ...keyResults.slice(i + 1)
                   ]
                 }
-              })
+              });
             }}
             onAddKeyResult={() => {
               const { keyResults } = this.state.objective;
@@ -199,7 +222,7 @@ class SquadList extends Component {
                   ...this.state.objective,
                   keyResults: [ ...keyResults, '' ]
                 }
-              })
+              });
             }}
             timeline={this.state.objective.timeline}
             onChangeTimeline={timeline =>
@@ -243,7 +266,7 @@ class SquadList extends Component {
                     ...keyResults.slice(i + 1)
                   ]
                 }
-              })
+              });
             }}
             onAddKeyResult={() => {
               const { keyResults } = this.state.user;
@@ -252,7 +275,7 @@ class SquadList extends Component {
                   ...this.state.user,
                   keyResults: [ ...keyResults, '' ]
                 }
-              })
+              });
             }}
 
             resources={this.state.user.resources}
@@ -267,7 +290,7 @@ class SquadList extends Component {
                     ...resources.slice(i + 1)
                   ]
                 }
-              })
+              });
             }}
             onAddResource={() => {
               const { resources } = this.state.user;
@@ -276,7 +299,7 @@ class SquadList extends Component {
                   ...this.state.user,
                   resources: [ ...resources, '' ]
                 }
-              })
+              });
             }}
             timeline={this.state.user.timeline}
             onChangeTimeline={timeline =>
@@ -302,42 +325,55 @@ class SquadList extends Component {
             onEnter={this._assignUserToSquad}
           />
         </SkyLight>
+
+        <SkyLight hideOnOverlayClicked dialogStyles={ skylightStyles }
+          title="Add Check In"
+          ref="newCheckInDialog"
+          afterClose={ () => this.setState({ checkIn: this.defaultCheckInState })}
+        >
+          <AddNewCheckIn
+            name={this.state.checkIn.name}
+            description={this.state.checkIn.body}
+            onNameChange={(name) => this.setState({
+              checkIn: {
+                ...this.state.checkIn,
+                name
+              }
+            })}
+            onDescriptionChange={(body) => this.setState({
+              checkIn: {
+                ...this.state.checkIn,
+                body
+              }
+            })}
+            onSubmit={this._addNewCheckin}
+           />
+        </SkyLight>
       </div>
     );
   };
 
-  _showNewUserOKRModal = (squadId, userId) => {
-    this.setState({
-      user: {
-        ...this.state.user,
-        squadId,
-        userId
-      }
-    }, () => this.refs.newUserOKRDialog.show());
+  // Container Methods
+  _addNewCheckin = () => {
+    const { dispatch } = this.props;
+    const { checkIn } = this.state;
+    const { name, body, completed, objectiveId, userId } = checkIn;
+    if (!name
+      || !body
+      || !objectiveId
+      || !userId) {
+      return;
+    }
+
+    dispatch(addCheckIn(checkIn));
   };
 
-  _showAssignUserModal = (id) => {
-    this.setState({
-      squad: {
-        ...this.state.assign,
-        squadId: id
-      }
-    }, () => this.refs.assignUserDialog.show());
-  };
+  _assignUserToSquad = (userId) => {
+    const { squadId } = this.state.squad;
+    const { dispatch } = this.props;
 
-  _showNewSquadModal = (e) => {
-    e.preventDefault();
-    this.refs.newSquadDialog.show();
-  };
-
-  _showNewObjectiveModal = (id) => {
-    this.setState({
-      objective: {
-        ...this.state.objective,
-        squadId: id
-      }
-    });
-    this.refs.newOKRDialog.show();
+    dispatch(addUserToSquad({userId, squadId}));
+    this.refs.assignUserDialog.hide();
   };
 
   _createObjective = () => {
@@ -386,6 +422,11 @@ class SquadList extends Component {
     return dispatch(newUserOKR(objective));
   };
 
+  _editUserObjective = () => {
+    // TODO: this
+    alert('Not implemented yet');
+  };
+
   _searchForUser = (val) => {
     if (val.length < 3) return;
 
@@ -393,13 +434,52 @@ class SquadList extends Component {
     dispatch(searchUsers(val));
   };
 
-  _assignUserToSquad = (userId) => {
-    const { squadId } = this.state.squad;
-    const { dispatch } = this.props;
+  _showCheckInModal = (objectiveId, userId) => {
+    this.setState({
+      checkIn:{
+        ...this.defaultCheckInState,
+        objectiveId,
+        userId
+      }
+    }, () => this.refs.newCheckInDialog.show());
+  };
 
-    dispatch(addUserToSquad({userId, squadId}));
-    this.refs.assignUserDialog.hide();
-  }
+  _showAssignUserModal = (id) => {
+    this.setState({
+      squad: {
+        ...this.state.assign,
+        squadId: id
+      }
+    }, () => this.refs.assignUserDialog.show());
+  };
+
+  _showNewUserOKRModal = (squadId, userId) => {
+    this.setState({
+      user: {
+        ...this.state.user,
+        squadId,
+        userId
+      }
+    }, () => this.refs.newUserOKRDialog.show());
+  };
+
+  _showNewSquadModal = (e) => {
+    e.preventDefault();
+    this.refs.newSquadDialog.show();
+  };
+
+  _showNewObjectiveModal = (id) => {
+    this.setState({
+      objective: {
+        ...this.state.objective,
+        squadId: id
+      }
+    });
+    this.refs.newOKRDialog.show();
+  };
+
+  _toggleUserOKRMenu = (id) => this.setState({ openMenu: id });
+
 }
 
 const mapStateToProps = state => ({

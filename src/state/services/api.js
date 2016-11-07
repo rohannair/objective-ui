@@ -56,54 +56,57 @@ export const login = payload =>
   });
 
   // /// Apis
-  export const fetchMission = id =>
+export const fetchMission = id =>
     callApi(`missions/${id}`);
 
-  export const fetchMissionList = (limit, offset) =>
+export const fetchMissionList = (limit, offset) =>
     callApi(`missions?limit=${limit}&offset=${offset}`);
 
-  export const updateMissionField = (payload) => {
-    const { id, field, data } = payload;
+export const updateMissionField = (payload) => {
+  const { id, field, data } = payload;
 
-    const url = data.id
+  const url = data.id
     ? `missions/${id}/${field[0]}/${data.id}`
     : `missions/${id}?field=${field[0]}`; // If a regular field
 
-    return postApi(url, omit(data, [`id`]));
-  };
+  return postApi(url, omit(data, ['id']));
+};
 
-  export const addMissionField = (payload) =>
+export const addMissionField = (payload) =>
     callApi(`missions/${payload.id}/${payload.field[0]}/add`);
 
-  export const newMission = () =>
-    callApi(`missions/new`);
+export const newMission = () =>
+    callApi('missions/new');
 
-  /// ******** CURRENT ******** ///
-  /// Users
-  export const fetchUserList = (limit, offset, sort, order) =>
+  // / ******** CURRENT ******** ///
+  // / Users
+export const fetchUserList = (limit, offset, sort, order) =>
     callApi(`users?limit=${limit}&offset=${offset}`);
 
-  export const fetchUser = (id) =>
+export const fetchUser = (id) =>
     callApi(`users/${id}`);
 
-  export const inviteUser = payload =>
-    postApi(`user/invite`, payload);
+export const inviteUser = payload =>
+    postApi('user/invite', payload);
 
-  export const searchUsers = payload =>
+export const searchUsers = payload =>
     callApi(`users/search?q=${payload.query}`);
 
-  export const assignUserToSquad = payload =>
-    postApi(`squads/assign`, payload);
+export const assignUserToSquad = payload =>
+    postApi('squads/assign', payload);
 
-  export const createUserOKR = payload =>
+export const createUserOKR = payload =>
     postApi(`user/${payload.userId}/objective`, payload);
 
-  /// Squads
-  export const fetchSquadList = () =>
-    callApi(`squads`);
+  // / Squads
+export const fetchSquadList = () =>
+    callApi('squads');
 
-  export const createSquadMission = payload =>
-    postApi(`objectives/add`, payload);
+export const createSquadMission = payload =>
+    postApi('objectives/add', payload);
 
-  export const createSquad = payload =>
-    postApi(`squads`, payload);
+export const createSquad = payload =>
+    postApi('squads', payload);
+
+export const createCheckIn = payload =>
+  postApi(`objectives/${payload.objectiveId}/check_in`, payload);

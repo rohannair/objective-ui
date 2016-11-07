@@ -37,7 +37,7 @@ const Modal = (props) => {
           placeholder='Enter atleast 3 characters'
           onChange={ e => {
             const { value } = e.target;
-            onType(value, props.onType)
+            onType(value, props.onType);
           }}
         />
       </label>
@@ -49,7 +49,7 @@ const Modal = (props) => {
 const onType = (val, fn) => {
   if (val.length < 3) return;
   fn(val);
-}
+};
 
 Modal.propTypes = {
   onEnter: PropTypes.func,

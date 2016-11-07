@@ -52,12 +52,12 @@ export function* assignUserToSquad(payload) {
     yield put({
       type: squadActions.ASSIGN_USER_TO_SQUAD.SUCCESS,
       squads
-    })
+    });
   } catch (e) {
     yield put({
       type: squadActions.ASSIGN_USER_TO_SQUAD.ERROR,
       message: e.message
-    })
+    });
   }
 }
 
@@ -84,7 +84,7 @@ function* createSquad(payload) {
 }
 
 export function* watchCreateSquad() {
-  while(true) {
+  while (true) {
     const { payload } = yield take(squadActions.NEW_SQUAD.ATTEMPT);
     yield fork(createSquad, payload, true);
   }
@@ -102,15 +102,39 @@ function* createUserOKR(payload) {
     });
   } catch (e) {
     yield put({
-      type: squadActions.NEW_USER_OKR.SUCCESS,
+      type: squadActions.NEW_USER_OKR.ERROR,
       message: e.message
     });
   }
 }
 
 export function* watchCreateUserOKR() {
-  while(true) {
+  while (true) {
     const { payload } = yield take(squadActions.NEW_USER_OKR.ATTEMPT);
     yield fork(createUserOKR, payload, true);
+  }
+}
+
+function* createCheckIn(payload) {
+  try {
+    const { user, userId, squadId } = yield api.createCheckIn(payload);
+    yield put({
+      type: squadActions.ADD_NEW_CHECKIN.SUCCESS,
+      user,
+      userId,
+      squadId
+    });
+  } catch (e) {
+    yield put({
+      type: squadActions.ADD_NEW_CHECKIN.ERROR,
+      message: e.message
+    });
+  }
+}
+
+export function* watchCreateCheckIn() {
+  while (true) {
+    const { payload } = yield take(squadActions.ADD_NEW_CHECKIN.ATTEMPT);
+    yield fork(createCheckIn, payload, true);
   }
 }

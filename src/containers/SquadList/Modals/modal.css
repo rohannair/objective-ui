@@ -11,6 +11,19 @@
   margin-bottom: 20px;
 }
 
+.modal__item__vert {
+  @extend .modal__item;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+  align-items: center;
+
+  input[type='checkbox'] {
+    padding: 5px;
+    margin-right: 5px
+  }
+}
+
 .modal__label {
   color: $secondary;
   font-weight: normal;
@@ -24,7 +37,6 @@
 .searchResultInfo {
   display: flex;
   flex-direction: column;
-
 }
 
 .searchResultInfo__name {

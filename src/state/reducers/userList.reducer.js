@@ -29,7 +29,7 @@ export default (state = defaultState, action) => {
   case ACTION.SEARCH_USERS.SUCCESS:
     return state.merge(fromJS({
       results: new List(action.users.results)
-    }))
+    }));
 
   default:
     return state;

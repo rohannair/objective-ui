@@ -11,7 +11,7 @@ export default (state = defaultState, action) => {
     return state.merge(new List([...action.squads.results]));
 
   case ACTION.NEW_SQUAD.SUCCESS:
-    return state.unshift(action.squad)
+    return state.unshift(action.squad);
 
   case ACTION.NEW_MISSION.SUCCESS:
     const { mission } = action;
@@ -20,21 +20,22 @@ export default (state = defaultState, action) => {
       o => ({ ...o, objectives: [ ...o.objectives, mission ] })
     );
 
+  case ACTION.ADD_NEW_CHECKIN.SUCCESS:
   case ACTION.NEW_USER_OKR.SUCCESS:
-  return state.update(
-    state.findIndex(l => l.id === action.squadId),
-    b => {
-      const i = b.users.findIndex(v => v.id === action.userId);
-      return {
-        ...b,
-        users: [
-          ...b.users.slice(0, i),
-          action.user[0],
-          ...b.users.slice(i + 1)
-        ]
+    return state.update(
+      state.findIndex(l => l.id === action.squadId),
+      b => {
+        const i = b.users.findIndex(v => v.id === action.userId);
+        return {
+          ...b,
+          users: [
+            ...b.users.slice(0, i),
+            action.user[0],
+            ...b.users.slice(i + 1)
+          ]
+        };
       }
-    }
-  )
+    );
 
   default:
     return state;

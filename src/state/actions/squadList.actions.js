@@ -1,8 +1,9 @@
 import {
+  ADD_NEW_CHECKIN,
+  ASSIGN_USER_TO_SQUAD,
   GET_SQUAD_LIST,
   NEW_MISSION,
   NEW_SQUAD,
-  ASSIGN_USER_TO_SQUAD,
   NEW_USER_OKR
 } from '../constants/squads.constants';
 
@@ -31,5 +32,10 @@ export const addUserToSquad = (payload) => ({
 
 export const newUserOKR = payload => ({
   type: NEW_USER_OKR.ATTEMPT,
+  payload
+});
+
+export const addCheckIn = payload => ({
+  type: ADD_NEW_CHECKIN.ATTEMPT,
   payload
 });

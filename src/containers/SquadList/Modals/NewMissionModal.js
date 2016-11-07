@@ -39,7 +39,7 @@ export default (p) => {
           )}
           <div className={styles.addButton} onClick={ e => {
             e.stopPropagation();
-            if (p.keyResults.length === 3 ) {
+            if (p.keyResults.length === 3) {
               // TODO: Have error messaging here
               return;
             }
