@@ -12,7 +12,7 @@ const CoreLayout = ({ children }) =>
     <header className={classes.header}>
       <Header />
       <nav className={classes.nav}>
-        <Link to={'/missions'}>M</Link>
+        <Link to={'/squads'}>S</Link>
         <Link to={'/users'}>U</Link>
       </nav>
     </header>

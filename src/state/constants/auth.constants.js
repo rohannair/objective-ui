@@ -1,4 +1,4 @@
 import { createActions } from './utils';
 
-/// Modal actions
+// / Modal actions
 export const LOGIN = createActions('app/LOGIN');

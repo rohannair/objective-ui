@@ -32,6 +32,6 @@ export function* watchLoginAttempt() {
 export function* watchLoginSuccess() {
   while (true) {
     const { payload } = yield take(authActions.LOGIN.SUCCESS);
-    yield put(push(`/`));
+    yield put(push('/'));
   }
 }

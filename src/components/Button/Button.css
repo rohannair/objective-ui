@@ -50,6 +50,12 @@
   }
 }
 
+.transparent {
+  @extend regularbutton;
+  background-color: transparent;
+  border: 2px dashed rgba(0, 0, 0, 0.2);
+}
+
 .link {
   @extend regularbutton;
   background-color: transparent;

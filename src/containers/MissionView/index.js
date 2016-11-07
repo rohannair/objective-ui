@@ -1,2 +1,2 @@
-import MissionView from './MissionView'
+import MissionView from './MissionView';
 export default MissionView;

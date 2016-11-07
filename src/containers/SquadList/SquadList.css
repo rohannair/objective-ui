@@ -1,0 +1,77 @@
+@import '../../styles/globals';
+
+.SquadList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 1024px;
+}
+
+.controlBar,
+.cardContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 30px;
+}
+
+.controlBar {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.buttonContainer {
+  display: flex;
+  margin-left: auto;
+  justify-content: space-between;
+}
+
+.cardContainer {
+}
+
+.listItem {
+  width: calc((100% - 120px) / 3);
+  margin-right: 30px;
+  margin-bottom: 30px;
+}
+
+.header,
+.body,
+.footer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: $secondary;
+}
+
+.header {
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  flex-direction: column;
+  align-items: center;
+}
+
+.body {
+  flex-direction: column;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  justify-content: baseline;
+  align-items: baseline;
+}
+
+.newSquadModal {
+  padding-top: 10px;
+}
+
+.squadMission {
+  width: 100%;
+  padding: 30px 0 0;
+}
+
+.addButton {
+  font-size: 0.75rem;
+  color: $primary;
+  cursor: pointer;
+  text-align: right;
+}

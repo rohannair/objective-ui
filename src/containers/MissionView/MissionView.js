@@ -36,7 +36,7 @@ const TextSection = (struct, dispatch, key, inputType) =>
 
 const ListSection = (struct, dispatch, key) => {
   let name = key === 'objectives'
-  ? `Personal Objectives`
+  ? 'Personal Objectives'
   : `${key.charAt(0).toUpperCase() + key.slice(1)}`;
 
   return (
@@ -50,15 +50,15 @@ const ListSection = (struct, dispatch, key) => {
         )}
       </ol>
    </Section>
-  )
-}
+  );
+};
 
 class MissionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modalVisible: false
-    }
+    };
   }
 
   componentWillMount() {
@@ -69,7 +69,7 @@ class MissionView extends Component {
   render() {
     const { dispatch, mission, users } = this.props;
     if (mission.size === 0) {
-      return <div className={ styles.missionView }>Loading...</div>
+      return <div className={ styles.missionView }>Loading...</div>;
     }
 
     const TextContainer = partial(TextSection, [mission, dispatch]);
@@ -130,8 +130,9 @@ class MissionView extends Component {
   };
 
   _returnUserImage = (user) => {
-    if (user.isEmpty())
+    if (user.isEmpty()) {
       return 'Unassigned';
+    }
     // if (user.get('img'))
       // return <img className={styles.avatar} src={ `${user.get('img')}/small` } />;
 

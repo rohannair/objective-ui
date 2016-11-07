@@ -26,7 +26,7 @@ class MissionList extends Component {
       collapsed: false,
       modalVisible: false,
       modalCIVisible: false,
-    }
+    };
   };
 
   static propTypes = {
@@ -70,7 +70,7 @@ class MissionList extends Component {
     };
 
     if (missionList.size === 0) {
-      return <div>Loading...</div>
+      return <div>Loading...</div>;
     }
 
     const MissionCards = missionList.map(mission => {
@@ -82,7 +82,7 @@ class MissionList extends Component {
         role: null
       };
 
-      const userimg = user.img || `//placehold.it/250x250/eee?text=\?`;
+      const userimg = user.img || '//placehold.it/250x250/eee?text=\?';
 
       return (
         <div key={ mission.id } className={ styles.missionCard }>
@@ -97,7 +97,7 @@ class MissionList extends Component {
             </div>
 
             <div className={ styles.body }>
-              {/*}
+              {/* }
               <div className={ styles.section }>
                 <h4>Objectives and Key Results</h4>
                 <ul>
@@ -139,7 +139,7 @@ class MissionList extends Component {
               <div className={ styles.section }>
                 <h4>Updates</h4>
                 {
-                  mission.checkIns.map( val =>
+                  mission.checkIns.map(val =>
                     <div key={val.id}><button className={styles.fakeLink} onClick={ (e) => this.setState({ modalCIVisible: true })}>*</button></div>)
                 }
                 { this._showCheckInModal(missionList.get(1).checkIns[0]) }
@@ -156,7 +156,7 @@ class MissionList extends Component {
             </div>
           </Card>
         </div>
-      )
+      );
     });
 
     return (
@@ -165,9 +165,6 @@ class MissionList extends Component {
           <div className={styles.macroContainer}>
           </div>
           <div className={styles.buttonContainer}>
-            <Button
-              onClick={ ()=>{} }
-            >Analytics</Button>
             &nbsp;&nbsp;
             <Button
               primary
@@ -199,7 +196,7 @@ class MissionList extends Component {
             <Button primary onClick={() => this.setState({modalCIVisible: false})}>Close</Button>
           </div>
         </Modal>
-      )
+      );
     }
   };
 }

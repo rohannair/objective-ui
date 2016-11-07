@@ -21,7 +21,8 @@ import {
 
 import {
   watchGetUserList,
-  watchInviteUser
+  watchInviteUser,
+  watchSearchUsers
 } from './userList.sagas';
 
 import {
@@ -32,6 +33,12 @@ import {
 import {
   watchGetUser
 } from './user.sagas';
+
+import {
+  watchGetSquadList,
+  watchNewSquadMission,
+  watchAssignUserToSquad
+} from './squadList.sagas';
 
 function* watchLogin() {
   while (true) {
@@ -46,12 +53,16 @@ export default function* root() {
     fork(watchGetMissionList),
     fork(watchUpdateMission),
     fork(watchAddMissionField),
-    fork(watchNewMission),
+    // fork(watchNewMission),
     fork(watchNewMissionSuccess),
     fork(watchLoginAttempt),
     fork(watchLoginSuccess),
     fork(watchGetUserList),
     fork(watchGetUser),
-    fork(watchInviteUser)
+    fork(watchInviteUser),
+    fork(watchGetSquadList),
+    fork(watchNewSquadMission),
+    fork(watchSearchUsers),
+    fork(watchAssignUserToSquad)
   ];
 }

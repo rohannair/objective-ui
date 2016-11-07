@@ -8,7 +8,7 @@ import Cookies from 'cookies-js';
 const API_ROOT = '//localhost:8080/api/v1/';
 const PUBLIC_ROOT = '//localhost:8080/api/public/';
 
-///// Meta
+// /// Meta
 const getHeaders = () => {
   const token = Cookies.get('qm.tid');
   return {
@@ -16,13 +16,13 @@ const getHeaders = () => {
     'Content-Type': 'application/json',
     'Authorization': token ? `Bearer ${token}` : null
   };
-}
+};
 const getUrl = endpoint => (endpoint.indexOf(API_ROOT) === -1)
   ? API_ROOT + endpoint
   : endpoint;
 
 
-///// Base
+// /// Base
 const callApi = (endpoint) =>
   fetch(getUrl(endpoint), {
     headers: getHeaders(),
@@ -40,7 +40,7 @@ const postApi = (endpoint, body) =>
   .then(response => response.json())
   .catch(err => console.error(err));
 
-////// Public
+// //// Public
 export const login = payload =>
   fetch(PUBLIC_ROOT + 'login', {
     method: 'POST',
@@ -55,7 +55,7 @@ export const login = payload =>
     return omit(response, 'token');
   });
 
-///// Apis
+// /// Apis
 export const fetchMission = id =>
   callApi(`missions/${id}`);
 
@@ -76,7 +76,7 @@ export const addMissionField = (payload) =>
   callApi(`missions/${payload.id}/${payload.field[0]}/add`);
 
 export const newMission = () =>
-  callApi(`missions/new`);
+  callApi('missions/new');
 
 export const fetchUserList = (limit, offset, sort, order) =>
   callApi(`users?limit=${limit}&offset=${offset}`);
@@ -84,4 +84,9 @@ export const fetchUserList = (limit, offset, sort, order) =>
 export const fetchUser = (id) =>
   callApi(`users/${id}`);
 
-export const inviteUser = payload => postApi(`user/invite`, payload);
+export const inviteUser = payload => postApi('user/invite', payload);
+export const fetchSquadList = () => callApi('squads');
+export const createSquadMission = payload => postApi('missions/add', payload);
+export const searchUsers = payload => callApi(`users/search?q=${payload.query}`);
+
+export const assignUserToSquad = payload => postApi(`squads/assign`, payload);

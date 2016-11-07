@@ -8,6 +8,7 @@ const Button = p => {
   const className = cx({
     [styles.primary]: p.primary,
     [styles.secondary]: p.secondary,
+    [styles.transparent]: p.transparent,
     [styles.sm]: p.size === 'sm',
     [styles.right]: p.right,
     [styles.link]: p.link || (!p.primary && !p.secondary)

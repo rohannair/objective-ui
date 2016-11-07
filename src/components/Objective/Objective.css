@@ -1,0 +1,18 @@
+@import '../../styles/globals';
+
+.Objective {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.label {
+  color: $secondary;
+  margin-bottom: 0;
+}
+
+.valueContainer {
+  font-size: 0.85rem;
+  margin: 0 0 15px;
+}

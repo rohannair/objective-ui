@@ -5,6 +5,6 @@ export const ERROR = 'ERROR';
 export const createActions = base =>
   [ATTEMPT, SUCCESS, ERROR]
     .reduce((acc, type) => {
-    acc[type] = `${base}_${type}`;
-    return acc
-  }, {});
+      acc[type] = `${base}_${type}`;
+      return acc;
+    }, {});

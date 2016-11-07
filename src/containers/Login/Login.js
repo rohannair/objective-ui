@@ -22,7 +22,7 @@ class Login extends Component {
         username: null,
         password: null
       }
-    }
+    };
 
     this.re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   }
@@ -78,7 +78,7 @@ class Login extends Component {
         ...messages,
         [val]: null
       }
-    })
+    });
   };
 
   _submitForm = e => {
@@ -93,7 +93,7 @@ class Login extends Component {
         messages: {
           username: 'Please enter a valid username'
         }
-      })
+      });
       return;
     }
 
@@ -106,7 +106,7 @@ class Login extends Component {
       messages: {
         password: 'Please enter a valid password'
       }
-    })
+    });
   }
 }
 

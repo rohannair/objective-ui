@@ -1,0 +1,42 @@
+.innerModal {
+  padding: 20px 0 0;
+  font-size: 0.9rem;
+}
+
+.modal__item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.modal__label {
+  color: $primary;
+  font-weight: normal;
+}
+
+.searchResult {
+  display: flex;
+  flex-direction: row;
+}
+
+.searchResultInfo {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.searchResultInfo__name {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  margin-right: 15px;
+  border-radius: 100%;
+}
+
+.buttonContainer {
+  margin-left: auto;
+}

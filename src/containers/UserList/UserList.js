@@ -36,7 +36,7 @@ class UserList extends Component {
 
   componentWillMount() {
     const { users, dispatch } = this.props;
-    dispatch(getUsers(users.get('limit'), users.get('offset')))
+    dispatch(getUsers(users.get('limit'), users.get('offset')));
   };
 
   render() {
@@ -44,7 +44,7 @@ class UserList extends Component {
     const userItems = users.get('results')
       // .filter(user => user.pending === false)
       .map(user => {
-        const userimg = user.img || `//placehold.it/250x250/eee?text=\?`;
+        const userimg = user.img || '//placehold.it/250x250/eee?text=\?';
         const nameBox = user.firstName && user.lastName
         ? `${user.firstName } ${user.lastName }`
         : user.email;
@@ -187,6 +187,6 @@ class UserList extends Component {
 
 const mapStateToProps = state => ({
   users: state.get('users')
-})
+});
 
 export default connect(mapStateToProps)(UserList);

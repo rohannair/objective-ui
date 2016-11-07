@@ -13,7 +13,7 @@ function* fetchUser(id) {
       type: userActions.GET_USER.SUCCESS,
       payload: user
     });
-  } catch(e) {
+  } catch (e) {
     yield put({
       type: userActions.GET_USER.ERROR,
       message: e.message
@@ -21,7 +21,7 @@ function* fetchUser(id) {
   }
 }
 export function* watchGetUser() {
-  while(true) {
+  while (true) {
     const { payload } = yield take(userActions.GET_USER.ATTEMPT);
     yield fork(fetchUser, payload.id, true);
   }

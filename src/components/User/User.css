@@ -1,0 +1,48 @@
+.user {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
+  border-top: 1px solid #F0F0F0;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  // justify-content: center;
+  align-items: center;
+}
+
+.body {
+  list-style-type: disc;
+  padding: 0 15px;
+
+  li {
+    list-style-type: disc;
+    margin-left: 1rem;
+  }
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 100%;
+  margin: 0 15px 15px 0;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: row;
+  line-height: 1;
+  flex-grow: 0;
+  align-items: center;
+  flex-wrap: wrap;
+
+  h4 {
+    margin-bottom: 0;
+  }
+
+  p {
+    width: 100%;
+  }
+}

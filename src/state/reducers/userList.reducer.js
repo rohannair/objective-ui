@@ -26,6 +26,11 @@ export default (state = defaultState, action) => {
       squads: []
     }));
 
+  case ACTION.SEARCH_USERS.SUCCESS:
+    return state.merge(fromJS({
+      results: new List(action.users.results)
+    }))
+
   default:
     return state;
   }

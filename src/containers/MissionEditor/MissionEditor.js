@@ -49,7 +49,7 @@ const TextSection = (struct, dispatch, key, inputType) =>
 
 const ListSection = (struct, dispatch, key) => {
   let name = key === 'objectives'
-  ? `Personal Objectives`
+  ? 'Personal Objectives'
   : `${key.charAt(0).toUpperCase() + key.slice(1)}`;
 
   let resourcesLink = key === 'resources'
@@ -60,12 +60,12 @@ const ListSection = (struct, dispatch, key) => {
         e.preventDefault();
         e.stopPropagation();
 
-        alert(`This doesn't work yet!`);
+        alert('This doesn\'t work yet!');
       }}
     >+ Add People Resource</span>
   : undefined;
 
-  let d = debounce(dispatch, 1000)
+  let d = debounce(dispatch, 1000);
   return (
     <Section name={name}>
       <ol className={ styles.listSection }>
@@ -101,15 +101,15 @@ const ListSection = (struct, dispatch, key) => {
         >+ Add {key.slice(0, key.length - 1)}</span>
       </div>
    </Section>
-  )
-}
+  );
+};
 
 class MissionEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modalVisible: false
-    }
+    };
   }
 
   componentWillMount() {
@@ -118,9 +118,9 @@ class MissionEditor extends Component {
   }
 
   render() {
-    const { dispatch, mission, users } = this.props;
+    const { dispatch, mission } = this.props;
     if (mission.size === 0) {
-      return <div className={ styles.missionEditor }>Loading...</div>
+      return <div className={ styles.missionEditor }>Loading...</div>;
     }
 
     const TextContainer = partial(TextSection, [mission, dispatch]);
@@ -129,45 +129,6 @@ class MissionEditor extends Component {
     const user = mission.get('user') && !(mission.get('users').isEmpty())
     ? mission.get('users').get(0)
     : Map({});
-
-    const getAssignUserModal = () => {
-      // document.body.style.overflow = this.state.modalVisible
-      //   ? 'hidden'
-      //   : 'visible';
-
-      if (this.state.modalVisible) {
-        return (
-          <Modal closeModal={() => this.setState({ modalVisible: false })}>
-            <div className={styles.userPicker} onClick={e => e.stopPropagation()}>
-              Search for a user
-              <div className={styles.userPickerForm}>
-                <TextInput />
-                <Button primary>Search</Button>
-              </div>
-
-              Search Results:
-              <div className={styles.userPickerDropdown}>
-                {
-                  users.map(val => {
-                    const fullName = `${val.firstName} ${val.lastName}`;
-                    return (
-                      <div key={val.id} className={styles.userPickerItem}>
-                        <div className={styles.userPickerInfo}>
-                        <img src={val.img} alt={ fullName } className={styles.userPickerImg} />
-                        <span className={styles.userPickerName}>{ fullName }</span>
-                        </div>
-                        <Button primary size="sm" right
-                        onClick={e => this.setState({ modalVisible: false })}>Assign</Button>
-                      </div>
-                    );
-                  })
-                }
-              </div>
-            </div>
-          </Modal>
-        );
-      }
-    };
 
     const okrs = mission.get('targets')
       .map((c, idx) =>
@@ -181,7 +142,7 @@ class MissionEditor extends Component {
                 dispatch(updateField(c.get('id'), ['targets', idx], {
                   ...c.toJSON(),
                   objective: e.target.value
-                }))
+                }));
               }}
             />
           </div>
@@ -195,12 +156,12 @@ class MissionEditor extends Component {
                     value={o}
                     onChange={ e => {
                       e.stopPropagation();
-                      console.log(c)
+                      console.log(c);
                       dispatch(updateField(c.get('id'), ['targets', idx], {
                         ...c.toJSON(),
                         keyResults: c.get('keyResults')
                           .update(i, () => e.target.value)
-                      }))
+                      }));
                     }}
                   />
                 </li>)
@@ -217,7 +178,7 @@ class MissionEditor extends Component {
                   ...c.toJSON(),
                   keyResults: c.get('keyResults')
                   .update(c.get('keyResults').size, () => '')
-                }))
+                }));
               }}
             >+ Add key result</span>
           </div>
@@ -228,11 +189,7 @@ class MissionEditor extends Component {
       <div className={ styles.missionEditor }>
         <h2 className={ styles.header }>
           <div className={ styles.innerHeader }>
-            <span>Mission Editor - {mission.get('name')}</span>
-            <div className={styles.userPickerButton} onClick={() => this.setState({ modalVisible: true })}>
-              { this._returnUserImage(user) }
-            </div>
-              { getAssignUserModal() }
+            <span>OKRs - {mission.get('name')}</span>
           </div>
         </h2>
 
@@ -274,8 +231,9 @@ class MissionEditor extends Component {
   };
 
   _returnUserImage = (user) => {
-    if (user.isEmpty())
+    if (user.isEmpty()) {
       return 'Unassigned';
+    }
     // if (user.get('img'))
       // return <img className={styles.avatar} src={ `${user.get('img')}/small` } />;
 
@@ -292,30 +250,7 @@ MissionEditor.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  mission: state.get('mission'),
-  users: new List([
-    {
-      id: (Math.random()),
-      firstName: 'Rohan Nair',
-      lastName: '',
-      role: 'user',
-      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
-    },
-    {
-      id: (Math.random()),
-      firstName: 'Ray Kanani',
-      lastName: '',
-      role: 'user',
-      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
-    },
-    {
-      id: (Math.random()),
-      firstName: 'Stu Peters',
-      lastName: '',
-      role: 'user',
-      img: `//placehold.it/48x48/${((1<<24)*Math.random()|0).toString(16)}`
-    }
-  ])
+  mission: state.get('mission')
 });
 
 export default connect(mapStateToProps)(MissionEditor);

@@ -14,7 +14,7 @@ const AuthLayout = ({ children }) =>
     </div>
   </div>;
 
-  AuthLayout.propTypes = {
+AuthLayout.propTypes = {
   children: PropTypes.element.isRequired
 };
 

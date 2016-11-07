@@ -11,7 +11,7 @@ const TextInput = (props) => {
       onChange = { props.onChange }
     />
   );
-}
+};
 
 TextInput.propTypes = {
   placeholder: PropTypes.string,

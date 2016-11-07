@@ -31,7 +31,7 @@ function* updateMissionField(payload) {
     yield put({
       type: missionActions.UPDATE_FIELD.SUCCESS,
       payload: { ...updated, field: payload.field }
-    })
+    });
   } catch (e) {
     yield put({
       type: missionActions.UPDATE_FIELD.ERROR,
@@ -47,11 +47,11 @@ function* newMission() {
       type: missionActions.NEW_MISSION.SUCCESS,
       payload: { ...mission }
     });
-  } catch(e) {
+  } catch (e) {
     yield put({
       type: missionActions.NEW_MISSION.ERROR,
       message: e.message
-    })
+    });
   }
 }
 
@@ -69,37 +69,37 @@ function* addMissionField(payload) {
       type: missionActions.ADD_FIELD.SUCCESS,
       payload: { ...inserted, field: payload.field }
     });
-  } catch(e) {
+  } catch (e) {
     yield put({
       type: missionActions.ADD_FIELD.ERROR,
       message: e.message
-    })
+    });
   }
 }
 
 export function* watchUpdateMission() {
-  while(true) {
+  while (true) {
     const { payload } = yield take(missionActions.UPDATE_FIELD.ATTEMPT);
     yield fork(updateMissionField, payload, true);
   }
 }
 
 export function* watchAddMissionField() {
-  while(true) {
+  while (true) {
     const { payload } = yield take(missionActions.ADD_FIELD.ATTEMPT);
     yield fork(addMissionField, payload, true);
   }
 }
 
 export function* watchNewMission() {
-  while(true) {
+  while (true) {
     yield take(missionActions.NEW_MISSION.ATTEMPT);
     yield fork(newMission, {}, true);
   }
 }
 
 export function* watchNewMissionSuccess() {
-  while(true) {
+  while (true) {
     const { payload: { mission: { id } }} = yield take(missionActions.NEW_MISSION.SUCCESS);
     yield put(push(`/missions/edit/${id}`));
   }

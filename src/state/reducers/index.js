@@ -6,6 +6,7 @@ import { reducer as formReducer } from 'redux-form';
 import globalReducer from './global.reducer';
 import missionReducer from './missions.reducer';
 import missionListReducer from './missionList.reducer';
+import squadReducer from './squadList.reducer';
 import userListReducer from './userList.reducer';
 import userReducer from './user.reducer';
 
@@ -34,6 +35,7 @@ export default function createReducer() {
     mission: missionReducer,
     missionList: missionListReducer,
     form: formReducer,
+    squads: squadReducer,
     user: userReducer,
     users: userListReducer
   });

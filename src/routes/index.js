@@ -12,6 +12,7 @@ import Login from '../containers/Login';
 import MissionEditor from '../containers/MissionEditor';
 import MissionList from '../containers/MissionList';
 import MissionView from '../containers/MissionView';
+import SquadList from '../containers/SquadList';
 import UserList from '../containers/UserList';
 import UserEditor from '../containers/UserEditor';
 
@@ -26,12 +27,14 @@ export default (store, history) => (
     </Route>
 
     <Route path="/" component={ CoreLayout } onEnter={ requireAuth }>
-      <IndexRoute component={ Dashboard } />
+      <IndexRoute component={ SquadList } />
       <Route path="dashboard" component={ Dashboard } />
 
       <Route path="missions" component={ MissionList } />
       <Route path="missions/:id" component={ MissionView } />
       <Route path="missions/edit/:id" component={ MissionEditor } />
+
+      <Route path="squads" component={ SquadList } />
 
       <Route path="users" component={ UserList } />
       <Route path="users/:id" component={ UserEditor } />

@@ -1,4 +1,4 @@
-/////////// Fetch Entity ///////////
+// ///////// Fetch Entity ///////////
 export function* fetchEntity(entity, apiFn, id, url) {
   yield put(entity.request(id));
   const {response, error} = yield call(apiFn, url || id);
@@ -9,7 +9,7 @@ export function* fetchEntity(entity, apiFn, id, url) {
   }
 }
 
-/////////// Debounceing ///////////
+// ///////// Debounceing ///////////
 export function delay(ms) {
   return new Promise(resolve => setTimeout(resolve,ms));
 }

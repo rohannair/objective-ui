@@ -35,8 +35,8 @@ class UserEditor extends Component {
             <h4>Squads</h4>
             <ul className={styles.squads}>
               { user.get('squads').map(sq => {
-                console.log('_________', sq.toJSON())
-                return (<li key={sq.get('id')}>{sq.get('name')}</li>)
+                console.log('_________', sq.toJSON());
+                return (<li key={sq.get('id')}>{sq.get('name')}</li>);
               })}
             </ul>
           </div>
@@ -45,7 +45,7 @@ class UserEditor extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   };
 }
 
