@@ -5,6 +5,10 @@ import Button from '../../components/Button';
 import Pill from '../Pill';
 
 const User = p => {
+  if (!user || !user.objectives) {
+    return <div></div>
+  }
+
   const user = p.data;
   const checkInCount = user.objectives[0].check_ins.length;
 
