@@ -5,8 +5,8 @@ import camelCase from 'lodash/camelCase';
 import omit from 'lodash/omit';
 import Cookies from 'cookies-js';
 
-const API_ROOT = '//localhost:8080/api/v1/';
-const PUBLIC_ROOT = '//localhost:8080/api/public/';
+const API_ROOT = '/api/v1/';
+const PUBLIC_ROOT = '/api/public/';
 
 // /// Meta
 const getHeaders = () => {

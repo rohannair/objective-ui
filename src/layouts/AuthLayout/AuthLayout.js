@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 // Styles
-import 'ress';
 import classes from './AuthLayout.css';
 
 import Header from '../../components/Global/Header';

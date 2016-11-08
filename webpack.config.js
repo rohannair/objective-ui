@@ -14,10 +14,12 @@ module.exports = {
   bail: isProd,
   cache: !isProd,
   debug: !isProd,
-  devtool: 'cheap-module-eval-source-map',
+  devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
 
   entry: {
-    bundle: [
+    bundle: isProd
+    ? [path.join(basePath, 'src', 'index.js')]
+    :[
       'webpack-hot-middleware/client?reload=true',
       'react-hot-loader/patch',
       path.join(basePath, 'src', 'index.js')
@@ -55,25 +57,29 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style!css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss'
-      },
-      {
-        test: /\.scss$/,
-        loader: 'style!css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass-loader'
+        include: [path.join(basePath, 'src')],
+        loader: isProd
+          ? ExtractText.extract(
+            'style-loader',
+            'css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
+          )
+          : 'style-loader!css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
       }
     ]
   },
 
   resolve: {
-    extensions: ['', '.js'],
+    extensions: ['', '.js', '.css'],
     root: path.resolve(__dirname, 'src'),
-    modulesDirectories: ['./node_modules']
+    modulesDirectories: ['./node_modules', './src']
   },
 
   stats: {
     colors: true,
-    timings: true,
-    reasons: true
+    timings: false,
+    reasons: false,
+    children: false,
+    chunkModules: false
   },
 
   postcss,
