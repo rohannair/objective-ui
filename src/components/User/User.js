@@ -57,7 +57,7 @@ const User = p => {
       <li onClick={(e) => {
         e.preventDefault();
 
-        // TODO: fix this hacker
+        // TODO: fix this hackery
         const { id } = user.objectives
           .filter(o => o.squadId === p.squadId)[0];
 

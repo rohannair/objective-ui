@@ -62,9 +62,11 @@ class UserList extends Component {
                 <small>{ titleBox }</small>
               </div>
 
-              <div className={ styles.footer }>
-                <Link to={`users/${user.id}`}>View user</Link>
-              </div>
+              <div className={ styles.body }>
+                 <p className={styles.squads}>{ this._returnSquadPill(user.squads) }</p>
+                 <p className={styles.missions}>{ this._returnObjectivesPill(user.objectives) }</p>
+               </div>
+
             </Card>
           </div>
         );
@@ -165,10 +167,10 @@ class UserList extends Component {
     this.refs.dialog.hide();
   };
 
-  _returnMissionPill = (missions) => {
-    const count = missions && missions.length || 0;
-    if (count === 0) return <Pill danger>No Missions</Pill>;
-    return <Pill warning>{`${count} ${count === 1 ? 'mission' : 'missions'}`}</Pill>;
+  _returnObjectivesPill = (objectives) => {
+    const count = objectives && objectives.length || 0;
+    if (count === 0) return <Pill danger>No OKRs</Pill>;
+    return <Pill warning>{`${count} ${count === 1 ? 'OKR' : 'OKRs'}`}</Pill>;
   };
 
   _returnSquadPill = (squads) => {
