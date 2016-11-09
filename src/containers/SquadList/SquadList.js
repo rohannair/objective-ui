@@ -19,7 +19,7 @@ import SkyLight from 'react-skylight';
 // Modals
 import AddNewCheckIn from './Modals/AddNewCheckIn';
 import AddSquadMember from './Modals/AddSquadMember';
-import NewMissionModal from './Modals/NewMissionModal';
+import NewObjectiveModal from './Modals/NewObjectiveModal';
 import NewSquadModal from './Modals/NewSquadModal';
 import NewUserOKRModal from './Modals/NewUserOKRModal';
 import ViewCheckIns from './Modals/ViewCheckIns';
@@ -30,7 +30,8 @@ import {
   addUserToSquad,
   createSquad,
   newUserOKR,
-  addCheckIn
+  addCheckIn,
+  editSquadObjective
 } from '../../state/actions/squadList.actions';
 
 import {
@@ -42,8 +43,10 @@ class SquadList extends Component {
     super(props);
 
     this.defaultObjectiveState = {
+      editing: false,
+      id: '',
       name: '',
-      keyResults: [ '' ],
+      keyResults: [ { name: '' } ],
       timeline: '',
       squadId: ''
     };
@@ -103,9 +106,10 @@ class SquadList extends Component {
     };
 
     const squadList = squads.map(squadItem => {
-      const objective = squadItem.objectives && squadItem.objectives.length > 0
-      ? <Objective data={squadItem.objectives[0]} />
-      : <Button transparent onClick={this._showNewObjectiveModal.bind(this, squadItem.id)}>Add Squad Objective</Button>;
+      const objectiveData = squadItem.objectives
+        && squadItem.objectives.length > 0
+      ? squadItem.objectives[0]
+      : null;
 
       const members = squadItem.users.map(u =>
         <User
@@ -130,7 +134,26 @@ class SquadList extends Component {
               <h3>{squadItem.name}</h3>
             </div>
             <div className={ styles.body }>
-              { objective }
+              <Objective
+                  data={ objectiveData }
+                  buttonAction={this._showNewObjectiveModal.bind(this, squadItem.id)}
+                  buttonText='Add Squad Objective'
+                  editAction={() => {
+                    this.setState({
+                      objective: {
+                        editing: true,
+                        id: objectiveData.id,
+                        name: objectiveData.name,
+                        keyResults: objectiveData.key_results,
+                        timeline: objectiveData.timeline,
+                        squadId: objectiveData.squadId
+                      }
+                    }, () => this._showNewObjectiveModal(squadItem.id));
+
+                    ;
+                  }}
+                />
+
               { members }
             </div>
             <div className={ styles.footer }>
@@ -191,10 +214,10 @@ class SquadList extends Component {
 
         <SkyLight hideOnOverlayClicked dialogStyles={ skylightStyles }
           title="New OKR"
-          ref="newOKRDialog"
+          ref="NewObjectiveModal"
           afterClose={ () => this.setState({ objective: this.defaultObjectiveState }) }
         >
-          <NewMissionModal
+          <NewObjectiveModal
             name={this.state.objective.name}
             onChangeName={name =>
               this.setState({
@@ -236,7 +259,7 @@ class SquadList extends Component {
                 }
               })
             }
-            onSubmit={this._createObjective}
+            onSubmit={this._createOrEditObjective}
           />
         </SkyLight>
 
@@ -390,11 +413,12 @@ class SquadList extends Component {
     this.refs.assignUserDialog.hide();
   };
 
-  _createObjective = () => {
+  _createOrEditObjective = () => {
     const { dispatch } = this.props;
-    const { objective: { name, keyResults, timeline, squadId } } = this.state;
+    const { objective: { id, editing, name, keyResults, timeline, squadId } } = this.state;
 
     const objective = {
+      id,
       name,
       timeline,
       squadId,
@@ -407,8 +431,12 @@ class SquadList extends Component {
         || !objective.timeline) {
       return console.error('Failed validation');
     }
-    this.refs.newOKRDialog.hide();
-    return dispatch(newSquadMission(objective));
+
+    this.refs.NewObjectiveModal.hide();
+
+    return editing
+      ? dispatch(editSquadObjective(objective))
+      : dispatch(newSquadMission(objective));
   };
 
   _createUserOKR = () => {
@@ -489,7 +517,7 @@ class SquadList extends Component {
         squadId: id
       }
     });
-    this.refs.newOKRDialog.show();
+    this.refs.NewObjectiveModal.show();
   };
 
   _showViewCheckInModal = (data) => {

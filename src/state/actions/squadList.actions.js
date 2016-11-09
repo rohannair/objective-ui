@@ -4,7 +4,8 @@ import {
   GET_SQUAD_LIST,
   NEW_MISSION,
   NEW_SQUAD,
-  NEW_USER_OKR
+  NEW_USER_OKR,
+  EDIT_OBJECTIVE
 } from '../constants/squads.constants';
 
 export const getSquadList = () => ({
@@ -16,8 +17,9 @@ export const newSquadMission = (payload) => ({
   payload
 });
 
-export const editSquadMission = () => ({
-
+export const editSquadObjective = (payload) => ({
+  type: EDIT_OBJECTIVE.ATTEMPT,
+  payload
 });
 
 export const createSquad = (payload) => ({

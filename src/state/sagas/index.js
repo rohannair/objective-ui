@@ -40,7 +40,8 @@ import {
   watchAssignUserToSquad,
   watchCreateSquad,
   watchCreateUserOKR,
-  watchCreateCheckIn
+  watchCreateCheckIn,
+  watchEditSquadObjective
 } from './squadList.sagas';
 
 function* watchLogin() {
@@ -52,12 +53,6 @@ function* watchLogin() {
 
 export default function* root() {
   yield [
-    // fork(watchGetMission),
-    // fork(watchGetMissionList),
-    // fork(watchUpdateMission),
-    // fork(watchAddMissionField),
-    // fork(watchNewMission),
-    // fork(watchNewMissionSuccess),
     fork(watchLoginAttempt),
     fork(watchLoginSuccess),
     fork(watchGetUserList),
@@ -71,6 +66,7 @@ export default function* root() {
     fork(watchNewSquadMission),
 
     fork(watchCreateUserOKR),
-    fork(watchCreateCheckIn)
+    fork(watchCreateCheckIn),
+    fork(watchEditSquadObjective)
   ];
 }

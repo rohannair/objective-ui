@@ -30,7 +30,8 @@ export default (p) => {
             <TextInput
               key={`kr-${i}`}
               placeholder='Enter a measurable Key Result'
-              value={ r }
+              value={ r.name }
+              id={ r.id }
               onChange={e => {
                 e.preventDefault();
                 p.onChangeKeyResults(e.target.value, i);

@@ -105,6 +105,9 @@ export const fetchSquadList = () =>
 export const createSquadMission = payload =>
     postApi('objectives/add', payload);
 
+export const editSquadObjective = payload =>
+    postApi(`objectives/${payload.squadId}/edit`, payload);
+
 export const createSquad = payload =>
     postApi('squads', payload);
 

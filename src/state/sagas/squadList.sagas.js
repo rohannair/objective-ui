@@ -32,6 +32,18 @@ function* createSquadMission(payload) {
   }
 }
 
+function* editSquadObjective(payload) {
+  try {
+    const { mission } = yield api.editSquadObjective(payload);
+    yield put({ type: squadActions.EDIT_OBJECTIVE.SUCCESS, mission });
+  } catch (e) {
+    yield put({
+      type: squadActions.EDIT_OBJECTIVE.ERROR,
+      message: e.message
+    });
+  }
+}
+
 export function* watchGetSquadList() {
   while (true) {
     yield take(squadActions.GET_SQUAD_LIST.ATTEMPT);
@@ -43,6 +55,13 @@ export function* watchNewSquadMission() {
   while (true) {
     const { payload } = yield take(squadActions.NEW_MISSION.ATTEMPT);
     yield fork(createSquadMission, payload, true);
+  }
+}
+
+export function* watchEditSquadObjective() {
+  while (true) {
+    const { payload } = yield take(squadActions.EDIT_OBJECTIVE.ATTEMPT);
+    yield fork(editSquadObjective, payload, true);
   }
 }
 

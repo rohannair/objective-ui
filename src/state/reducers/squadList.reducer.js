@@ -14,10 +14,15 @@ export default (state = defaultState, action) => {
     return state.unshift(action.squad);
 
   case ACTION.NEW_MISSION.SUCCESS:
-    const { mission } = action;
     return state.update(
       state.findIndex(l => l.id === action.mission.squadId),
-      o => ({ ...o, objectives: [ ...o.objectives, mission ] })
+      o => ({ ...o, objectives: [ action.mission ] })
+    );
+
+  case ACTION.EDIT_OBJECTIVE.SUCCESS:
+    return state.update(
+      state.findIndex(l => l.id === action.mission.squadId),
+      o => ({...o, objectives: [ action.mission ]})
     );
 
   case ACTION.ADD_NEW_CHECKIN.SUCCESS:
