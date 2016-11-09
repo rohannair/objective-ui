@@ -105,7 +105,7 @@ class SquadList extends Component {
     const squadList = squads.map(squadItem => {
       const objective = squadItem.objectives && squadItem.objectives.length > 0
       ? <Objective data={squadItem.objectives[0]} />
-      : <Button transparent onClick={this._showNewObjectiveModal.bind(this, squadItem.id)}>Add Squad Objective</Button>;
+      : <Button primary onClick={this._showNewObjectiveModal.bind(this, squadItem.id)}>Add Squad Objective</Button>;
 
       const members = squadItem.users.map(u =>
         <User
@@ -135,7 +135,7 @@ class SquadList extends Component {
             </div>
             <div className={ styles.footer }>
               <Button
-                primary
+                transparent
                 onClick={this._showAssignUserModal.bind(this, squadItem.id)}
               >
                 + Add Squad Member
