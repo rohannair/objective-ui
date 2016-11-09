@@ -12,7 +12,7 @@ const User = p => {
   const user = p.data;
   const checkInCount = user.objectives.length > 0
   ? user.objectives[0].check_ins.length
-  : NaN;
+  : 0;
 
   const leaderBadge = false || p.leader
   ? <Pill info>Leader</Pill>

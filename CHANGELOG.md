@@ -1,5 +1,9 @@
 ## 0.2.0
+#### Added 
+- Edit Squad OKRs
 
+#### Fixed
+- When there are no checkins, output is `NaN` instead of `0`
 
 ## 0.1.1 - 2016-10-08
 #### Fixed
