@@ -65,7 +65,7 @@ const User = p => {
       }}>
         <i className="zmdi zmdi-comment-edit"></i>
         &nbsp;&nbsp;
-        Add Checkin
+        Add Snapshot
       </li>
       <li onClick={(e) => {
         if (p.data.objectives.length > 0) {
@@ -74,7 +74,7 @@ const User = p => {
       }}>
         <i className="zmdi zmdi-comment"></i>
         &nbsp;&nbsp;
-        View Checkins <Pill info>{checkInCount}</Pill>
+        View Snapshots <Pill info>{checkInCount}</Pill>
       </li>
     </ul>
   </div>
@@ -88,16 +88,37 @@ const User = p => {
           <h4>{`${user.firstName} ${user.lastName}`} { leaderBadge }</h4>
           <p>{user.jobTitle}</p>
         </div>
-        <div className={styles.moreBar}>
-          <div className={styles.more__action} onMouseEnter={openOKRMenu} onMouseLeave={closeOKRMenu}>
-            <i className="zmdi zmdi-more-vert"></i>
-            { moreDropdown }
-          </div>
-        </div>
+
       </div>
       <div className={styles.body}>
         <h4>Objectives:</h4>
         {objective}
+
+      </div>
+      <div className={styles.actionBar}>
+        <li className={styles.action} onClick={(e) => {
+          e.preventDefault();
+
+          // TODO: fix this hackery
+          const { id } = user.objectives
+            .filter(o => o.squadId === p.squadId)[0];
+
+          p.onNewCheckinClick(id, p.data.id);
+        }}>
+          <i className="zmdi zmdi-comment-edit"></i>
+          <div className={styles.caption}>Add Snapshot</div>
+        </li>
+
+        <div className={styles.action} onClick={(e) => {
+          if (p.data.objectives.length > 0) {
+            p.viewCheckIn(p.data.objectives[0].check_ins)
+          }
+        }}>
+          <i className="zmdi zmdi-comment"></i>
+          <div className={styles.caption}>View Snapshots</div>
+          <Pill info>{checkInCount}</Pill>
+        </div>
+
       </div>
     </div>
   );

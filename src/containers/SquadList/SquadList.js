@@ -353,7 +353,7 @@ class SquadList extends Component {
         </SkyLight>
 
         <SkyLight hideOnOverlayClicked dialogStyles={ skylightStyles }
-          title="Add Check In"
+          title="Add Snapshot"
           ref="newCheckInDialog"
           afterClose={ () => this.setState({ checkIn: this.defaultCheckInState })}
         >

@@ -33,11 +33,11 @@ export default (p) => {
         />
       </label>
 
-      <label className={styles.modal__item__vert}>
-        <input type='checkbox' /><span>Key completed</span>
-      </label>
+      { /* <label className={styles.modal__item__vert}>
+        <input type='checkbox' disabled /><span>OKR completed</span>
+      </label>*/ }
 
-      <Button primary onClick={onSubmit}>Save Check-In</Button>
+      <Button primary onClick={onSubmit}>Save Snapshot</Button>
     </form>
   );
 };

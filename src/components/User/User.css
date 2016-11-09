@@ -1,3 +1,5 @@
+@import '../../styles/globals';
+
 .user {
   display: flex;
   flex-direction: column;
@@ -122,4 +124,45 @@
       background-color: #f0f0f0;
     }
   }
+}
+
+.actionBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin: -10px 0 5px;
+  justify-content: flex-end;
+}
+
+.action {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  color: #ccc;
+  height: 32px;
+  // width: 24px;
+  // margin-left: auto;
+  text-align: center;
+  // line-height: 24px;
+  transition: color 0.25s ease;
+  align-items: center;
+
+  &:hover {
+    color: $secondary;
+  }
+}
+
+.caption {
+  flex-grow: 0;
+  width: 0px;
+  overflow: hidden;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin: 0 5px;
+  transition: width 0.25s ease;
+  color: inherit;
+}
+
+.action:hover .caption {
+  width: initial;
 }

@@ -5,7 +5,6 @@ import Button from '../../components/Button';
 
 const Objective = p => {
   if (p.data) {
-    console.info(p.data);
     return (
       <div className={styles.Objective}>
         <h4 className={styles.label}>Objective:</h4>
@@ -20,10 +19,10 @@ const Objective = p => {
         <p className={styles.valueContainer}>{ p.data.timeline }</p>
 
         <div className={styles.actionBar}>
-          <Button onClick={e => {
+          <div className={styles.action} onClick={e => {
             e.preventDefault();
             p.editAction()
-          }}><i className="zmdi zmdi-edit" /></Button>
+          }}><i className="zmdi zmdi-edit" /></div>
         </div>
       </div>
     );
