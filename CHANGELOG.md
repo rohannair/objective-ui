@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 #### Added 
 - Edit Squad OKRs
 - Added proper squad and OKR count visualizations to UserList
+- Enabling Log Outs
 
 #### Changed
 - Tweaked some UX on the squadList users section
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 #### Fixed
 - When there are no checkins, output is `NaN` instead of `0`
+- Key results does not serialize properly
 
 ## [0.1.1] - 2016-10-08
 #### Fixed

@@ -40,6 +40,7 @@ module.exports = {
   }
   : {
     path: path.join(basePath, 'dist'),
+    pathinfo: true,
     filename: 'bundle.js',
     publicPath: '/public/'
   },
@@ -80,6 +81,12 @@ module.exports = {
     reasons: false,
     children: false,
     chunkModules: false
+  },
+
+  node: {
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
   },
 
   postcss,
