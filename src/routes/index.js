@@ -17,14 +17,14 @@ import UserList from '../containers/UserList';
 import UserEditor from '../containers/UserEditor';
 
 // Utils
-import { requireAuth, checkAuth } from '../utils/auth';
+import { requireAuth, checkAuth, clearToken } from '../utils/auth';
 
 export default (store, history) => (
   <Router history={ history }>
+    <Route path="/logout" onEnter={ clearToken }/>
     <Route path="/auth" component={ AuthLayout } onEnter={ checkAuth }>
       <IndexRoute component={ Login } />
       <Route path="/login" component={ Login } />
-      <Route path="/logout" component={ Login } />
     </Route>
 
     <Route path="/" component={ CoreLayout } onEnter={ requireAuth }>
