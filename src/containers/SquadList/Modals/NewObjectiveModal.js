@@ -34,7 +34,7 @@ export default (p) => {
               id={ r.id }
               onChange={e => {
                 e.preventDefault();
-                p.onChangeKeyResults(e.target.value, i);
+                p.onChangeKeyResults(e.target.value, i, r.id);
               }}
               />
           )}

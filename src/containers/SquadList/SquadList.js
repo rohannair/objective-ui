@@ -228,14 +228,14 @@ class SquadList extends Component {
               })
             }
             keyResults={this.state.objective.keyResults}
-            onChangeKeyResults={(val, i) => {
+            onChangeKeyResults={(val, i, id) => {
               const { keyResults } = this.state.objective;
               this.setState({
                 objective: {
                   ...this.state.objective,
                   keyResults: [
                     ...keyResults.slice(0, i),
-                    val,
+                    { name: val, id },
                     ...keyResults.slice(i + 1)
                   ]
                 }
