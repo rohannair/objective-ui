@@ -27,7 +27,6 @@ const checkAuth = (nextState, replace) => {
 };
 
 const clearToken = (nextState, replace) => {
-  debugger;
   Cookies.expire(QUARTERMASTER_COOKIE);
   replace({
     pathname: '/auth',
