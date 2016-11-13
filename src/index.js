@@ -13,7 +13,6 @@ const ROOT_NODE = document.getElementById('app');
 import reducers from './state/reducers';
 import configureStore from './state/store';
 import configureRoutes from './routes/index';
-import { fromJS } from 'immutable';
 
 const store = configureStore({}, browserHistory);
 const history = syncHistoryWithStore(
