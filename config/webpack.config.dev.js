@@ -8,6 +8,7 @@ const paths    = require('./paths');
 
 // Plugins
 const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
+const FaviconsPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   cache: true,
