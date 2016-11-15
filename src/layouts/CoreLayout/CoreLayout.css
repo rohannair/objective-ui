@@ -61,7 +61,7 @@
 .body {
   display: flex;
   width: calc(100% - 60px);
-  margin-top: 40px;
+  // margin-top: 40px;
   margin-left: 60px;
   background-color: #EEEEEE;
 }

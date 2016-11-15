@@ -27,7 +27,7 @@ const Objective = p => {
       </div>
     );
   } else {
-    return <Button transparent onClick={p.buttonAction}>{p.buttonText}</Button>
+    return <Button primary onClick={p.buttonAction}>{p.buttonText}</Button>
   }
 };
 

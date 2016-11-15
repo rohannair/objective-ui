@@ -132,33 +132,32 @@ class SquadList extends Component {
           <Card>
             <div className={ styles.header }>
               <h3>{squadItem.name}</h3>
+
             </div>
             <div className={ styles.body }>
               <Objective
-                  data={ objectiveData }
-                  buttonAction={this._showNewObjectiveModal.bind(this, squadItem.id)}
-                  buttonText='Add Squad Objective'
-                  editAction={() => {
-                    this.setState({
-                      objective: {
-                        editing: true,
-                        id: objectiveData.id,
-                        name: objectiveData.name,
-                        keyResults: objectiveData.key_results,
-                        timeline: objectiveData.timeline,
-                        squadId: objectiveData.squadId
-                      }
-                    }, () => this._showNewObjectiveModal(squadItem.id));
-
-                    ;
-                  }}
-                />
+                data={ objectiveData }
+                buttonAction={this._showNewObjectiveModal.bind(this, squadItem.id)}
+                buttonText='Add Squad Objective'
+                editAction={() => {
+                  this.setState({
+                    objective: {
+                      editing: true,
+                      id: objectiveData.id,
+                      name: objectiveData.name,
+                      keyResults: objectiveData.key_results,
+                      timeline: objectiveData.timeline,
+                      squadId: objectiveData.squadId
+                    }
+                  }, () => this._showNewObjectiveModal(squadItem.id));
+                }}
+              />
 
               { members }
             </div>
             <div className={ styles.footer }>
               <Button
-                primary
+                transparent
                 onClick={this._showAssignUserModal.bind(this, squadItem.id)}
               >
                 + Add Squad Member
