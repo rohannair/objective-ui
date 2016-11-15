@@ -37,33 +37,32 @@ class Login extends Component {
     : undefined;
 
     return (
-      <div className={ styles.container }>
-        <div className={ styles.loginBox }>
-          <h2>Log In</h2>
+      <div className={ styles.loginBox }>
+        <h2>Log In</h2>
 
-          <form className={styles.loginForm} onSubmit={ this._submitForm }>
-            <label className={ styles.formGroup }>
-              <span className={ styles.formLabel }>Username:</span>
-              <TextInput placeholder="Enter username"
-                onChange={e => this._setInput(e, 'username')}
-              />
-              { usernameMessage }
-            </label>
+        <form className={styles.loginForm} onSubmit={ this._submitForm }>
+          <label className={ styles.formGroup }>
+            <span className={ styles.formLabel }>Username:</span>
+            <TextInput placeholder="Enter username"
+              onChange={e => this._setInput(e, 'username')}
+            />
+            { usernameMessage }
+          </label>
 
-            <label className={ styles.formGroup }>
-              <span className={ styles.formLabel }>Password:</span>
-              <TextInput inputType="password" placeholder="Enter password"
-                onChange={e => this._setInput(e, 'password') }
-              />
-              { passwordMessage }
-            </label>
+          <label className={ styles.formGroup }>
+            <span className={ styles.formLabel }>Password:</span>
+            <TextInput inputType="password" placeholder="Enter password"
+              onChange={e => this._setInput(e, 'password') }
+            />
+            { passwordMessage }
+          </label>
 
-            <Button primary onClick={() => {}}>Submit</Button>
-          </form>
-        </div>
+          <Button primary onClick={() => {}}>Submit</Button>
+        </form>
 
         <Button onClick={ () => alert('Whoops... // TODO!')}>Forgot your password?</Button>
       </div>
+
     );
   };
 

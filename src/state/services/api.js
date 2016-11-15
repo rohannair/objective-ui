@@ -13,14 +13,14 @@ const getHeaders = () => {
   const token = Cookies.get('qm.tid');
   return {
     'Accept': 'application/json',
-    'Content-Type': 'application/json',
+    'content-type': 'application/json',
     'Authorization': token ? `Bearer ${token}` : null
   };
 };
+
 const getUrl = endpoint => (endpoint.indexOf(API_ROOT) === -1)
   ? API_ROOT + endpoint
   : endpoint;
-
 
 // /// Base
 const callApi = (endpoint) =>
@@ -45,7 +45,21 @@ export const login = payload =>
   fetch(PUBLIC_ROOT + 'login', {
     method: 'POST',
     headers: getHeaders(),
-    body: JSON.stringify({...payload})
+    body: JSON.stringify(payload)
+  })
+  .then(response => response.json())
+  .then(response => {
+    Cookies.set('qm.tid', response.token,
+      { expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 1.95)) }
+    );
+    return omit(response, 'token');
+  });
+
+export const acceptInvite = payload =>
+  fetch(PUBLIC_ROOT + 'finishinvite', {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload)
   })
   .then(response => response.json())
   .then(response => {

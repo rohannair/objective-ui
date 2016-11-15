@@ -41,6 +41,7 @@ class UserList extends Component {
 
   render() {
     const { users } = this.props;
+    const userCount = users.get('results').size;
     const userItems = users.get('results')
       // .filter(user => user.pending === false)
       .map(user => {
@@ -81,17 +82,20 @@ class UserList extends Component {
       padding: '30px'
     };
 
+    const inviteUserButton = userCount > 9
+      ? undefined
+      : <Button
+          primary
+          onClick={ this._showInviteUserModal }
+        >Invite User</Button>;
+
     return (
       <div className={styles.UserList}>
         <div className={styles.controlBar}>
-          <div className={styles.macroContainer}>
-          </div>
+          <h2>Users</h2>
           <div className={styles.buttonContainer}>
             &nbsp;&nbsp;
-            <Button
-              primary
-              onClick={ this._showInviteUserModal }
-            >Invite User</Button>
+            { inviteUserButton }
           </div>
         </div>
         <div className={styles.cardContainer}>

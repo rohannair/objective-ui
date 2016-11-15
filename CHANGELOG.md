@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.2.0]
+## [0.3.0]
+#### Added
+- Invite user functionality is fully hooked up
+
+## [0.2.0] - 2016-10-09
 #### Added 
 - Edit Squad OKRs
 - Added proper squad and OKR count visualizations to UserList

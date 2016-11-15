@@ -1,11 +1,11 @@
 const path = require('path');
 const express = require('express');
 const proxy = require('express-http-proxy');
-const gzipStastic = require('connect-gzip-static');
+
 const webpack = require('webpack');
 const debug = require('./debug');
 
-const config = require('../webpack.config');
+const config = require('../config/webpack.config.dev');
 const basePath = path.join(__dirname, '..');
 
 const app = express();

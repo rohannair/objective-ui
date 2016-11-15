@@ -51,7 +51,7 @@ export default (p) => {
       <label className={styles.modal__item}>
         <h3 className={styles.modal__label}>Timeline</h3>
         <TextInput
-          placeholder='Please timeline'
+          placeholder='Timeline'
           value={ p.timeline }
           onChange={e => {
             e.preventDefault();
