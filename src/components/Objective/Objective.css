@@ -7,6 +7,14 @@
   padding: 0 20px;
 }
 
+.ObjectiveButton {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+}
+
+
 .label {
   color: $secondary;
   margin-bottom: 0;

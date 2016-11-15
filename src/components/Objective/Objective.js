@@ -27,7 +27,11 @@ const Objective = p => {
       </div>
     );
   } else {
-    return <Button primary onClick={p.buttonAction}>{p.buttonText}</Button>
+    return (
+      <div className={styles.ObjectiveButton}>
+        <Button primary onClick={p.buttonAction}>{p.buttonText}</Button>
+      </div>
+    )
   }
 };
 
