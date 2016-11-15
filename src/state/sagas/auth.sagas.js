@@ -22,6 +22,22 @@ function* getToken(payload) {
   }
 }
 
+function* postAcceptInvite(payload) {
+  try {
+    const auth = yield api.acceptInvite(payload);
+    if (auth.status) {
+      throw new Error(auth.message);
+    } else {
+      yield put({ type: authActions.ACCEPT_INVITE.SUCCESS, auth });
+    }
+  } catch (e) {
+    yield put({
+      type: authActions.ACCEPT_INVITE.ERROR,
+      message: e.message
+    });
+  }
+}
+
 export function* watchLoginAttempt() {
   while (true) {
     const { payload } = yield take(authActions.LOGIN.ATTEMPT);
@@ -32,6 +48,21 @@ export function* watchLoginAttempt() {
 export function* watchLoginSuccess() {
   while (true) {
     const { payload } = yield take(authActions.LOGIN.SUCCESS);
+    yield put(push('/'));
+  }
+}
+
+
+export function* watchAcceptInviteAttempt() {
+  while (true) {
+    const { payload } = yield take(authActions.ACCEPT_INVITE.ATTEMPT);
+    yield fork(postAcceptInvite, payload, true);
+  }
+}
+
+export function* watchAcceptInviteSuccess() {
+  while (true) {
+    const { payload } = yield take(authActions.ACCEPT_INVITE.SUCCESS);
     yield put(push('/'));
   }
 }

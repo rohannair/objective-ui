@@ -12,7 +12,7 @@ const hasToken = (store) => {
 const requireAuth = (nextState, replace) => {
   if (!hasToken()) {
     replace({
-      pathname: '/auth',
+      pathname: '/auth/',
       state: { nextPathname: nextState.location.pathname }
     });
   }
@@ -29,7 +29,7 @@ const checkAuth = (nextState, replace) => {
 const clearToken = (nextState, replace) => {
   Cookies.expire(QUARTERMASTER_COOKIE);
   replace({
-    pathname: '/auth',
+    pathname: '/auth/',
     state: { nextPathname: nextState.location.pathname }
   });
 }
