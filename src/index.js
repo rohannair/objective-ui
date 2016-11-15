@@ -1,5 +1,9 @@
 import 'babel-polyfill';
 
+// Setting up Sentry Logging
+const Raven = window.Raven;
+Raven && Raven.config('https://e588c23d6c4842dfadb1a8e06fafe380@sentry.io/114849').install();
+
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
