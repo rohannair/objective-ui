@@ -60,7 +60,7 @@ class Login extends Component {
           <Button primary onClick={() => {}}>Submit</Button>
         </form>
 
-        <Button onClick={ () => alert('Whoops... // TODO!')}>Forgot your password?</Button>
+        { /* <Button onClick={ () => alert('Whoops... // TODO!')}>Forgot your password?</Button> */}
       </div>
 
     );

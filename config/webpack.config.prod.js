@@ -48,6 +48,11 @@ module.exports = {
           'style-loader',
           'css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
         )
+      },
+      {
+        test: /\.svg$/,
+        include: [path.join(basePath, 'src')],
+        loader: 'babel!svg-react'
       }
     ]
   },
