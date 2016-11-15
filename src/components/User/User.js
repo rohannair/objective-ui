@@ -40,7 +40,7 @@ const User = p => {
           <ul>{o.resources.map(r => <li key={r.id}>{r.name}</li>)}</ul>
       </div>)
   : <div className={styles.buttonContainer}>
-      <Button transparent onClick={ e => {
+      <Button primary onClick={ e => {
         e.preventDefault();
         p.showOKRModal(p.squadId, p.data.id);
       }}>Add Objective</Button>

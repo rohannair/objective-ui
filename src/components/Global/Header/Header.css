@@ -5,7 +5,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: 5px;
 
   a {
     &:link,
@@ -16,10 +16,5 @@
 }
 
 .logo {
-  align-items: center;
-  color: #fff;
-  font-family: 'Gotham';
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 3rem;
+  width: 100%;
 }

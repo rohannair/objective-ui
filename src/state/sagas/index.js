@@ -27,7 +27,9 @@ import {
 
 import {
   watchLoginAttempt,
-  watchLoginSuccess
+  watchLoginSuccess,
+  watchAcceptInviteAttempt,
+  watchAcceptInviteSuccess
 } from './auth.sagas';
 
 import {
@@ -55,6 +57,9 @@ export default function* root() {
   yield [
     fork(watchLoginAttempt),
     fork(watchLoginSuccess),
+    fork(watchAcceptInviteAttempt),
+    fork(watchAcceptInviteSuccess),
+
     fork(watchGetUserList),
     fork(watchGetUser),
     fork(watchSearchUsers),
