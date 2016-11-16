@@ -13,7 +13,13 @@ if (!name) {
 const containerName   = _.flowRight(_.upperFirst, _.camelCase)(name);
 const dest            = path.join(__dirname, '..', 'src', 'containers', containerName);
 
-const styleFile = `.${containerName} {}`;
+const styleFile = `@import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
+.${containerName} {
+  @extend container;
+}`;
+
 const containerFile = `import React, { Component, PropTypes } from 'react';
 import styles from './${containerName}.css';
 
@@ -27,7 +33,7 @@ class ${containerName} extends Component {
 
   render() {
     return (
-      <div className="${containerName}">
+      <div className={styles.${containerName}>
       </div>
     );
   }
@@ -65,7 +71,6 @@ if (isDir.sync(dest)) {
 fs.mkdir(dest);
 fs.writeFileSync(path.join(dest, 'index.js'), indexFile);
 fs.writeFileSync(path.join(dest, `${containerName}.js`), containerFile);
-fs.writeFileSync(path.join(dest, `${containerName}.test.js`), tests);
 fs.writeFileSync(path.join(dest, `${containerName}.css`), styleFile);
 
 console.log(chalk.green(`Container ${containerName} created`));

@@ -64,6 +64,5 @@ if (isDir.sync(dest)) {
 fs.mkdir(dest);
 fs.writeFileSync(path.join(dest, 'index.js'), indexFile);
 fs.writeFileSync(path.join(dest, `${componentName}.js`), componentFile);
-fs.writeFileSync(path.join(dest, `${componentName}.test.js`), tests);
 fs.writeFileSync(path.join(dest, `${componentName}.css`), styleFile);
 console.log(chalk.green('Component Created'));
