@@ -28,6 +28,8 @@ class ChangePassword extends Component {
       [styles.ChangePassword]: true
     });
 
+    const { strength } = this.state;
+
     const alert = this.state.message
     ? <Alert type="danger" close={() => this.setState({ message: '' })}>{ this.state.message }</Alert>
     : null;
@@ -55,8 +57,8 @@ class ChangePassword extends Component {
             <small className={styles.strengthMeter}>
               <em>Password strength:</em> {this.state.strength}/4
 
-              { this.state.strength === 3 ? <div className={styles.okayPassword}><i className="zmdi zmdi-check-circle" /> (Keep going!)</div> : null }
-              { this.state.strength === 4 ? <div className={styles.goodPassword}><i className="zmdi zmdi-check-circle" /></div> : null }
+              { strength > 1 && strength < 4 ? <div className={styles.okayPassword}><i className="zmdi zmdi-check-circle" /> (Keep going!)</div> : null }
+              { strength === 4 ? <div className={styles.goodPassword}><i className="zmdi zmdi-check-circle" /></div> : null }
             </small>
           </label>
 
@@ -99,7 +101,7 @@ class ChangePassword extends Component {
       return;
     }
 
-    if (parseInt(strength) < 3) {
+    if (parseInt(strength) < 2) {
       this.setState({
         message: 'New password is too weak'
       });

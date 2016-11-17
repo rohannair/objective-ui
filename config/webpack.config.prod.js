@@ -8,8 +8,10 @@ const paths    = require('./paths');
 
 // Plugins
 const ExtractText        = require('extract-text-webpack-plugin');
+const FaviconsPlugin     = require('favicons-webpack-plugin');
 const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
 const HtmlPlugin         = require('html-webpack-plugin');
+const CommonsPlugin      = new require('webpack/lib/optimize/CommonsChunkPlugin');
 
 module.exports = {
   bail: true,
@@ -19,6 +21,26 @@ module.exports = {
     bundle: [
       require.resolve('./polyfills'),
       paths.appIndexJs
+    ],
+    vendor: [
+      'classnames',
+      'cookies-js',
+      'dateformat',
+      'immutable',
+      'isomorphic-fetch',
+      'jwt-decode',
+      'ramda',
+      'react',
+      'react-dom',
+      'react-hot-loader',
+      'react-redux',
+      'react-router',
+      'react-router-redux',
+      'redbox-react',
+      'redux',
+      'redux-immutable',
+      'redux-logger',
+      'redux-saga'
     ]
   },
 
@@ -50,6 +72,21 @@ module.exports = {
         )
       },
       {
+        test: /\.css$/,
+        include: paths.appNodeModules, // For node CSS only
+        loader: 'style-loader!css-loader'
+      },
+      {
+        test: /\.scss$/,
+        include: paths.appNodeModules, // For node CSS only
+        loaders: [
+          'style',
+          'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+          'sass?sourceMap',
+          'toolbox'
+        ]
+      },
+      {
         test: /\.svg$/,
         include: [path.join(basePath, 'src')],
         loader: 'babel!svg-react'
@@ -78,6 +115,10 @@ module.exports = {
   },
 
   postcss,
+  toolbox: {
+    theme: path.join(paths.appSrc, 'styles/_react-toolbox.theme.scss')
+  },
+
   plugins: [
     new CaseSensitivePaths(),
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -89,8 +130,11 @@ module.exports = {
     new ExtractText('styles.css' , {
       allChunks: true,
     }),
+    new CommonsPlugin({
+      name: 'vendor',
+      minChunks: Infinity
+    }),
     new HtmlPlugin({
-      chunksSortMode : 'dependency',
       template: path.join(basePath, 'src', 'index.html'),
       inject: 'body',
       minify: { collapseWhitespace: true }
