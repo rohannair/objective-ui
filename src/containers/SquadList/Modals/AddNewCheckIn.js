@@ -17,25 +17,15 @@ export default (p) => {
         <TextInput
           placeholder='Title'
           value={ p.name }
-          onChange={e => {
-            e.preventDefault();
-            p.onNameChange(e.target.value);
-          }}
+          onChange={val => p.onNameChange(val) }
         />
 
         <TextArea
           placeholder='Body'
           value={p.description}
-          onChange={e => {
-            e.preventDefault();
-            p.onDescriptionChange(e.target.value);
-          }}
+          onChange={val => p.onDescriptionChange(val) }
         />
       </label>
-
-      { /* <label className={styles.modal__item__vert}>
-        <input type='checkbox' disabled /><span>OKR completed</span>
-      </label>*/ }
 
       <Button primary onClick={onSubmit}>Save Snapshot</Button>
     </form>

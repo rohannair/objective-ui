@@ -1,24 +1,18 @@
 @import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
 
 .SquadList {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-width: 1024px;
+  @extend container;
 }
 
 .controlBar,
 .cardContainer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 30px;
+  @extend row;
 }
 
 .controlBar {
-  margin-bottom: 15px;
-  border-bottom: 1px solid #ccc;
+  @extend controlBar;
 }
 
 .buttonContainer {

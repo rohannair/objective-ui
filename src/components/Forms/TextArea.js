@@ -1,23 +1,29 @@
 import React, { PropTypes } from 'react';
 import styles from './Forms.css';
 
+import { Input } from 'react-toolbox/lib/input';
+
 const TextArea = (props) =>
-  <textarea
+  <Input
     type="text"
     className = { styles.textArea }
-    placeholder = { props.placeholder }
+    label = { props.label || props.placeholder }
     value = { props.value }
     onChange = { props.onChange }
+    multiline = { true }
+    rows = { props.rows }
   />;
 
 TextArea.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  rows: PropTypes.number
 };
 
 TextArea.defaultProps = {
   placeholder: 'Please enter text',
+  rows: 4,
   onChange: (e) => console.info('text changed')
 };
 

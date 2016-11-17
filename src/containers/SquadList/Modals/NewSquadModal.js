@@ -13,14 +13,10 @@ export default (p) => {
   return (
     <form className={styles.innerModal} onSubmit={onSubmit}>
       <label className={styles.modal__item}>
-        <h3 className={styles.modal__label}>Create Squad Name</h3>
         <TextInput
-          placeholder='Please enter Squad Name'
+          placeholder='Squad Name'
           value={ p.name }
-          onChange={(e) => {
-            e.preventDefault();
-            p.onChangeName(e.target.value);
-          }}
+          onChange={val => p.onChangeName(val) }
         />
       </label>
       <Button primary onClick={onSubmit}>Create Squad</Button>

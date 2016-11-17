@@ -7239,6 +7239,10 @@ to-ico@^1.1.2:
     parse-png "^1.0.0"
     resize-img "^1.1.0"
 
+toolbox-loader:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/toolbox-loader/-/toolbox-loader-0.0.3.tgz#0d9d1bcd6c44aacce3d4c17b6115f0477fcf4179"
+
 toposort@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.0.tgz#b66cf385a1a8a8e68e45b8259e7f55875e8b06ef"
@@ -7878,4 +7882,8 @@ yauzl@2.4.1:
   resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-2.4.1.tgz#9528f442dab1b2284e58b4379bb194e22e0c4005"
   dependencies:
     fd-slicer "~1.0.1"
+
+zxcvbn:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/zxcvbn/-/zxcvbn-4.4.1.tgz#2381aadd7f078a25a86b215327562647b80aa8ac"
 

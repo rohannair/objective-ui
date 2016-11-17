@@ -1,0 +1,42 @@
+@import '../../styles/mixins';
+
+@define-extend alert {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 3rem;
+  line-height: 3rem;
+  padding: 0 15px;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  border: 1px solid;
+}
+
+.body {
+  margin-left: 10px;
+}
+
+.close {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.success {
+  @extend alert;
+  @mixin success;
+}
+
+.info {
+  @extend alert;
+  @mixin info;
+}
+
+.warning {
+  @extend alert;
+  @mixin warning;
+}
+
+.danger {
+  @extend alert;
+  @mixin danger;
+}

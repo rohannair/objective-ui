@@ -11,7 +11,9 @@ export default (state = defaultState, action) => {
 
   switch (action.type) {
   case ACTION.GET_USER.SUCCESS:
+  case ACTION.EDIT_USER.SUCCESS:
     return state.merge(fromJS({ ...action.payload.user }));
+
 
   default:
     return state;

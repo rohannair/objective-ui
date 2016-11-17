@@ -1,9 +1,12 @@
 /**
  * Colours
  */
-$primary: #3861F4;
-$secondary: #344055;
-$background: #F5F3F0;
+$primary: #009ED9;
+$secondary: #011627;
+
+$accent: #FF3366;
+$background: #F6F7F8;
+$secondaryaccent: #F1E8B8;
 
 /**
  * z-index
@@ -376,6 +379,7 @@ $top: 100;
   h4,
   h5,
   h6 {
+    color: ($secondary blackness(20%));
     margin-bottom: 0.3rem;
   }
 

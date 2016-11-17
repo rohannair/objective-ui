@@ -1,0 +1,29 @@
+/**
+ * This file contains all layout extendss
+ * Import it like `@import '../../styles/layout';`
+ * and use it like `@extend <extend-name>.
+ *
+ * Editing/saving this file doens't cause a hot reload.
+ * Edit/save the file that this is included into for HMR.
+ */
+
+@define-extend container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 1024px;
+}
+
+@define-extend row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 30px;
+}
+
+@define-extend controlBar {
+  background-color: #FFF;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}

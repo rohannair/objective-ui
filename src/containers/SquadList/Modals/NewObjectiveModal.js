@@ -13,50 +13,38 @@ export default (p) => {
   return (
     <form className={styles.innerModal} onSubmit={onSubmit}>
       <label className={styles.modal__item}>
-        <h3 className={styles.modal__label}>Objective</h3>
         <TextInput
-          placeholder='Please enter objective'
+          placeholder='Objective'
           value={ p.name }
-          onChange={e => {
-            e.preventDefault();
-            p.onChangeName(e.target.value);
-          }}
+          onChange={val => p.onChangeName(val) }
         />
       </label>
 
       <label className={styles.modal__item}>
-        <h3 className={styles.modal__label}>Key Results</h3>
-          { p.keyResults.map((r, i) =>
-            <TextInput
-              key={`kr-${i}`}
-              placeholder='Enter a measurable Key Result'
-              value={ r.name }
-              id={ r.id }
-              onChange={e => {
-                e.preventDefault();
-                p.onChangeKeyResults(e.target.value, i, r.id);
-              }}
-              />
-          )}
-          <div className={styles.addButton} onClick={ e => {
-            e.stopPropagation();
-            if (p.keyResults.length === 3) {
-              // TODO: Have error messaging here
-              return;
-            }
-            p.onAddKeyResult();
-          }}>Add Key Result</div>
+        { p.keyResults.map((r, i) =>
+          <TextInput
+            key={`kr-${i}`}
+            placeholder='Key Result'
+            value={ r.name }
+            id={ r.id }
+            onChange={val => p.onChangeKeyResults(val, i, r.id) }
+            />
+        )}
+        <div className={styles.addButton} onClick={ e => {
+          e.stopPropagation();
+          if (p.keyResults.length === 3) {
+            // TODO: Have error messaging here
+            return;
+          }
+          p.onAddKeyResult();
+        }}>Add Key Result</div>
       </label>
 
       <label className={styles.modal__item}>
-        <h3 className={styles.modal__label}>Timeline</h3>
         <TextInput
           placeholder='Timeline'
           value={ p.timeline }
-          onChange={e => {
-            e.preventDefault();
-            p.onChangeTimeline(e.target.value);
-          }}
+          onChange={val => p.onChangeTimeline(val) }
         />
       </label>
       <Button primary onClick={onSubmit}>Save OKR</Button>

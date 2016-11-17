@@ -1,27 +1,26 @@
 import React, { PropTypes } from 'react';
 import styles from './Forms.css';
 
+import { Input } from 'react-toolbox/lib/input';
+
 const TextInput = (props) => {
   return (
-    <input
-      type={props.inputType}
-      className = { styles.textInput }
-      placeholder = { props.placeholder }
-      defaultValue = { props.value }
+    <Input
+      label = { props.label || props.placeholder }
+      value = { props.value }
       onChange = { props.onChange }
+      type = { props.type }
     />
   );
 };
 
 TextInput.propTypes = {
-  placeholder: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
   inputType: PropTypes.string,
 };
 
 TextInput.defaultProps = {
-  placeholder: 'Please enter text',
   value: '',
   onChange: (e) => console.info('text changed'),
   inputType: 'text'

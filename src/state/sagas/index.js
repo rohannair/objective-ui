@@ -29,11 +29,13 @@ import {
   watchLoginAttempt,
   watchLoginSuccess,
   watchAcceptInviteAttempt,
-  watchAcceptInviteSuccess
+  watchAcceptInviteSuccess,
+  watchGlobalObject
 } from './auth.sagas';
 
 import {
-  watchGetUser
+  watchGetUser,
+  watchEditUser
 } from './user.sagas';
 
 import {
@@ -59,9 +61,12 @@ export default function* root() {
     fork(watchLoginSuccess),
     fork(watchAcceptInviteAttempt),
     fork(watchAcceptInviteSuccess),
+    fork(watchGlobalObject),
+
+    fork(watchGetUser),
+    fork(watchEditUser),
 
     fork(watchGetUserList),
-    fork(watchGetUser),
     fork(watchSearchUsers),
     fork(watchInviteUser),
 

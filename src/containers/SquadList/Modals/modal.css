@@ -29,9 +29,18 @@
   font-weight: normal;
 }
 
+.resultContainer {
+  max-height: 200px;
+  overflow-y: scroll;
+  border: 2px solid $background;
+  border-right: 0;
+}
+
 .searchResult {
   display: flex;
   flex-direction: row;
+  padding: 5px;
+  border-bottom: 1px solid $background;
 }
 
 .searchResultInfo {

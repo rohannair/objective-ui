@@ -13,28 +13,20 @@ export default (p) => {
   return (
     <form className={styles.innerModal} onSubmit={onSubmit}>
       <label className={styles.modal__item}>
-        <h3 className={styles.modal__label}>Objective</h3>
         <TextInput
           placeholder='Objective'
           value={ p.name }
-          onChange={e => {
-            e.preventDefault();
-            p.onChangeName(e.target.value);
-          }}
+          onChange={val => p.onChangeName(val) }
         />
       </label>
 
       <label className={styles.modal__item}>
-        <h3 className={styles.modal__label}>Key Results</h3>
           { p.keyResults.map((r, i) =>
             <TextInput
               key={`kr-${i}`}
               placeholder='A Measurable Key Result'
               value={ r }
-              onChange={e => {
-                e.preventDefault();
-                p.onChangeKeyResults(e.target.value, i);
-              }}
+              onChange={val => p.onChangeKeyResults(val, i) }
               />
           )}
           <div className={styles.addButton} onClick={ e => {
@@ -48,28 +40,20 @@ export default (p) => {
       </label>
 
       <label className={styles.modal__item}>
-        <h3 className={styles.modal__label}>Timeline</h3>
         <TextInput
           placeholder='Timeline'
           value={ p.timeline }
-          onChange={e => {
-            e.preventDefault();
-            p.onChangeTimeline(e.target.value);
-          }}
+          onChange={val => p.onChangeTimeline(val) }
         />
       </label>
 
       <label className={styles.modal__item}>
-        <h3 className={styles.modal__label}>Resources</h3>
         { p.resources.map((r, i) =>
           <TextInput
             key={`kr-${i}`}
             placeholder='A resource'
             value={ r }
-            onChange={e => {
-              e.preventDefault();
-              p.onChangeResources(e.target.value, i);
-            }}
+            onChange={ val => p.onChangeResources(val, i) }
             />
         )}
         <div className={styles.addButton} onClick={ e => {

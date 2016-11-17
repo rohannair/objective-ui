@@ -1,0 +1,51 @@
+@import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
+
+.preferences {
+  @extend container;
+}
+
+.controlBar,
+.body {
+  @extend row;
+}
+
+.controlBar {
+  @extend controlBar;
+}
+
+.profileCard {
+  display: flex;
+  margin-left: auto;
+  width: calc(75% - 30px);
+}
+
+.innerProfile {
+  padding: 30px;
+}
+
+.settingPickerContainer {
+  display: flex;
+  width: 25%;
+  height: 0%;
+}
+
+.settingsPicker {
+  li {
+    width: 100%;
+    padding: 10px 20px;
+    text-align: left;
+    border-bottom: 1px solid #EEE;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #EFEFEF;
+    }
+  }
+}
+
+.avatar {
+  border-radius: 100%;
+  padding: 30px;
+}

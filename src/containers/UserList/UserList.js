@@ -111,29 +111,27 @@ class UserList extends Component {
         >
           <form className={styles.addUserModal} onSubmit={ this._validateInviteUserInputs }>
             <label className={styles.modal__item}>
-              <h3 className={styles.modal__label}>Email</h3>
               <TextInput
                 type='email'
-                placeholder='Please enter email'
+                placeholder='Email'
                 value={this.state.newUser.email}
-                onChange={ e => this.setState({
+                onChange={ val => this.setState({
                   newUser: {
                     ...this.state.newUser,
-                    email: e.target.value
+                    email: val
                   }
                 })}
                 />
             </label>
 
             <label className={styles.modal__item}>
-              <h3 className={styles.modal__label}>Job Title</h3>
               <TextInput
-                placeholder='Please enter Job Title'
+                placeholder='Job Title'
                 value={this.state.newUser.jobTitle}
-                onChange={ e => this.setState({
+                onChange={ val => this.setState({
                   newUser: {
                     ...this.state.newUser,
-                    jobTitle: e.target.value
+                    jobTitle: val
                   }
                 })}
                 />

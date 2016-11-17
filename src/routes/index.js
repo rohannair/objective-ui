@@ -1,6 +1,5 @@
 import React from 'react';
 import { Router, Route, Redirect, IndexRoute, IndexRedirect, browserHistory, applyRouterMiddleware } from 'react-router';
-// import useScroll from 'react-router-scroll/lib/useScroll';
 
 // Layouts
 import AuthLayout from '../layouts/AuthLayout';
@@ -11,12 +10,9 @@ import Dashboard from '../containers/Dashboard';
 import Login from '../containers/Login';
 import Signup from '../containers/Signup';
 
-import MissionEditor from '../containers/MissionEditor';
-import MissionList from '../containers/MissionList';
-import MissionView from '../containers/MissionView';
+import Preferences from '../containers/Preferences';
 import SquadList from '../containers/SquadList';
 import UserList from '../containers/UserList';
-import UserEditor from '../containers/UserEditor';
 
 // Utils
 import { requireAuth, checkAuth, clearToken } from '../utils/auth';
@@ -36,16 +32,9 @@ export default (store, history) => (
       <Redirect from="login" to="auth/login" />
       <Redirect from="signup" to="auth/signup" />
 
-      <Route path="dashboard" component={ Dashboard } />
-
-      <Route path="missions" component={ MissionList } />
-      <Route path="missions/:id" component={ MissionView } />
-      <Route path="missions/edit/:id" component={ MissionEditor } />
-
       <Route path="squads" component={ SquadList } />
-
       <Route path="users" component={ UserList } />
-      <Route path="users/:id" component={ UserEditor } />
+      <Route path="settings" component={ Preferences } />
     </Route>
   </Router>
 );

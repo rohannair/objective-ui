@@ -115,7 +115,12 @@ module.exports = {
       {
         test: /\.scss$/,
         include: paths.appNodeModules, // For node CSS only
-        loader: 'style!css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!sass?sourceMap'
+        loaders: [
+          'style',
+          'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+          'sass?sourceMap',
+          'toolbox'
+        ]
       },
       {
         test: /\.svg$/,
@@ -138,6 +143,10 @@ module.exports = {
   },
 
   postcss,
+  toolbox: {
+    theme: path.join(paths.appSrc, 'styles/_react-toolbox.theme.scss')
+  },
+
   plugins: [
     new CaseSensitivePaths(),
     new webpack.DefinePlugin({

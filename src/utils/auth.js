@@ -1,15 +1,15 @@
 import Cookies from 'cookies-js';
-const QUARTERMASTER_COOKIE = 'qm.tid';
+export const COOKIE_NAME = 'qm.tid';
 
 const hasToken = (store) => {
   // TODO: Verify that this actually should work this way
-  if (Cookies.get(QUARTERMASTER_COOKIE)) {
+  if (Cookies.get(COOKIE_NAME)) {
     return true;
   }
   return false;
 };
 
-const requireAuth = (nextState, replace) => {
+export const requireAuth = (nextState, replace) => {
   if (!hasToken()) {
     replace({
       pathname: '/auth/',
@@ -18,7 +18,7 @@ const requireAuth = (nextState, replace) => {
   }
 };
 
-const checkAuth = (nextState, replace) => {
+export const checkAuth = (nextState, replace) => {
   if (hasToken()) {
     replace({
       pathname: '/'
@@ -26,16 +26,10 @@ const checkAuth = (nextState, replace) => {
   }
 };
 
-const clearToken = (nextState, replace) => {
-  Cookies.expire(QUARTERMASTER_COOKIE);
+export const clearToken = (nextState, replace) => {
+  Cookies.expire(COOKIE_NAME);
   replace({
     pathname: '/auth/',
     state: { nextPathname: nextState.location.pathname }
   });
-}
-
-module.exports = {
-  requireAuth,
-  checkAuth,
-  clearToken
 };

@@ -1,0 +1,73 @@
+@import '../../styles/globals';
+
+.SettingsProfile {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.heading {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.buttonContainer {
+  display: flex;
+  width: 100%;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.form,
+.imageForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.imageContainer {
+  display: flex;
+  width: 250px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  height: 250px;
+  overflow: hidden;
+  background-color: $background;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+
+  i {
+    color: rgba(0,0,0, 0.1);
+  }
+
+}
+
+.form {
+  width: calc(100% - 280px);
+  margin-left: auto;
+}
+
+.avatarButtonContainer {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: center;
+
+  button {
+    height: 1.875rem;
+    border-radius: 1.875em;
+    font-size: 0.75em !important;
+    line-height: 1;
+  }
+}

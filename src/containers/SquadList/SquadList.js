@@ -469,7 +469,7 @@ class SquadList extends Component {
   };
 
   _searchForUser = (val) => {
-    if (val.length < 3) return;
+    // if (val.length < 3) return;
 
     const { dispatch } = this.props;
     dispatch(searchUsers(val));

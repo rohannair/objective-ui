@@ -1,31 +1,21 @@
-@define-mixin $form {
-  border: 1px solid #DBDBDB;
-  font-size: 1rem;
-  transition: border-bottom-color 0.4s ease;
-  padding: 8px;
-  width: 100%;
-  margin-bottom: 6px;
-  border-radius: 2px;
+@import '../../styles/globals';
 
-  &:focus {
-    border-bottom-color: #3861F4;
-    outline: none;
+.input {
+  margin: -15px 0;
+
+  .inputElement {
+    font-size: 1rem;
+
+    .label {
+      font-size: 0.85rem;
+    }
+
+    .bar {
+      &:before,
+      &:after {
+        background-color: $primary !important;
+      }
+    }
+
   }
-}
-
-.textInput {
-  @mixin $form;
-  line-height: 1;
-  min-width: 60%
-}
-
-.textInput__lng {
-  @extend .textInput;
-  width: 100%;
-}
-
-.textArea {
-  @mixin $form;
-  min-height: 400%;
-  line-height: 1.5;
 }

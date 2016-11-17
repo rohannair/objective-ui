@@ -23,8 +23,6 @@ class Login extends Component {
         password: null
       }
     };
-
-    this.re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   }
 
   render() {
@@ -42,17 +40,17 @@ class Login extends Component {
 
         <form className={styles.loginForm} onSubmit={ this._submitForm }>
           <label className={ styles.formGroup }>
-            <span className={ styles.formLabel }>Username:</span>
-            <TextInput placeholder="Enter username"
-              onChange={e => this._setInput(e, 'username')}
+            <TextInput label="Username"
+              onChange={this._handleChange.bind(this, 'username')}
+              value={this.state.auth.username}
             />
             { usernameMessage }
           </label>
 
           <label className={ styles.formGroup }>
-            <span className={ styles.formLabel }>Password:</span>
-            <TextInput inputType="password" placeholder="Enter password"
-              onChange={e => this._setInput(e, 'password') }
+            <TextInput type="password" label="Password"
+              onChange={this._handleChange.bind(this, 'password') }
+              value={this.state.auth.password}
             />
             { passwordMessage }
           </label>
@@ -66,16 +64,17 @@ class Login extends Component {
     );
   };
 
-  _setInput = (e, val) => {
+  _handleChange = (name, val) => {
     let { auth, messages } = this.state;
     this.setState({
+      ...this.state,
       auth: {
         ...auth,
-        [val]: e.target.value
+        [name]: val
       },
       messages: {
         ...messages,
-        [val]: null
+        [name]: null
       }
     });
   };
@@ -86,8 +85,7 @@ class Login extends Component {
 
     const { auth } = this.state;
     const { dispatch } = this.props;
-
-    if (!(this.re.test(auth.username))) {
+    if (!validateEmail(auth.username)) {
       this.setState({
         messages: {
           username: 'Please enter a valid username'
