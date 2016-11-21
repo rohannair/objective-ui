@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.0]
+#### Added
+- Edit user preferences page
+- Change password functionality
+- Changed forms to use Material Design library
+
+#### Changed
+- Redid colour scheme and some UI treatment
+- Separated vendor JS
+
 ## [0.3.0]
 #### Added
 - Invite user functionality is fully hooked up
