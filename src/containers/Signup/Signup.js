@@ -80,27 +80,26 @@ class Signup extends Component {
 
         <form className={styles.loginForm}>
           <label className={styles.formGroup}>
-            <span className={ styles.formLabel }>email:</span>
             <div>{email}</div>
           </label>
 
           <label className={styles.formGroup}>
-            <span className={ styles.formLabel }>Password:</span>
-            <TextInput inputType="password" placeholder="Enter password"
-              onChange={e => this._setInput(e, 'password') }
+            <TextInput type="password" placeholder="Enter password"
+              onChange={this._setInput.bind(this, 'password')}
+              value={this.state.auth.password}
             />
             { passwordMessage }
           </label>
 
           <label className={styles.formGroup}>
-            <span className={ styles.formLabel }>First Name:</span>
             <TextInput placeholder="First Name"
-              onChange={e => this._setInput(e, 'firstName') }
+              onChange={this._setInput.bind(this, 'firstName')}
+              value={this.state.auth.firstName}
             />
             { firstNameMessage }
-            <span className={ styles.formLabel }>Last Name:</span>
             <TextInput placeholder="Last Name"
-              onChange={e => this._setInput(e, 'lastName') }
+              onChange={this._setInput.bind(this, 'lastName')}
+              value={this.state.auth.lastName}
             />
             { lastNameMessage }
           </label>
@@ -111,16 +110,16 @@ class Signup extends Component {
     );
   };
 
-  _setInput = (e, val) => {
+  _setInput = (key, val) => {
     let { auth, messages } = this.state;
     this.setState({
       auth: {
         ...auth,
-        [val]: e.target.value
+        [key]: val
       },
       messages: {
         ...messages,
-        [val]: null
+        [key]: null
       }
     });
   };

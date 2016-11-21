@@ -54,11 +54,12 @@ class Preferences extends Component {
                   <i className="zmdi zmdi-lock" />&nbsp;&nbsp;
                   Change Password
                 </li>
-
+                { /*
                 <li onClick={this._setVisible.bind(this, 'integrations')}>
                   <i className="zmdi zmdi-input-power" />&nbsp;&nbsp;
                   Integrations
                 </li>
+                */ }
               </ul>
             </Card>
           </div>
