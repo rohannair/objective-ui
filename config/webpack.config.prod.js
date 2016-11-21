@@ -118,6 +118,7 @@ module.exports = {
   toolbox: {
     theme: path.join(paths.appSrc, 'styles/_react-toolbox.theme.scss')
   },
+  env: process.env.NODE_ENVIRONMENT
 
   plugins: [
     new CaseSensitivePaths(),
