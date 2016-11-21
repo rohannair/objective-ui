@@ -30,10 +30,6 @@ class ChangePassword extends Component {
 
     const { strength } = this.state;
 
-    const alert = this.state.message
-    ? <Alert type="danger" close={() => this.setState({ message: '' })}>{ this.state.message }</Alert>
-    : null;
-
     return (
       <div className={classname}>
         <h2>Change Password</h2>
@@ -71,11 +67,27 @@ class ChangePassword extends Component {
             />
           </label>
 
-          { alert }
+          { this._getMessage() }
           <Button primary onClick={this._handleSubmit}>Confirm</Button>
         </form>
       </div>
     );
+  };
+
+  _getMessage = () => {
+    if (this.state.message) {
+      return <Alert type="danger" close={() => this.setState({ message: '' })}>{ this.state.message }</Alert>
+    }
+
+    if (this.props.message && this.props.message === 'success') {
+      return <Alert type="success" close={(this.props.clearMessage)}>Password change was succesful</Alert>
+    }
+
+    if (this.props.message && this.props.message === 'failure') {
+      return <Alert type="danger" close={(this.props.clearMessage)}>Old password incorrect; please try again</Alert>
+    }
+
+    return;
   };
 
   _checkStrength = (val) => {

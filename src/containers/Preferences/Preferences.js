@@ -4,7 +4,7 @@ import styles from './Preferences.css';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 
-import { getUser, editUser } from '../../state/actions/user.actions';
+import { getUser, editUser, clearMessage } from '../../state/actions/user.actions';
 
 import Card from '../../components/Card';
 import ChangePassword from '../../components/ChangePassword';
@@ -93,14 +93,22 @@ class Preferences extends Component {
       return <div>Coming soon!!!!</div>;
 
     case 'password':
-      return <ChangePassword handleSubmit={ this._submitProfile } />;
+      return <ChangePassword
+        message={this.props.user.get('message')}
+        handleSubmit={ this._submitProfile }
+        clearMessage={ this.props._clearMessage }
+      />;
 
     case 'profile':
     default:
-      return <SettingsProfile user={user} handleSubmit={ this._submitProfile }/>;
+      return <SettingsProfile
+        user={user}
+        handleSubmit={ this._submitProfile }
+        clearMessage={ this.props._clearMessage }
+      />;
     }
   };
-
+  _clearMessage = () => this.props.dispatch(this.props.clearMessage());
   _setVisible = (val) => this.setState({ componentToRender: val });
 }
 

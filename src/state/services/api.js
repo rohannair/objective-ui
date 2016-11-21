@@ -60,8 +60,12 @@ const postApi = (endpoint, body) =>
     headers: getHeaders(),
     body: JSON.stringify(body)
   })
-  .then(response => response.json())
-  .catch(err => console.error(err));
+  .then(response => {
+    if (response.status >= 400 && response.status < 600) {
+      throw new Error(response.statusText)
+    }
+    return response.json();
+  });
 
 // //// Public
 export const login = payload =>

@@ -1,10 +1,10 @@
-import { takeEvery, takeLatest  } from 'redux-saga';
+import { takeEvery, takeLatest, delay  } from 'redux-saga';
 import { call, put, take, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 
 import * as types from '../constants/users.constants';
 import * as api from '../services/api';
-import { fetchEntity, delay } from './utils';
+// import { fetchEntity, delay } from './utils';
 
 function* fetchUser(id) {
   try {
@@ -35,11 +35,24 @@ function* editUser(payload) {
       type: types.EDIT_USER.SUCCESS,
       payload: user
     });
+
+    yield delay(3000);
+
+    yield put({
+      type: types.CLEAR_USER_MESSAGE
+    });
+
   } catch (e) {
     yield put({
       type: types.EDIT_USER.ERROR,
       message: e.message
-    })
+    });
+
+    yield delay(4000);
+
+    yield put({
+      type: types.CLEAR_USER_MESSAGE
+    });
   }
 }
 

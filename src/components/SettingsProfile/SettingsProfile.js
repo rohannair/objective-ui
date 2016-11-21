@@ -39,7 +39,7 @@ class SettingsProfile extends Component {
             { img }
           </div>
           <div className={styles.avatarButtonContainer}>
-            <Button primary>Upload New Avatar</Button>
+            <Button primary onClick={e => e.preventDefault()}>Upload New Avatar</Button>
           </div>
           <div className={styles.avatarButtonContainer}>
             <Button link onClick={e => {
