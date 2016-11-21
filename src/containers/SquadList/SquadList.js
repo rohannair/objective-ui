@@ -102,7 +102,6 @@ class SquadList extends Component {
       marginLeft: '-20%',
       marginTop: '0',
       top: '20%',
-      padding: '30px'
     };
 
     const squadList = squads.map(squadItem => {

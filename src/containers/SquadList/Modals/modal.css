@@ -1,8 +1,10 @@
 @import '../../../styles/globals';
 
 .innerModal {
-  padding: 20px 0 0;
+  padding: 20px;
   font-size: 0.9rem;
+  overflow-y: scroll;
+  max-height: 500px;
 }
 
 .modal__item {
