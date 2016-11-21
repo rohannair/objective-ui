@@ -1,15 +1,15 @@
-const webpack     = require('webpack');
-const path        = require('path');
+const webpack  = require('webpack');
+const path     = require('path');
 
-const postcss     = require('./postcss');
+const postcss  = require('./postcss');
 
-const basePath    = path.join(__dirname, '..');
+const basePath = path.join(__dirname, '..');
 const paths    = require('./paths');
 
 // Plugins
+const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
 const ExtractText        = require('extract-text-webpack-plugin');
 const FaviconsPlugin     = require('favicons-webpack-plugin');
-const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
 const HtmlPlugin         = require('html-webpack-plugin');
 const CommonsPlugin      = new require('webpack/lib/optimize/CommonsChunkPlugin');
 
@@ -127,7 +127,7 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       __DEV__: false
     }),
-    new ExtractText('styles.css' , {
+    new ExtractText('styles.[hash].css' , {
       allChunks: true,
     }),
     new CommonsPlugin({
