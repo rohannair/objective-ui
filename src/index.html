@@ -11,6 +11,8 @@
 <body>
   <div id="app"></div>
   <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
-
+  <% if (process.env.NODE_ENV === 'production') { %>
+    <%= require('html!analytics.html') %>
+  <% } %>
 </body>
 </html>
