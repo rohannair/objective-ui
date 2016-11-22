@@ -88,9 +88,9 @@ function* getUserDetails() {
   const cookie = Cookies.get(COOKIE_NAME);
   if (!cookie) return;
 
-  const { id: user, companyId, role } = jwtDecode(cookie);
+  const { id: user, companyId, role, email } = jwtDecode(cookie);
   yield put({
     type: types.LOAD_USER_DETAILS.SUCCESS,
-    auth: { user, companyId, role }
+    auth: { user, companyId, role, email }
   });
 }

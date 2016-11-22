@@ -14,7 +14,8 @@ export default (state = defaultState, action) => {
       return state.merge(fromJS({
         companyId: action.auth.companyId,
         user: action.auth.user,
-        role: action.auth.role
+        role: action.auth.role,
+        email: action.auth.email
       }));
 
     default:

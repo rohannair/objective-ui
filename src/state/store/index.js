@@ -1,7 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
+
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
+
+import driftLoggerMiddleware from '../middleware/driftIdentifier';
+import crashReporterMiddleware from '../middleware/crashReporter';
+
 import createReducer from '../reducers';
 import createLogger from 'redux-logger';
 
@@ -23,7 +28,9 @@ export default function configureStore(initialState = {}, history) {
   const middlewares = [
     sagaMiddleware,
     routerMiddleware(history),
-    loggerMiddleware
+    loggerMiddleware,
+    driftLoggerMiddleware,
+    crashReporterMiddleware
   ];
 
   const enhancers = [
