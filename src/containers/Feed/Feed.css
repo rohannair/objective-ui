@@ -1,0 +1,16 @@
+@import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
+
+.Feed {
+  @extend container;
+}
+
+.controlBar {
+  @extend row;
+  @extend controlBar;
+}
+
+.body {
+  @extend row;
+}

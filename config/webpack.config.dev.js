@@ -92,6 +92,11 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /\.(graphql|gql)$/,
+        include: paths.appSrc,
+        loader: 'graphql-tag/loader'
+      },
+      {
         test: /\.jsx?$/,
         include: paths.appSrc,
         loader: 'babel',

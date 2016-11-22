@@ -70,7 +70,7 @@ export function* watchAcceptInviteSuccess() {
 }
 
 export function* watchGlobalObject() {
-  while(true) {
+  while (true) {
     const action = yield take();
     const state = yield isGlobalEmpty();
     if (state) {
@@ -80,7 +80,7 @@ export function* watchGlobalObject() {
 }
 
 function* isGlobalEmpty() {
-  const state = yield select(state => state.get('global').toJSON());
+  const state = yield select(state => state.global);
   return !(!!state.user || !!state.companyID);
 }
 
@@ -88,9 +88,9 @@ function* getUserDetails() {
   const cookie = Cookies.get(COOKIE_NAME);
   if (!cookie) return;
 
-  const { id: user, companyId, role } = jwtDecode(cookie);
+  const { id: user, companyId, role, email } = jwtDecode(cookie);
   yield put({
     type: types.LOAD_USER_DETAILS.SUCCESS,
-    auth: { user, companyId, role }
+    auth: { user, companyId, role, email }
   });
 }

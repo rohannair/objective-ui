@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import styles from './Signup.css';
 
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
 
 import TextInput from 'components/Forms/TextInput';
 import Button from 'components/Button';
@@ -131,7 +130,7 @@ class Signup extends Component {
     const { auth } = this.state;
     const { dispatch } = this.props;
 
-    if(!(auth.password && auth.password.length > 6)) {
+    if (!(auth.password && auth.password.length > 6)) {
       this.setState({
         messages: {
           password: 'Please enter a valid password'

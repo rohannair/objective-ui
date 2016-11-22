@@ -20,7 +20,7 @@ class ChangePassword extends Component {
       newPassword2: '',
       message: '',
       strength: 0
-    }
+    };
   }
 
   render() {
@@ -76,15 +76,15 @@ class ChangePassword extends Component {
 
   _getMessage = () => {
     if (this.state.message) {
-      return <Alert type="danger" close={() => this.setState({ message: '' })}>{ this.state.message }</Alert>
+      return <Alert type="danger" close={() => this.setState({ message: '' })}>{ this.state.message }</Alert>;
     }
 
     if (this.props.message && this.props.message === 'success') {
-      return <Alert type="success" close={(this.props.clearMessage)}>Password change was succesful</Alert>
+      return <Alert type="success" close={(this.props.clearMessage)}>Password change was succesful</Alert>;
     }
 
     if (this.props.message && this.props.message === 'failure') {
-      return <Alert type="danger" close={(this.props.clearMessage)}>Old password incorrect; please try again</Alert>
+      return <Alert type="danger" close={(this.props.clearMessage)}>Old password incorrect; please try again</Alert>;
     }
 
     return;
@@ -126,7 +126,7 @@ class ChangePassword extends Component {
       this.setState({
         ...this.state,
         message: 'Passwords do not match'
-      })
+      });
       return;
     }
 

@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import styles from './Preferences.css';
 
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
 
 import { getUser, editUser, clearMessage } from '../../state/actions/user.actions';
 
@@ -16,11 +15,11 @@ class Preferences extends Component {
 
     this.state = {
       componentToRender: 'profile',
-    }
+    };
   };
 
   componentWillMount() {
-    const id = this.props.global.get('user');
+    const id = this.props.global.user;
     this.props.dispatch(getUser(id));
   };
 
@@ -28,14 +27,14 @@ class Preferences extends Component {
     const { user } = this.props;
     const { componentToRender } = this.state;
 
-    if (!user.get('id')) {
-      return <div className={styles.Preferences}></div>
+    if (!user.id) {
+      return <div className={styles.Preferences}></div>;
     }
 
     return (
       <div className={styles.preferences}>
         <div className={styles.controlBar}>
-          <h2>Settings - {user.get('firstName')} {user.get('lastName')}</h2>
+          <h2>Settings - {user.firstName} {user.lastName}</h2>
 
           <div className={styles.buttonContainer}>
           </div>
@@ -79,11 +78,9 @@ class Preferences extends Component {
 
   _submitProfile = (val) => {
     const { user, dispatch } = this.props;
-    if (!Immutable.is(this.props.user, val)) {
-      // TODO: figure out why the fuck my call for editUser on password change
-      // isn't sending val properly and instead makes a call with old val?
-      dispatch(editUser({...val, id: user.get('id')}));
-    }
+
+    // TODO: do a deep check here
+    dispatch(editUser({...val, id: user.id}));
     return;
   };
 
@@ -94,7 +91,7 @@ class Preferences extends Component {
 
     case 'password':
       return <ChangePassword
-        message={this.props.user.get('message')}
+        message={this.props.user.message}
         handleSubmit={ this._submitProfile }
         clearMessage={ this.props._clearMessage }
       />;
@@ -113,8 +110,8 @@ class Preferences extends Component {
 }
 
 const mapStateToProps = state => ({
-  global: state.get('global'),
-  user: state.get('user')
+  global: state.global,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(Preferences);

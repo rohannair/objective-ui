@@ -62,7 +62,7 @@ const postApi = (endpoint, body) =>
   })
   .then(response => {
     if (response.status >= 400 && response.status < 600) {
-      throw new Error(response.statusText)
+      throw new Error(response.statusText);
     }
     return response.json();
   });
@@ -110,7 +110,7 @@ export const updateMissionField = (payload) => {
     ? `missions/${id}/${field[0]}/${data.id}`
     : `missions/${id}?field=${field[0]}`; // If a regular field
 
-return postApi(url, omit(data, ['id']));
+  return postApi(url, omit(data, ['id']));
 };
 
 export const addMissionField = (payload) =>

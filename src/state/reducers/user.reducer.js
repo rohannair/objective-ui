@@ -1,12 +1,10 @@
-import { fromJS, List } from 'immutable';
-
 import * as ACTION from '../constants/users.constants';
 
-const defaultState = new fromJS({
-  squads: new List(),
-  missions: new List(),
+const defaultState = {
+  squads: [],
+  missions: [],
   message: null
-});
+};
 
 export default (state = defaultState, action) => {
   switch (action.type) {
@@ -17,17 +15,24 @@ export default (state = defaultState, action) => {
       ? 'success'
       : null;
 
-    return state.merge(fromJS({
+    return {
+      ...state,
       ...action.payload.user,
       message
-    }));
+    };
 
   case ACTION.EDIT_USER.ERROR:
   case ACTION.GET_USER.ERROR:
-    return state.merge(fromJS({ message: 'failure' }));
+    return {
+      ...state,
+      message: 'failure'
+    };
 
   case ACTION.CLEAR_USER_MESSAGE:
-    return state.merge(fromJS({ message: null }));
+    return {
+      ...state,
+      message: null
+    };
 
   default:
     return state;

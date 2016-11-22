@@ -1,35 +1,41 @@
-import { fromJS, List } from 'immutable';
-
 import * as ACTION from '../constants/users.constants';
 
-const defaultState = new fromJS({
+const defaultState = {
   offset: 0,
   limit: 25,
-  results: new List()
-});
+  results: []
+};
 
 export default (state = defaultState, action) => {
 
   switch (action.type) {
   case ACTION.GET_USER_LIST.SUCCESS:
 
-    return state.merge(fromJS({
+    return {
+      ...state,
       offset: parseInt(action.users.nextOffset),
       limit: parseInt(action.users.nextLimit),
-      results: new List(action.users.results)
-    }));
+      results: [...action.users.results]
+    };
 
   case ACTION.INVITE_USER.SUCCESS:
-    return state.updateIn(['results'], arr => arr.push({
-      ...action.body.user,
-      missions: [],
-      squads: []
-    }));
+    return {
+      ...state,
+      results: [
+        ...state.results,
+        ...action.body.user,
+        missions: [],
+        squads: []
+      ]
+    }
 
   case ACTION.SEARCH_USERS.SUCCESS:
-    return state.merge(fromJS({
-      results: new List(action.users.results)
-    }));
+    return {
+      ...state,
+      results: [
+        ...action.users.results
+      ]
+    };
 
   default:
     return state;

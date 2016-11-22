@@ -21,18 +21,19 @@ const Objective = p => {
         <div className={styles.actionBar}>
           <div className={styles.action} onClick={e => {
             e.preventDefault();
-            p.editAction()
+            p.editAction();
           }}><i className="zmdi zmdi-edit" /></div>
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className={styles.ObjectiveButton}>
-        <Button primary onClick={p.buttonAction}>{p.buttonText}</Button>
-      </div>
-    )
   }
+
+  return (
+    <div className={styles.ObjectiveButton}>
+      <Button primary onClick={p.buttonAction}>{p.buttonText}</Button>
+    </div>
+  );
+
 };
 
 export default Objective;

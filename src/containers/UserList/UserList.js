@@ -1,25 +1,23 @@
+// Deps
 import React, { Component, PropTypes } from 'react';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+
 import styles from './UserList.css';
 
-import { connect } from 'react-redux';
-import Immutable from 'immutable';
-import { Link } from 'react-router';
-import dateFormat from 'dateformat';
+// Fragments
+import UserMetaFields from '../../fragments/UserMetaFields';
 
-// Deps
-import Card from '../../components/Card';
+// Components
 import Button from '../../components/Button';
-import Pill from '../../components/Pill';
+import LoadingBar from '../../components/LoadingBar';
+
 import SkyLight from 'react-skylight';
 import TextInput from '../../components/Forms/TextInput';
+import UserCard from '../../components/UserCard';
 
+// Utilities
 import { validateEmail } from '../../utils';
-
-// Actions
-import {
-  getUsers,
-  inviteUser
-} from '../../state/actions/userList.actions';
 
 class UserList extends Component {
   constructor(props) {
@@ -34,44 +32,25 @@ class UserList extends Component {
     this.state = { ...this.userListDefaultState };
   };
 
-  componentWillMount() {
-    const { users, dispatch } = this.props;
-    dispatch(getUsers(users.get('limit'), users.get('offset')));
-  };
+  static propTypes = {
+    data: PropTypes.shape({
+      loading: PropTypes.bool.isRequired,
+      viewer: PropTypes.object
+    }).isRequired,
+    invite: PropTypes.func.isRequired
+  }
 
   render() {
-    const { users } = this.props;
-    const userCount = users.get('results').size;
-    const userItems = users.get('results')
-      // .filter(user => user.pending === false)
-      .map(user => {
-        const userimg = user.img || '//placehold.it/250x250/eee?text=\?';
-        const nameBox = user.firstName && user.lastName
-        ? `${user.firstName } ${user.lastName }`
-        : user.email;
+    const { data: { viewer, loading } } = this.props;
+    if (loading) {
+      return <LoadingBar />
+    }
 
-        const titleBox = user.pending
-        ? <Pill>Invited</Pill>
-        : user.jobTitle || 'No title';
-
-        return (
-          <div key={user.id} className={styles.listItem}>
-            <Card>
-              <div className={ styles.header }>
-                <img className={ styles.avatar} src={ userimg } />
-                <h3>{ nameBox }</h3>
-                <small>{ titleBox }</small>
-              </div>
-
-              <div className={ styles.body }>
-                 <p className={styles.squads}>{ this._returnSquadPill(user.squads) }</p>
-                 <p className={styles.missions}>{ this._returnObjectivesPill(user.objectives) }</p>
-               </div>
-
-            </Card>
-          </div>
-        );
-      });
+    const userCount = viewer.company.users.length;
+    const userItems = viewer.company.users.map(user =>
+      <div className={styles.listItem} key={user.id}>
+        <UserCard user={user} />
+      </div>);
 
     const skylightStyles = {
       width: '40%',
@@ -98,6 +77,7 @@ class UserList extends Component {
             { inviteUserButton }
           </div>
         </div>
+
         <div className={styles.cardContainer}>
           { userItems }
         </div>
@@ -163,29 +143,95 @@ class UserList extends Component {
     if (!validateEmail(email) || !jobTitle) return console.error('Not an email!');
 
     // Dispatch action
-    dispatch(inviteUser({ email, jobTitle }));
+    const { invite } = this.props;
+    invite(email);
 
     // Close Modal
     this.refs.dialog.hide();
   };
-
-  _returnObjectivesPill = (objectives) => {
-    const count = objectives && objectives.length || 0;
-    if (count === 0) return <Pill danger>No OKRs</Pill>;
-    return <Pill warning>{`${count} ${count === 1 ? 'OKR' : 'OKRs'}`}</Pill>;
-  };
-
-  _returnSquadPill = (squads) => {
-    const count = squads && squads.length || 0;
-    if (count === 0) return <Pill danger>No Squads</Pill>;
-    return count > 1
-      ? <Pill info>{`In ${count} squads`}</Pill>
-      : <Pill info>{ squads[0].name }</Pill>;
-  };
 }
 
-const mapStateToProps = state => ({
-  users: state.get('users')
+const NEW_USER_MUTATION = gql`
+  mutation inviteUser($email: String!) {
+    inviteUser(email: $email) {
+      ...UserMetaFields
+    }
+  }
+  ${UserMetaFields}
+`;
+
+const withMutation = graphql(NEW_USER_MUTATION, {
+  props: ({ mutate }) => ({
+    invite: (email) => mutate({
+      variables: { email },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        inviteUser: {
+          __typename: 'User',
+          id: Math.random().toString(16).slice(2),
+          email,
+          firstName: '',
+          lastName: '',
+          img: '',
+          role: '',
+          jobTitle: '',
+          pending: true
+        }
+      },
+
+      updateQueries: {
+        UserList: (prev, { mutationResult }) => {
+          const newUser = mutationResult.data.inviteUser;
+          return {
+            ...prev,
+            viewer: {
+              ...prev.viewer,
+              company: {
+                ...prev.viewer.company,
+                users: [
+                  newUser,
+                  ...prev.viewer.company.users
+                ]
+              }
+            }
+          }
+        }
+      }
+
+    })
+  })
 });
 
-export default connect(mapStateToProps)(UserList);
+const GET_USER_QUERY = gql`
+  query UserList($id: String) {
+    viewer(id: $id) {
+      id
+      role
+      company {
+        id
+        users {
+          ...UserMetaFields
+          squads {
+            id
+            name
+          }
+          objectives {
+            id
+          }
+        }
+      }
+    }
+  }
+  ${UserMetaFields}
+`;
+
+const withData = graphql(GET_USER_QUERY, {
+  options: props => ({
+    variables: {
+      // TODO: Remove hardcoding
+      id: 'e8e49354-a078-4832-8596-8fdc70ee6278'
+    }
+  })
+})
+
+export default withData(withMutation(UserList));

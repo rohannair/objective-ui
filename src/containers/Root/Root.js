@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
+import { ApolloProvider } from 'react-apollo';
 
-const Root = ({ routes, store }) =>
-  <Provider store={ store }>
+const Root = ({ routes, store, client }) =>
+  <ApolloProvider store={ store } client={ client }>
     { routes }
-  </Provider>;
+  </ApolloProvider>;
 
 Root.propTypes = {
   store: PropTypes.object.isRequired,
