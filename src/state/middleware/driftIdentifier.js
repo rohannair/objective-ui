@@ -5,10 +5,10 @@ const drift = window.drift ? window.drift : () => {};
 const driftLogger = store => next => action => {
   if (action.type === LOAD_USER_DETAILS) {
     drift.identify(
-      action.global.user,
+      action.auth.user,
       {
-        email: action.global.email,
-        companyId: action.global.companyId
+        email: action.auth.email,
+        companyId: action.auth.companyId
       }
     );
   }
