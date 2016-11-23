@@ -8,7 +8,6 @@ export default (state = defaultState, action) => {
   case ACTION.ASSIGN_USER_TO_SQUAD.SUCCESS:
   case ACTION.GET_SQUAD_LIST.SUCCESS:
     return [
-      ...state,
       ...action.squads.results
     ]
 
