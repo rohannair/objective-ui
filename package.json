@@ -9,8 +9,10 @@
     "build:dll": "webpack --config ./config/webpack.dll.js",
     "build:webpack": "better-npm-run build:webpack",
     "build": "npm run clean && npm run build:webpack",
-    "lint": "eslint --ext .js src",
-    "lint:fix": "eslint --ext .js src --fix",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:js": "eslint --ext .js src",
+    "lint:js:fix": "eslint --ext .js src --fix",
+    "lint:css": "stylelint src/**/*.css",
     "new:comp": "babel-node ./scripts/newComponent.js",
     "new:cont": "babel-node ./scripts/newContainer.js",
     "test:watch": "npm test -- --watch"
@@ -92,6 +94,7 @@
     "sass-loader": "4.0.0",
     "strip-ansi": "3.0.1",
     "style-loader": "0.13.1",
+    "stylelint-config-standard": "^15.0.0",
     "stylelint-webpack-plugin": "0.4.0",
     "svg-react-loader": "0.3.7",
     "toolbox-loader": "^0.0.3",
@@ -104,6 +107,7 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "apollo-client": "^0.5.6",
     "axios": "^0.15.2",
     "classnames": "2.2.5",
     "cookies-js": "1.2.2",
@@ -119,7 +123,9 @@
     "react": "~15.3.2",
     "react-addons-css-transition-group": "15.3.1",
     "react-addons-update": "15.3.1",
+    "react-apollo": "^0.6.0",
     "react-dom": "~15.3.2",
+    "react-flip-move": "^2.7.1",
     "react-hot-loader": "3.0.0-beta.2",
     "react-material-icons": "1.0.1",
     "react-redux": "4.4.5",
@@ -134,6 +140,7 @@
     "redux-logger": "2.6.1",
     "redux-saga": "0.11.1",
     "ress": "1.1.1",
+    "stylelint": "^7.6.0",
     "zxcvbn": "^4.4.1"
   },
   "engines": {

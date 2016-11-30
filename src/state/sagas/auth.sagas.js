@@ -50,7 +50,8 @@ export function* watchLoginAttempt() {
 
 export function* watchLoginSuccess() {
   while (true) {
-    const { payload } = yield take(types.LOGIN.SUCCESS);
+    yield take(types.LOGIN.SUCCESS);
+    location.reload();
     yield put(push('/'));
   }
 }
@@ -65,6 +66,7 @@ export function* watchAcceptInviteAttempt() {
 export function* watchAcceptInviteSuccess() {
   while (true) {
     const { payload } = yield take(types.ACCEPT_INVITE.SUCCESS);
+    location.reload();
     yield put(push('/'));
   }
 }

@@ -95,7 +95,7 @@ class SquadList extends Component {
       this.props.dispatch(getUsers(25, 0));
       this.props.dispatch(getSquadList());
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }
 

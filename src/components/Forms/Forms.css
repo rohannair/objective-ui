@@ -11,11 +11,10 @@
     }
 
     .bar {
-      &:before,
-      &:after {
+      &::before,
+      &::after {
         background-color: $primary !important;
       }
     }
-
   }
 }

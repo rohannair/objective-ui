@@ -5,14 +5,13 @@
   flex-direction: column;
   padding: 20px 20px 0;
   width: 100%;
-  border-top: 1px solid #F0F0F0;
+  border-top: 1px solid #f0f0f0;
   font-size: 0.9rem;
 }
 
 .header {
   display: flex;
   flex-direction: row;
-  // justify-content: center;
   align-items: center;
 }
 
@@ -97,12 +96,12 @@
   margin-bottom: 5px;
 
   &:hover {
-    box-shadow: 0 1px 3px rgba(0,0,0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
 }
 
 .moreDropdown {
-  background-color: #FFF;
+  background-color: #fff;
   position: absolute;
   min-height: 1px;
   width: 150px;
@@ -140,10 +139,7 @@
   cursor: pointer;
   color: #ccc;
   height: 32px;
-  // width: 24px;
-  // margin-left: auto;
   text-align: center;
-  // line-height: 24px;
   transition: color 0.25s ease;
   align-items: center;
 
@@ -154,7 +150,7 @@
 
 .caption {
   flex-grow: 0;
-  width: 0px;
+  width: 0;
   overflow: hidden;
   font-size: 0.75rem;
   font-weight: bold;

@@ -37,13 +37,14 @@ class UserList extends Component {
       loading: PropTypes.bool.isRequired,
       viewer: PropTypes.object
     }).isRequired,
+
     invite: PropTypes.func.isRequired
   }
 
   render() {
     const { data: { viewer, loading } } = this.props;
     if (loading) {
-      return <LoadingBar />
+      return <LoadingBar />;
     }
 
     const userCount = viewer.company.users.length;
@@ -194,7 +195,7 @@ const withMutation = graphql(NEW_USER_MUTATION, {
                 ]
               }
             }
-          }
+          };
         }
       }
 
@@ -203,8 +204,8 @@ const withMutation = graphql(NEW_USER_MUTATION, {
 });
 
 const GET_USER_QUERY = gql`
-  query UserList($id: String) {
-    viewer(id: $id) {
+  query UserList {
+    viewer {
       id
       role
       company {
@@ -225,13 +226,6 @@ const GET_USER_QUERY = gql`
   ${UserMetaFields}
 `;
 
-const withData = graphql(GET_USER_QUERY, {
-  options: props => ({
-    variables: {
-      // TODO: Remove hardcoding
-      id: 'e8e49354-a078-4832-8596-8fdc70ee6278'
-    }
-  })
-})
+const withData = graphql(GET_USER_QUERY);
 
 export default withData(withMutation(UserList));

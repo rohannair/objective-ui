@@ -9,7 +9,7 @@ export default (state = defaultState, action) => {
   case ACTION.GET_SQUAD_LIST.SUCCESS:
     return [
       ...action.squads.results
-    ]
+    ];
 
   case ACTION.NEW_SQUAD.SUCCESS:
     return [
@@ -41,7 +41,7 @@ export default (state = defaultState, action) => {
       users: [
         ...state[idx].users.slice(0, deepIdx),
         action.user[0],
-        ...state[idx].users.slice( deepIdx + 1)
+        ...state[idx].users.slice(deepIdx + 1)
       ]
     };
 

@@ -34,9 +34,7 @@
   justify-content: space-between;
 }
 
-.cardContainer {
-  // flex-direction: column;
-}
+.cardContainer {}
 
 .listItem {
   width: calc((100% - 120px) / 3);

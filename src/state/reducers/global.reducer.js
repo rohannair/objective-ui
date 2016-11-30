@@ -1,4 +1,5 @@
 import * as types from '../constants/auth.constants';
+import { push } from 'react-router-redux';
 
 const defaultState = {
   user: null,

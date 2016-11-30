@@ -15,6 +15,7 @@
 
 .modal__item__vert {
   @extend .modal__item;
+
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
@@ -22,7 +23,7 @@
 
   input[type='checkbox'] {
     padding: 5px;
-    margin-right: 5px
+    margin-right: 5px;
   }
 }
 

@@ -4,12 +4,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  color: #2E404E;
+  color: #2e404e;
 }
 
 .sectionSplash {
-  composes: section;
+  @extend .section;
+
   padding: 150px 40px;
   color: #fff;
 }

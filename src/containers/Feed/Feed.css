@@ -13,4 +13,54 @@
 
 .body {
   @extend row;
+
+  flex-direction: column;
+  align-items: center;
+}
+
+.add {
+  width: calc(28% - 15px);
+  width: 100%;
+  max-width: 640px;
+  background-color: color($primary lightness(+55%));
+  border: 1px solid color($primary lightness(+40%));
+}
+
+.feedBody {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  width: calc(72% - 15px);
+  width: 100%;
+  max-width: 640px;
+  justify-content: center;
+}
+
+.snapshot {
+  padding: 20px;
+  border: 1px solid color($secondaryaccent saturation(0));
+  border-top: 0;
+}
+
+.snapshot__head {
+}
+
+.snapshot__body {
+  padding: 20px 0;
+  color: $font;
+}
+
+.snapshot__footer {
+  border-top: 1px dashed color($secondaryaccent saturation(0));
+  padding-top: 15px;
+}
+
+.addSnapshotContainer {
+  padding: 20px;
+}
+
+.addSnapshotMeta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

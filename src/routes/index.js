@@ -27,7 +27,7 @@ export default (store, history) => (
     </Route>
 
     <Route path="/" component={ CoreLayout } onEnter={ requireAuth }>
-      <IndexRoute component={ SquadList } />
+      <IndexRedirect to="feed" />
       <Redirect from="login" to="auth/login" />
       <Redirect from="signup" to="auth/signup" />
 

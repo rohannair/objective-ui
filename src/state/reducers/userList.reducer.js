@@ -27,7 +27,7 @@ export default (state = defaultState, action) => {
         missions: [],
         squads: []
       ]
-    }
+    };
 
   case ACTION.SEARCH_USERS.SUCCESS:
     return {
