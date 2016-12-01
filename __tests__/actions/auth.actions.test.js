@@ -20,5 +20,5 @@ describe('auth actions', () => {
     };
 
     expect(actions.tryAcceptInvite(payload)).toEqual(expected);
-  })
-})
+  });
+});
