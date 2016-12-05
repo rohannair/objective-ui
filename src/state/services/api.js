@@ -96,6 +96,18 @@ export const acceptInvite = payload =>
     return omit(response, 'token');
   });
 
+export const resetPassword = payload =>
+  fetch(PUBLIC_ROOT + 'forgotpassword', {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload)
+  })
+  .then(response => {
+    if (!response.ok) throw new Error(response.statusText);
+    return response;
+  })
+  .then(response => response.json());
+
 // /// Apis
 export const fetchMission = id =>
   callApi(`missions/${id}`);

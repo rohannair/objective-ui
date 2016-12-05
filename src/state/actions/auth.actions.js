@@ -1,6 +1,7 @@
 import {
   LOGIN,
-  ACCEPT_INVITE
+  ACCEPT_INVITE,
+  RESET_PASSWORD
 } from '../constants/auth.constants';
 
 export const tryLogin = auth => ({
@@ -13,3 +14,9 @@ export const tryAcceptInvite = auth => ({
   payload: auth
 });
 
+export const tryPasswordReset = auth => ({
+  type: RESET_PASSWORD.ATTEMPT,
+  payload: {
+    email: auth.username
+  }
+});

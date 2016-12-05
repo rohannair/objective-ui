@@ -1,14 +1,15 @@
 @import '../../styles/mixins';
 @define-extend alert {
+  align-items: center;
+  border: 1px solid;
+  border-radius: 2px;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  font-size: 0.85rem;
   height: 3rem;
   line-height: 3rem;
-  padding: 0 15px;
   margin-bottom: 20px;
-  border-radius: 2px;
-  border: 1px solid;
+  padding: 0 15px;
 }
 
 .body {

@@ -41,6 +41,25 @@ function* postAcceptInvite(payload) {
   }
 }
 
+function* resetPassword(payload) {
+  try {
+    const auth = yield api.resetPassword(payload);
+    yield put({ type: types.RESET_PASSWORD.SUCCESS, auth });
+  } catch (e) {
+    yield put({
+      type: types.RESET_PASSWORD.ERROR,
+      message: e.message
+    });
+  }
+}
+
+export function* watchResetPasswordAttempt() {
+  while (true) {
+    const { payload } = yield take(types.RESET_PASSWORD.ATTEMPT);
+    yield fork(resetPassword, payload, true);
+  }
+}
+
 export function* watchLoginAttempt() {
   while (true) {
     const { payload } = yield take(types.LOGIN.ATTEMPT);

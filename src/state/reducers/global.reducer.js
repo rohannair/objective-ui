@@ -4,7 +4,8 @@ import { push } from 'react-router-redux';
 const defaultState = {
   user: null,
   companyId: null,
-  role: null
+  role: null,
+  message: {}
 };
 
 export default (state = defaultState, action) => {
@@ -16,7 +17,26 @@ export default (state = defaultState, action) => {
       companyId: action.auth.companyId,
       user: action.auth.user,
       role: action.auth.role,
-      email: action.auth.email
+      email: action.auth.email,
+      message: {}
+    });
+
+  case types.RESET_PASSWORD.SUCCESS:
+    return ({
+      ...state,
+      message: {
+        status: 0,
+        body: action.auth.message
+      }
+    });
+
+  case types.RESET_PASSWORD.ERROR:
+    return ({
+      ...state,
+      message: {
+        status: 1,
+        body: action.message
+      }
     });
 
   default:

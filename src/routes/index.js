@@ -7,6 +7,7 @@ import CoreLayout from '../layouts/CoreLayout';
 
 // Containers
 import Feed from '../containers/Feed';
+import ForgotPassword from '../containers/ForgotPassword';
 import Login from '../containers/Login';
 import Preferences from '../containers/Preferences';
 import Signup from '../containers/Signup';
@@ -24,6 +25,7 @@ export default (store, history) => (
       <IndexRedirect to="login" />
       <Route path="login" component={ Login } />
       <Route path="signup" component={ Signup } />
+      <Route path="resetpassword" component={ ForgotPassword } />
     </Route>
 
     <Route path="/" component={ CoreLayout } onEnter={ requireAuth }>
