@@ -56,6 +56,8 @@ class Feed extends Component {
         </section>
 
         <footer className={styles.snapshot__footer}>
+          { snap.blocker ? <Pill danger>BLOCKER!</Pill> : null}
+          &nbsp;&nbsp;
           <Pill>{snap.objective.name}</Pill>
         </footer>
       </div>
@@ -113,18 +115,19 @@ class Feed extends Component {
 
   _submit = () => {
     const { submit } = this.props;
-    const { body, blocked, objective } = this.state;
-    submit (body, blocked, objective);
+    const { body, blocker, objective } = this.state;
+    submit (body, blocker, objective);
   };
 
   _handleChange = (name, val) => this.setState({ [name]: val });
 }
 
 const NEW_SNAPSHOT = gql`
-  mutation addSnapshot($body: String!, $objective: String) {
-    addSnapshot(body: $body, objective: $objective) {
+  mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean) {
+    addSnapshot(body: $body, objective: $objective, blocker: $blocker) {
       id
       body
+      blocker
       createdAt
       user {
         id
@@ -142,8 +145,8 @@ const NEW_SNAPSHOT = gql`
 
 const withMutation = graphql(NEW_SNAPSHOT, {
   props: ({ mutate }) => ({
-    submit: (body, blocked, objective) => mutate({
-      variables: { body, blocked, objective },
+    submit: (body, blocker, objective) => mutate({
+      variables: { body, blocker, objective },
       optimisticResponse: {
         __typename: 'Mutation',
         addSnapshot: {
@@ -180,6 +183,7 @@ const GET_FEED_QUERY = gql`
       snapshots {
         id
         body
+        blocker
         createdAt
         user {
           id
