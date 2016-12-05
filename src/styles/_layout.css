@@ -23,7 +23,7 @@
 }
 
 @define-extend controlBar {
-  background-color: #FFF;
+  background-color: #fff;
   margin-bottom: 15px;
   border-bottom: 1px solid #ccc;
 }

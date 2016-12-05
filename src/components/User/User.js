@@ -6,7 +6,7 @@ import Pill from '../Pill';
 
 const User = p => {
   if (!(p.data && p.data.objectives)) {
-    return <div></div>
+    return <div></div>;
   }
 
   const user = p.data;
@@ -69,7 +69,7 @@ const User = p => {
       </li>
       <li onClick={(e) => {
         if (p.data.objectives.length > 0) {
-          p.viewCheckIn(p.data.objectives[0].check_ins)
+          p.viewCheckIn(p.data.objectives[0].check_ins);
         }
       }}>
         <i className="zmdi zmdi-comment"></i>
@@ -111,7 +111,7 @@ const User = p => {
 
         <div className={styles.action} onClick={(e) => {
           if (p.data.objectives.length > 0) {
-            p.viewCheckIn(p.data.objectives[0].check_ins)
+            p.viewCheckIn(p.data.objectives[0].check_ins);
           }
         }}>
           <i className="zmdi zmdi-comment"></i>

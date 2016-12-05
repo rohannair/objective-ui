@@ -12,6 +12,10 @@ const CoreLayout = ({ children }) =>
       <Header />
 
       <nav className={classes.nav}>
+        <Link to={'/feed'}>
+          <i className="zmdi zmdi-graphic-eq" />
+          <span className={classes.nav__legend}>Feed</span>
+        </Link>
         <Link to={'/squads'}>
           <i className="zmdi zmdi-tab" />
           <span className={classes.nav__legend}>Squads</span>

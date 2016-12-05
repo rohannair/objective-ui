@@ -8,10 +8,11 @@ const paths    = require('./paths');
 
 // Plugins
 const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
+const CommonsPlugin      = new require('webpack/lib/optimize/CommonsChunkPlugin');
+const DashboardPlugin    = require('webpack-dashboard/plugin');
 const ExtractText        = require('extract-text-webpack-plugin');
 const FaviconsPlugin     = require('favicons-webpack-plugin');
 const HtmlPlugin         = require('html-webpack-plugin');
-const CommonsPlugin      = new require('webpack/lib/optimize/CommonsChunkPlugin');
 
 module.exports = {
   cache: true,
@@ -22,7 +23,6 @@ module.exports = {
     bundle: [
       'webpack-dev-server/client?http://127.0.0.1:8080/',
       'react-hot-loader/patch',
-      require.resolve('./polyfills'),
       path.join(basePath, 'src', 'index.js')
     ],
     vendor: [
@@ -92,6 +92,11 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /\.(graphql|gql)$/,
+        include: paths.appSrc,
+        loader: 'graphql-tag/loader'
+      },
+      {
         test: /\.jsx?$/,
         include: paths.appSrc,
         loader: 'babel',
@@ -149,6 +154,7 @@ module.exports = {
 
   plugins: [
     new CaseSensitivePaths(),
+    new DashboardPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       __DEV__: true
@@ -166,4 +172,4 @@ module.exports = {
       inject: 'body'
     })
   ]
-}
+};

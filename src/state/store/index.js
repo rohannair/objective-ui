@@ -1,59 +1,53 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import { fromJS } from 'immutable';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 
-import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
-
-import driftLoggerMiddleware from '../middleware/driftIdentifier';
-import crashReporterMiddleware from '../middleware/crashReporter';
-
-import createReducer from '../reducers';
 import createLogger from 'redux-logger';
+import { routerReducer } from 'react-router-redux';
 
+import driftLogger from '../middleware/driftIdentifier';
+import crashReporter from '../middleware/crashReporter';
+
+import reducers from '../reducers';
 import rootSaga from '../sagas';
 
 const sagaMiddleware = createSagaMiddleware();
+const NOOP = () => noop => noop;
 const loggerMiddleware = (__DEV__)
-? createLogger({
-  stateTransformer: state => state && state.toJS()
-})
-: (() => noop => noop);
+? createLogger(state => state)
+: NOOP;
+
+const driftLoggerMiddleware = !(__DEV__)
+? driftLogger
+: NOOP;
+
+const crashReporterMiddleware = !(__DEV__)
+? crashReporter
+: NOOP;
 
 const devtools = window.devToolsExtension || (() => noop => noop);
 
-export default function configureStore(initialState = {}, history) {
-  // 1. sagaMiddleware: Makes redux-sagas work
-  // 2. routerMiddleware: Syncs the location/URL path to the state
-  // 3. loggerMiddleware: Logs messages to console in dev
-  const middlewares = [
-    sagaMiddleware,
-    routerMiddleware(history),
-    loggerMiddleware,
-    driftLoggerMiddleware,
-    crashReporterMiddleware
-  ];
-
-  const enhancers = [
-    applyMiddleware(...middlewares),
-    devtools(),
-  ];
-
+export default function configureStore(initialState = {}, history, client) {
   const store = createStore(
-    createReducer(),
-    fromJS(initialState),
-    compose(...enhancers)
+    combineReducers({
+      ...reducers,
+      apollo: client.reducer(),
+      route: routerReducer
+    }),
+    initialState,
+    compose(
+      applyMiddleware(client.middleware()),
+      applyMiddleware(
+        sagaMiddleware,
+        loggerMiddleware,
+        driftLoggerMiddleware,
+        crashReporterMiddleware
+      ),
+      devtools(),
+    )
   );
 
   // Extensions
   sagaMiddleware.run(rootSaga);
-
-  // Make reducers hot reloadable
-  if (__DEV__ && module.hot) {
-    module.hot.accept('state/reducers', () => {
-      const nextReducers = createReducers();
-      store.replaceReducer(nextReducers);
-    });
-  }
 
   return store;
 }

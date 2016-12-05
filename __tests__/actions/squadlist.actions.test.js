@@ -20,4 +20,4 @@ describe('squadList actions', () => {
 
     expect(actions.newSquadMission(payload)).toEqual(expected);
   });
-})
+});

@@ -1,0 +1,22 @@
+.UserTab {
+  display: flex;
+  align-items: center;
+}
+
+.avatarContainer {
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 64px;
+}
+
+.name {
+  line-height: 1;
+  margin-bottom: 0;
+}
+
+.content {
+  margin-left: 15px;
+}

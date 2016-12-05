@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import styles from './SquadList.css';
 
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
 
 import { Link } from 'react-router';
 
@@ -35,6 +34,7 @@ import {
 } from '../../state/actions/squadList.actions';
 
 import {
+  getUsers,
   searchUsers
 } from '../../state/actions/userList.actions';
 
@@ -91,7 +91,12 @@ class SquadList extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(getSquadList());
+    try {
+      this.props.dispatch(getUsers(25, 0));
+      this.props.dispatch(getSquadList());
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   render() {
@@ -400,7 +405,7 @@ class SquadList extends Component {
     }
 
     dispatch(addCheckIn(checkIn));
-    this.refs.newCheckInDialog.hide()
+    this.refs.newCheckInDialog.hide();
   };
 
   _assignUserToSquad = (userId) => {
@@ -529,8 +534,8 @@ class SquadList extends Component {
 }
 
 const mapStateToProps = state => ({
-  squads: state.get('squads'),
-  users: state.get('users')
+  squads: state.squads,
+  users: state.users
 });
 
 export default connect(mapStateToProps)(SquadList);

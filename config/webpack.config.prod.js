@@ -8,10 +8,10 @@ const paths    = require('./paths');
 
 // Plugins
 const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
+const CommonsPlugin      = new require('webpack/lib/optimize/CommonsChunkPlugin');
 const ExtractText        = require('extract-text-webpack-plugin');
 const FaviconsPlugin     = require('favicons-webpack-plugin');
 const HtmlPlugin         = require('html-webpack-plugin');
-const CommonsPlugin      = new require('webpack/lib/optimize/CommonsChunkPlugin');
 
 module.exports = {
   bail: true,
@@ -19,7 +19,6 @@ module.exports = {
 
   entry: {
     bundle: [
-      require.resolve('./polyfills'),
       paths.appIndexJs
     ],
     vendor: [
@@ -56,6 +55,11 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /\.(graphql|gql)$/,
+        include: paths.appSrc,
+        loader: 'graphql-tag/loader'
+      },
+      {
         test: /\.jsx?$/,
         include: paths.appSrc,
         loader: 'babel',
@@ -78,7 +82,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        include: paths.appNodeModules, // For node CSS only
+        include: paths.appNodeModules, // For node SCSS only
         loaders: [
           'style',
           'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
@@ -144,4 +148,4 @@ module.exports = {
     }),
     new webpack.optimize.DedupePlugin()
   ]
-}
+};

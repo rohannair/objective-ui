@@ -1,8 +1,8 @@
-import 'babel-polyfill';
-
 // Setting up Sentry Logging
 const Raven = window.Raven;
 Raven && Raven.config('https://e588c23d6c4842dfadb1a8e06fafe380@sentry.io/114849').install();
+
+import 'babel-polyfill';
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -11,6 +11,8 @@ import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
+
 import Root from './containers/Root';
 const ROOT_NODE = document.getElementById('app');
 
@@ -18,13 +20,33 @@ import reducers from './state/reducers';
 import configureStore from './state/store';
 import configureRoutes from './routes/index';
 
-const store = configureStore({}, browserHistory);
+import { getToken } from './utils/auth';
+
+const client = new ApolloClient({
+  networkInterface: createNetworkInterface({
+    uri: 'api/graphql'
+  })
+});
+
+client.networkInterface.use([{
+  applyMiddleware(req, next) {
+    if (!req.options.headers) {
+      req.options.headers = new Headers();
+    }
+
+    req.options.headers.authorization = `Bearer ${getToken()}`;
+    next();
+  }
+}]);
+
+const store = configureStore({}, browserHistory, client);
+
 const history = syncHistoryWithStore(
   browserHistory,
   store,
   {
     selectLocationState(state) {
-      return state.get('route').toJS();
+      return state.route;
     }
   }
 );
@@ -33,7 +55,7 @@ const routes = configureRoutes(store, history);
 let render = () => {
   ReactDOM.render(
     <HotLoaderContainer>
-      <Root store={ store } routes={ routes } />
+      <Root store={ store } routes={ routes } client={ client } />
     </HotLoaderContainer>,
     ROOT_NODE
   );
@@ -62,7 +84,7 @@ if (__DEV__) {
       render = () => {
         ReactDOM.render(
           <HotLoaderContainer>
-            <NextRoot store={ store } routes={ routes } />
+            <NextRoot store={ store } routes={ routes } client={ client } />
           </HotLoaderContainer>,
           ROOT_NODE
         );

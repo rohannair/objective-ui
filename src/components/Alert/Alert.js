@@ -17,7 +17,7 @@ const Alert = p => {
         { p.children }
       </div>
       <div className={styles.close}>
-        <i className={`zmdi zmdi-close`} onClick={p.close}/>
+        <i className={'zmdi zmdi-close'} onClick={p.close}/>
       </div>
     </div>
   );

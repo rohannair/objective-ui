@@ -11,7 +11,6 @@ const TextArea = (props) =>
     value = { props.value }
     onChange = { props.onChange }
     multiline = { true }
-    rows = { props.rows }
   />;
 
 TextArea.propTypes = {
@@ -23,7 +22,7 @@ TextArea.propTypes = {
 
 TextArea.defaultProps = {
   placeholder: 'Please enter text',
-  rows: 4,
+  rows: 3,
   onChange: (e) => console.info('text changed')
 };
 

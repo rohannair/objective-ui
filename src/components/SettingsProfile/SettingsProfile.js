@@ -10,7 +10,7 @@ let cx = classNames.bind(styles);
 class SettingsProfile extends Component {
   constructor(props) {
     super(props);
-    const { img, firstName, lastName, jobTitle } = this.props.user.toJSON();
+    const { img, firstName, lastName, jobTitle } = this.props.user;
 
     this.state = {
       img,
@@ -47,7 +47,7 @@ class SettingsProfile extends Component {
               this.setState({
                 ...this.state,
                 img: ''
-              })
+              });
             }}>Delete</Button>
           </div>
         </section>
@@ -86,7 +86,7 @@ class SettingsProfile extends Component {
     this.setState({
       ...this.state,
       [name]: value
-    })
+    });
   };
 
   _handleSubmit = (e) => {

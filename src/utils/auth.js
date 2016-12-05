@@ -1,9 +1,11 @@
 import Cookies from 'cookies-js';
 export const COOKIE_NAME = 'qm.tid';
 
+export const getToken = () => Cookies.get(COOKIE_NAME);
+
 const hasToken = (store) => {
   // TODO: Verify that this actually should work this way
-  if (Cookies.get(COOKIE_NAME)) {
+  if (getToken()) {
     return true;
   }
   return false;

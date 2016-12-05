@@ -1,11 +1,10 @@
 @import '../../styles/mixins';
-
 @define-extend pill {
   flex-flow: 0;
   font-size: 0.7rem;
   padding: 3px 5px;
   text-align: center;
-  background-color: #CCC;
+  background-color: #ccc;
   font-weight: bold;
   text-transform: uppercase;
   border-radius: 3px;

@@ -5,7 +5,7 @@ import dateformat from 'dateformat';
 import styles from './modal.css';
 
 export default p => {
-  const checkIns = p.data.map( c =>
+  const checkIns = p.data.map(c =>
     <li key={`checkin-${c.id}`} className={styles.checkin}>
       <div className={styles.checkin__header}>
         <h3>{c.name}</h3>
@@ -15,11 +15,11 @@ export default p => {
         {c.body}
       </div>
     </li>
-  )
+  );
 
   return (
     <div className={styles.innerModal}>
       { checkIns }
     </div>
-  )
-}
+  );
+};

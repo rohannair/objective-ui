@@ -41,6 +41,25 @@ function* postAcceptInvite(payload) {
   }
 }
 
+function* resetPassword(payload) {
+  try {
+    const auth = yield api.resetPassword(payload);
+    yield put({ type: types.RESET_PASSWORD.SUCCESS, auth });
+  } catch (e) {
+    yield put({
+      type: types.RESET_PASSWORD.ERROR,
+      message: e.message
+    });
+  }
+}
+
+export function* watchResetPasswordAttempt() {
+  while (true) {
+    const { payload } = yield take(types.RESET_PASSWORD.ATTEMPT);
+    yield fork(resetPassword, payload, true);
+  }
+}
+
 export function* watchLoginAttempt() {
   while (true) {
     const { payload } = yield take(types.LOGIN.ATTEMPT);
@@ -50,7 +69,8 @@ export function* watchLoginAttempt() {
 
 export function* watchLoginSuccess() {
   while (true) {
-    const { payload } = yield take(types.LOGIN.SUCCESS);
+    yield take(types.LOGIN.SUCCESS);
+    location.reload();
     yield put(push('/'));
   }
 }
@@ -65,12 +85,13 @@ export function* watchAcceptInviteAttempt() {
 export function* watchAcceptInviteSuccess() {
   while (true) {
     const { payload } = yield take(types.ACCEPT_INVITE.SUCCESS);
+    location.reload();
     yield put(push('/'));
   }
 }
 
 export function* watchGlobalObject() {
-  while(true) {
+  while (true) {
     const action = yield take();
     const state = yield isGlobalEmpty();
     if (state) {
@@ -80,7 +101,7 @@ export function* watchGlobalObject() {
 }
 
 function* isGlobalEmpty() {
-  const state = yield select(state => state.get('global').toJSON());
+  const state = yield select(state => state.global);
   return !(!!state.user || !!state.companyID);
 }
 

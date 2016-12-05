@@ -5,11 +5,11 @@ import TextInput from '../../../components/Forms/TextInput';
 import styles from './modal.css';
 
 const Modal = (props) => {
-  const users = props.users.get('results').size > 0
+  const users = props.users.results.length > 0
   ? <div className={styles.modal__item}>
       <h5 className={styles.modal__label}>Results</h5>
       <div className={styles.resultContainer}>
-        { props.users.get('results').map(u =>
+        { props.users.results.map(u =>
           <div key={`result-${u.id}`} className={styles.searchResult}>
             <img className={styles.avatar} src={u.img}/>
             <div className={styles.searchResultInfo}>
