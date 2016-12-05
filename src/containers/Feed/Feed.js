@@ -56,7 +56,7 @@ class Feed extends Component {
         </section>
 
         <footer className={styles.snapshot__footer}>
-          { snap.blocker ? <Pill danger>BLOCKER!</Pill> : null}
+          { snap.blocker ? <Pill danger><i className={'zmdi zmdi-alert-triangle'} /> BLOCKER!</Pill> : null}
           &nbsp;&nbsp;
           <Pill>{snap.objective.name}</Pill>
         </footer>
