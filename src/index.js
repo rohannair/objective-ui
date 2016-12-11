@@ -7,6 +7,7 @@ import 'babel-polyfill';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
+import FontFaceObserver from 'fontfaceobserver';
 
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -21,6 +22,9 @@ import configureStore from './state/store';
 import configureRoutes from './routes/index';
 
 import { getToken } from './utils/auth';
+import AuthService from './utils/AuthService';
+
+const auth = new AuthService('t1FpGvQBC9DqqbaIzhKedem3yca1CQNB', 'objective.auth0.com');
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
@@ -50,8 +54,8 @@ const history = syncHistoryWithStore(
     }
   }
 );
-const routes = configureRoutes(store, history);
 
+const routes = configureRoutes(store, history, auth);
 let render = () => {
   ReactDOM.render(
     <HotLoaderContainer>
@@ -97,4 +101,5 @@ if (__DEV__) {
   }
 }
 
-render();
+const roboto = new FontFaceObserver('Roboto');
+roboto.load().then(render);

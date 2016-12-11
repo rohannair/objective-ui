@@ -17,43 +17,17 @@
 }
 
 .innerLoginBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 30px;
-}
 
-.formGroup {
-  display: block;
-  margin: 10px 0;
-}
-
-.formLabel {
-  color: $secondary;
-  font-size: 0.65rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 7px;
+  h2 {
+    margin-bottom: 30px;
+  }
 }
 
 .buttonContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
 
-.forgotpasswordContainer {
-  margin-top: 30px;
-  text-align: center;
-}
-
-.forgotpassword {
-  color: $secondaryaccent;
-  cursor: pointer;
-  font-size: 0.75em;
-  padding: 0 2px 2px;
-  transition: all 0.25s ease;
-
-  &:hover {
-    color: color($secondaryaccent lightness(-20%));
-    border-bottom: 1px solid color($secondaryaccent lightness(-20%));
-  }
 }
