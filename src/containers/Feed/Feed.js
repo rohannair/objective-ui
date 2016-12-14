@@ -15,6 +15,7 @@ import UserTab from '../../components/UserTab';
 
 import Checkbox from 'react-toolbox/lib/checkbox';
 import Autocomplete from 'react-toolbox/lib/autocomplete';
+import Dropdown from 'react-toolbox/lib/dropdown';
 import FlipMove from 'react-flip-move';
 
 class Feed extends Component {
@@ -34,7 +35,7 @@ class Feed extends Component {
       viewer: PropTypes.object
     }).isRequired,
 
-    addSnapshot: PropTypes.func.isRequired
+    submit: PropTypes.func.isRequired
   }
 
   render() {
@@ -63,11 +64,11 @@ class Feed extends Component {
       </div>
     );
 
-    const autoCompleteValues = viewer.objectives
-      .reduce((o, v) => {
-        o[v.id] = v.name;
-        return o;
-      }, {});
+    const dropdownValues = viewer.objectives
+      .map(v => ({
+        value: v.id,
+        label: v.name
+      }));
 
     return (
       <div className={styles.Feed}>
@@ -85,12 +86,13 @@ class Feed extends Component {
                 />
 
                 <div className={styles.addSnapshotMeta}>
-                  <Autocomplete
-                    direction="down"
-                    label="Objective"
-                    value={this.state.objective}
-                    source={autoCompleteValues}
+
+                  <Dropdown
+                    auto
+                    label="Select Objective"
                     onChange={this._handleChange.bind(this, 'objective')}
+                    source={dropdownValues}
+                    value={this.state.objective}
                   />
                   <Checkbox
                     checked={this.state.blocker}

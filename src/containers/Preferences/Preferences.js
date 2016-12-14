@@ -107,7 +107,7 @@ class Preferences extends Component {
   };
   _clearMessage = () => this.props.dispatch(this.props.clearMessage());
   _setVisible = (val) => this.setState({ componentToRender: val });
-}
+};
 
 const mapStateToProps = state => ({
   global: state.global,

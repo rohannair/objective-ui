@@ -1,0 +1,16 @@
+@import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
+
+.CreateUser {
+  @extend container;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.message {
+  color: #fff;
+  font-weight: normal;
+  margin-top: 30px;
+}

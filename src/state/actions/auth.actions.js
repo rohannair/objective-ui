@@ -1,7 +1,8 @@
 import {
   LOGIN,
   ACCEPT_INVITE,
-  RESET_PASSWORD
+  RESET_PASSWORD,
+  CREATE_USER
 } from '../constants/auth.constants';
 
 export const tryLogin = auth => ({
@@ -19,4 +20,9 @@ export const tryPasswordReset = auth => ({
   payload: {
     email: auth.username
   }
+});
+
+export const tryCreateUser = payload => ({
+  type: CREATE_USER.ATTEMPT,
+  payload
 });

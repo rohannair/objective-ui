@@ -7,6 +7,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import CoreLayout from '../layouts/CoreLayout';
 
 // Containers
+import CreateUser from '../containers/CreateUser';
 import Feed from '../containers/Feed';
 import ForgotPassword from '../containers/ForgotPassword';
 import Login from '../containers/Login';
@@ -27,16 +28,13 @@ export default (store, history, lock) => {
     replace('/auth/login');
   };
 
-  // const login = (nextState, replace) => {
-
-  // };
-
   return (
     <Router history={ history } >
       <Route path="/logout" onEnter={ logout } />
 
       <Route path="/auth/" component={ AuthLayout } onEnter={ checkAuth }>
         <IndexRedirect to="login" />
+        <Route path="create" component={ CreateUser } lock={lock} />
         <Route path="login" component={ Login } lock={lock} />
         <Route path="signup" component={ Signup } />
         <Route path="resetpassword" component={ ForgotPassword } />

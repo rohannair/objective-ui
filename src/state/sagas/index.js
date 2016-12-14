@@ -35,6 +35,11 @@ import {
 } from './auth.sagas';
 
 import {
+  watchCreateUserAttempt,
+  watchCreateUserSuccess
+} from './auth/createUser.sagas';
+
+import {
   watchGetUser,
   watchEditUser
 } from './user.sagas';
@@ -79,6 +84,9 @@ export default function* root() {
 
     fork(watchCreateUserOKR),
     fork(watchCreateCheckIn),
-    fork(watchEditSquadObjective)
+    fork(watchEditSquadObjective),
+
+    fork(watchCreateUserAttempt),
+    fork(watchCreateUserSuccess)
   ];
 }

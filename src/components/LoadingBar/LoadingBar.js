@@ -14,7 +14,7 @@ const LoadingBar = p => {
   return (
     <div className={classname}>
       <div className={styles.loading}>
-        <ProgressBar type="circular" mode="indeterminate" />
+        <ProgressBar multicolor type="circular" mode="indeterminate" />
       </div>
     </div>
   );

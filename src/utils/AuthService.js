@@ -6,12 +6,13 @@ const REDIRECT_URL = 'http://localhost:8080/auth/login';
 
 const AuthService = (clientId, domain, onAuthenticate) => {
   const COOKIE_KEY = 'qm.tid';
+  // TODO: role doesn't actually exist here
   const lock = new Auth0Lock(clientId, domain, {
     auth: {
       redirectUrl: REDIRECT_URL,
       responseType: 'token',
       params: {
-        scope: 'openid email companyId role user_id'
+        scope: 'openid user_metadata role email'
       }
     }
   });

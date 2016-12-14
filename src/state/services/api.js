@@ -8,11 +8,11 @@ import Cookies from 'cookies-js';
 
 const API_ROOT = '/api/v1/';
 const PUBLIC_ROOT = '/api/public/';
-let token = Cookies.get('qm.tid');
+// let token = localStorage.getItem('qm.tid');
 
 // /// Meta
 const getHeaders = () => {
-  let token = token || Cookies.get('qm.tid');
+  let token = token || localStorage.getItem('qm.tid');
   return {
     'Accept': 'application/json',
     'content-type': 'application/json',
@@ -31,6 +31,19 @@ const apiRequest = axios.create({
 
 const publicRequest = axios.create({
   baseUrl: PUBLIC_ROOT
+});
+
+export const getPublic = endpoint => axios({
+  method: 'get',
+  url: PUBLIC_ROOT + endpoint,
+  headers: getHeaders()
+});
+
+export const postPublic = (endpoint, data) => axios({
+  method: 'post',
+  url: PUBLIC_ROOT + endpoint,
+  headers: getHeaders(),
+  data
 });
 
 const handleError = (e) => {

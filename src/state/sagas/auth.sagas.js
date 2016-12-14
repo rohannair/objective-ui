@@ -106,12 +106,17 @@ function* isGlobalEmpty() {
 }
 
 function* getUserDetails() {
-  const cookie = Cookies.get(COOKIE_NAME);
+  const cookie = localStorage.getItem(COOKIE_NAME);
   if (!cookie) return;
 
-  const { id: user, companyId, role, email } = jwtDecode(cookie);
+  const token = jwtDecode(cookie);
   yield put({
     type: types.LOAD_USER_DETAILS.SUCCESS,
-    auth: { user, companyId, role, email }
+    auth: {
+      user: token.user_metadata.oiq_id,
+      companyId: token.user_metadata.oiq_id,
+      role: token.role,
+      email: token.email
+    }
   });
 }
