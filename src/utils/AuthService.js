@@ -1,12 +1,11 @@
 import Auth0Lock from 'auth0-lock';
 import { browserHistory } from 'react-router';
 
-// TODO: figure out what the proper url should be here
-const REDIRECT_URL = 'http://localhost:8080/auth/login';
+const REDIRECT_URL = `${document.location.origin}/auth/login`;
 
 const AuthService = (clientId, domain, onAuthenticate) => {
   const COOKIE_KEY = 'qm.tid';
-  // TODO: role doesn't actually exist here
+
   const lock = new Auth0Lock(clientId, domain, {
     auth: {
       redirectUrl: REDIRECT_URL,

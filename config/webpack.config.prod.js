@@ -10,7 +10,7 @@ const paths    = require('./paths');
 const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
 const CommonsPlugin      = new require('webpack/lib/optimize/CommonsChunkPlugin');
 const ExtractText        = require('extract-text-webpack-plugin');
-const FaviconsPlugin     = require('favicons-webpack-plugin');
+const CopyPlugin         = require('copy-webpack-plugin');
 const HtmlPlugin         = require('html-webpack-plugin');
 
 module.exports = {
@@ -146,6 +146,9 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin({
       compressor: { warnings: false }
     }),
+    new CopyPlugin([{
+      from: './favicon.ico'
+    }]),
     new webpack.optimize.DedupePlugin()
   ]
 };
