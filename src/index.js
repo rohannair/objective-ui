@@ -43,6 +43,15 @@ client.networkInterface.use([{
   }
 }]);
 
+client.networkInterface.useAfter([{
+  applyAfterware({ response }, next) {
+    if (response.status === 401) {
+      auth.logout();
+    }
+    next();
+  }
+}]);
+
 const store = configureStore({}, browserHistory, client);
 
 const history = syncHistoryWithStore(

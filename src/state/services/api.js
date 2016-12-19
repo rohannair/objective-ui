@@ -10,7 +10,7 @@ const API_ROOT = '/api/v1/';
 const PUBLIC_ROOT = '/api/public/';
 // let token = localStorage.getItem('qm.tid');
 
-// /// Meta
+///// Meta
 const getHeaders = () => {
   let token = token || localStorage.getItem('qm.tid');
   return {
@@ -24,7 +24,7 @@ const getUrl = endpoint => (endpoint.indexOf(API_ROOT) === -1)
   ? API_ROOT + endpoint
   : endpoint;
 
-// /// Base
+///// Base
 const apiRequest = axios.create({
   baseUrl: API_ROOT
 });
@@ -80,7 +80,7 @@ const postApi = (endpoint, body) =>
     return response.json();
   });
 
-// //// Public
+////// Public
 export const login = payload =>
   fetch(PUBLIC_ROOT + 'login', {
     method: 'POST',
@@ -121,7 +121,7 @@ export const resetPassword = payload =>
   })
   .then(response => response.json());
 
-// /// Apis
+///// Apis
 export const fetchMission = id =>
   callApi(`missions/${id}`);
 

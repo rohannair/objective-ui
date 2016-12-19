@@ -11,6 +11,7 @@ import Button from '../../components/Button';
 import TextInput from '../../components/Forms/TextInput';
 
 import Objective from '../../components/Objective';
+import LoadingBar from '../../components/LoadingBar';
 import User from '../../components/User';
 
 import SkyLight from 'react-skylight';
@@ -31,12 +32,12 @@ import {
   newUserOKR,
   addCheckIn,
   editSquadObjective
-} from '../../state/actions/squadList.actions';
+} from 'state/actions/squadList.actions';
 
 import {
   getUsers,
   searchUsers
-} from '../../state/actions/userList.actions';
+} from 'state/actions/userList.actions';
 
 class SquadList extends Component {
   constructor(props) {
@@ -90,7 +91,7 @@ class SquadList extends Component {
 
   }
 
-  componentWillMount() {
+  componentDidMount() {
     try {
       this.props.dispatch(getUsers(25, 0));
       this.props.dispatch(getSquadList());
@@ -101,6 +102,10 @@ class SquadList extends Component {
 
   render() {
     const { squads } = this.props;
+    if (!(squads.length > 0)) {
+      return <LoadingBar />;
+    }
+
     const skylightStyles = {
       width: '40%',
       height: 'static',
@@ -136,7 +141,6 @@ class SquadList extends Component {
           <Card>
             <div className={ styles.header }>
               <h3>{squadItem.name}</h3>
-
             </div>
             <div className={ styles.body }>
               <Objective

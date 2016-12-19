@@ -113,8 +113,8 @@ function* getUserDetails() {
   yield put({
     type: types.LOAD_USER_DETAILS.SUCCESS,
     auth: {
-      user: token.user_metadata.oiq_id,
-      companyId: token.user_metadata.oiq_id,
+      user: token.app_metadata.oiq_id,
+      companyId: token.app_metadata.oiq_id,
       role: token.role,
       email: token.email
     }

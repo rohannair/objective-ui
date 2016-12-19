@@ -11,13 +11,14 @@ const AuthService = (clientId, domain, onAuthenticate) => {
       redirectUrl: REDIRECT_URL,
       responseType: 'token',
       params: {
-        scope: 'openid user_metadata role email'
+        scope: 'openid app_metadata role email'
       }
     }
   });
 
   lock.on('authenticated', result => {
     setToken(result.idToken);
+    window.location.replace('/');
   });
 
   const getToken = () => localStorage.getItem(COOKIE_KEY);
