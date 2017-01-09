@@ -1,0 +1,12 @@
+exports[`Test suite for Section component Section should exist 1`] = `
+<div
+  style={
+    Object {
+      "backgroundColor": "transparent",
+    }
+  }>
+  <h2 />
+  <p />
+  <div />
+</div>
+`;

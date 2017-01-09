@@ -1,14 +1,14 @@
-import { LOAD_USER_DETAILS } from '../constants/auth.constants';
+import { LOAD_USER_DETAILS } from '../constants/auth.constants'
 
-const drift = window.drift ? window.drift : () => {};
-const identified = window.identified = false;
+const drift = window.drift ? window.drift : () => {}
+const identified = window.identified = false
 
 const driftLogger = store => next => action => {
   if (action.type === LOAD_USER_DETAILS.SUCCESS) {
-    isDriftIn(driftIdentify.bind(this, action));
+    isDriftIn(driftIdentify.bind(this, action))
   }
-  return next(action);
-};
+  return next(action)
+}
 
 const driftIdentify = (action) => {
   drift.identify(
@@ -17,13 +17,13 @@ const driftIdentify = (action) => {
       email: action.auth.email,
       companyId: action.auth.companyId
     }
-  );
-};
+  )
+}
 
 const isDriftIn = (cb) => {
   if (window.driftLoaded) {
-    cb();
-  } else setTimeout(isDriftIn(cb), 100);
-};
+    cb()
+  } else setTimeout(isDriftIn(cb), 100)
+}
 
-export default driftLogger;
+export default driftLogger

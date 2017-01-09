@@ -1,0 +1,13 @@
+exports[`Test suite for UserTab component UserTab should exist 1`] = `
+<div
+  className="undefined">
+  <div>
+    <img />
+  </div>
+  <div>
+    <h3>
+       
+    </h3>
+  </div>
+</div>
+`;

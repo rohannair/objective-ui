@@ -1,2 +1,2 @@
-import ChangePassword from './ChangePassword';
-export default ChangePassword;
+import ChangePassword from './ChangePassword'
+export default ChangePassword

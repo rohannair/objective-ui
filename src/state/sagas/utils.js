@@ -1,15 +1,15 @@
 // ///////// Fetch Entity ///////////
 export function* fetchEntity(entity, apiFn, id, url) {
-  yield put(entity.request(id));
-  const {response, error} = yield call(apiFn, url || id);
+  yield put(entity.request(id))
+  const {response, error} = yield call(apiFn, url || id)
   if (response) {
-    yield put(entity.success(id, response));
+    yield put(entity.success(id, response))
   } else {
-    yield put(entity.failure(id, error));
+    yield put(entity.failure(id, error))
   }
 }
 
 // ///////// Debounceing ///////////
 export function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve,ms));
+  return new Promise(resolve => setTimeout(resolve,ms))
 }

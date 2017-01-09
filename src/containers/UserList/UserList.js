@@ -1,35 +1,35 @@
 // Deps
-import React, { Component, PropTypes } from 'react';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import React, { Component, PropTypes } from 'react'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
-import styles from './UserList.css';
+import styles from './UserList.css'
 
 // Fragments
-import UserMetaFields from '../../fragments/UserMetaFields';
+import UserMetaFields from '../../fragments/UserMetaFields'
 
 // Components
-import Button from '../../components/Button';
-import LoadingBar from '../../components/LoadingBar';
+import Button from '../../components/Button'
+import LoadingBar from '../../components/LoadingBar'
 
-import SkyLight from 'react-skylight';
-import TextInput from '../../components/Forms/TextInput';
-import UserCard from '../../components/UserCard';
+import SkyLight from 'react-skylight'
+import TextInput from '../../components/Forms/TextInput'
+import UserCard from '../../components/UserCard'
 
 // Utilities
-import { validateEmail } from '../../utils';
+import { validateEmail } from '../../utils'
 
 class UserList extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.userListDefaultState = {
       newUser: {
         email: '',
         jobTitle: ''
       }
-    };
+    }
 
-    this.state = { ...this.userListDefaultState };
+    this.state = { ...this.userListDefaultState }
   };
 
   static propTypes = {
@@ -42,16 +42,16 @@ class UserList extends Component {
   }
 
   render() {
-    const { data: { viewer, loading } } = this.props;
+    const { data: { viewer, loading } } = this.props
     if (loading) {
-      return <LoadingBar />;
+      return <LoadingBar />
     }
 
-    const userCount = viewer.company.users.length;
+    const userCount = viewer.company.users.length
     const userItems = viewer.company.users.map(user =>
       <div className={styles.listItem} key={user.id}>
         <UserCard user={user} />
-      </div>);
+      </div>)
 
     const skylightStyles = {
       width: '40%',
@@ -60,14 +60,9 @@ class UserList extends Component {
       marginTop: '0',
       top: '20%',
       padding: '30px'
-    };
+    }
 
-    const inviteUserButton = userCount > 9
-      ? undefined
-      : <Button
-          primary
-          onClick={ this._showInviteUserModal }
-        >Invite User</Button>;
+    const inviteUserButton = undefined
 
     return (
       <div className={styles.UserList}>
@@ -122,7 +117,7 @@ class UserList extends Component {
         </SkyLight>
 
       </div>
-    );
+    )
   };
 
   _clearState = () => this.setState({
@@ -130,25 +125,25 @@ class UserList extends Component {
   });
 
   _showInviteUserModal = (e) => {
-    e.preventDefault();
-    this.refs.dialog.show();
+    e.preventDefault()
+    this.refs.dialog.show()
   };
 
   _validateInviteUserInputs = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
 
-    const { newUser: { email, jobTitle } } = this.state;
-    const { dispatch } = this.props;
+    const { newUser: { email, jobTitle } } = this.state
+    const { dispatch } = this.props
 
-    if (!validateEmail(email) || !jobTitle) return console.error('Not an email!');
+    if (!validateEmail(email) || !jobTitle) return console.error('Not an email!')
 
     // Dispatch action
-    const { invite } = this.props;
-    invite(email);
+    const { invite } = this.props
+    invite(email)
 
     // Close Modal
-    this.refs.dialog.hide();
+    this.refs.dialog.hide()
   };
 }
 
@@ -159,7 +154,7 @@ const NEW_USER_MUTATION = gql`
     }
   }
   ${UserMetaFields}
-`;
+`
 
 const withMutation = graphql(NEW_USER_MUTATION, {
   props: ({ mutate }) => ({
@@ -182,7 +177,7 @@ const withMutation = graphql(NEW_USER_MUTATION, {
 
       updateQueries: {
         UserList: (prev, { mutationResult }) => {
-          const newUser = mutationResult.data.inviteUser;
+          const newUser = mutationResult.data.inviteUser
           return {
             ...prev,
             viewer: {
@@ -195,13 +190,13 @@ const withMutation = graphql(NEW_USER_MUTATION, {
                 ]
               }
             }
-          };
+          }
         }
       }
 
     })
   })
-});
+})
 
 const GET_USER_QUERY = gql`
   query UserList {
@@ -224,8 +219,8 @@ const GET_USER_QUERY = gql`
     }
   }
   ${UserMetaFields}
-`;
+`
 
-const withData = graphql(GET_USER_QUERY);
+const withData = graphql(GET_USER_QUERY)
 
-export default withData(withMutation(UserList));
+export default withData(withMutation(UserList))

@@ -1,34 +1,34 @@
-import React, { Component, PropTypes } from 'react';
-import styles from './Preferences.css';
+import React, { Component, PropTypes } from 'react'
+import styles from './Preferences.css'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import { getUser, editUser, clearMessage } from '../../state/actions/user.actions';
+import { getUser, editUser, clearMessage } from '../../state/actions/user.actions'
 
-import Card from '../../components/Card';
-import ChangePassword from '../../components/ChangePassword';
-import SettingsProfile from '../../components/SettingsProfile';
+import Card from '../../components/Card'
+import ChangePassword from '../../components/ChangePassword'
+import SettingsProfile from '../../components/SettingsProfile'
 
 class Preferences extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       componentToRender: 'profile',
-    };
+    }
   };
 
   componentWillMount() {
-    const id = this.props.global.user;
-    this.props.dispatch(getUser(id));
+    const id = this.props.global.user
+    this.props.dispatch(getUser(id))
   };
 
   render() {
-    const { user } = this.props;
-    const { componentToRender } = this.state;
+    const { user } = this.props
+    const { componentToRender } = this.state
 
     if (!user.id) {
-      return <div className={styles.Preferences}></div>;
+      return <div className={styles.Preferences}></div>
     }
 
     return (
@@ -49,11 +49,11 @@ class Preferences extends Component {
                   Edit Profile
                 </li>
 
+                { /*
                 <li onClick={this._setVisible.bind(this, 'password')}>
                   <i className="zmdi zmdi-lock" />&nbsp;&nbsp;
                   Change Password
                 </li>
-                { /*
                 <li onClick={this._setVisible.bind(this, 'integrations')}>
                   <i className="zmdi zmdi-input-power" />&nbsp;&nbsp;
                   Integrations
@@ -73,28 +73,28 @@ class Preferences extends Component {
 
         </div>
       </div>
-    );
+    )
   };
 
   _submitProfile = (val) => {
-    const { user, dispatch } = this.props;
+    const { user, dispatch } = this.props
 
     // TODO: do a deep check here
-    dispatch(editUser({...val, id: user.id}));
-    return;
+    dispatch(editUser({...val, id: user.id}))
+    return
   };
 
   _componentToRender = (val, user) => {
     switch (val) {
     case 'integrations':
-      return <div>Coming soon!!!!</div>;
+      return <div>Coming soon!!!!</div>
 
     case 'password':
       return <ChangePassword
         message={this.props.user.message}
         handleSubmit={ this._submitProfile }
         clearMessage={ this.props._clearMessage }
-      />;
+      />
 
     case 'profile':
     default:
@@ -102,7 +102,7 @@ class Preferences extends Component {
         user={user}
         handleSubmit={ this._submitProfile }
         clearMessage={ this.props._clearMessage }
-      />;
+      />
     }
   };
   _clearMessage = () => this.props.dispatch(this.props.clearMessage());
@@ -112,6 +112,6 @@ class Preferences extends Component {
 const mapStateToProps = state => ({
   global: state.global,
   user: state.user
-});
+})
 
-export default connect(mapStateToProps)(Preferences);
+export default connect(mapStateToProps)(Preferences)

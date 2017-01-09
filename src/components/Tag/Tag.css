@@ -1,0 +1,13 @@
+.Tag {
+  display: flex;
+  font-size: 0.75em;
+  border: 1px solid #ccc;
+  background-color: #ddd;
+  border-radius: 3px;
+  padding: 2px 5px;
+}
+
+.action {
+  cursor: pointer;
+  margin-left: 10px;
+}

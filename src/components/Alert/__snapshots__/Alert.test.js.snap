@@ -1,0 +1,12 @@
+exports[`Test suite for Alert component Alert should exist 1`] = `
+<div
+  className="undefined">
+  <i
+    className="zmdi zmdi-undefined" />
+  <div />
+  <div>
+    <i
+      className="zmdi zmdi-close" />
+  </div>
+</div>
+`;

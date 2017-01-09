@@ -1,18 +1,16 @@
-import React, { Component, PropTypes } from 'react';
-import styles from './ChangePassword.css';
-import classNames from 'classnames/bind';
+import React, { Component, PropTypes } from 'react'
+import styles from './ChangePassword.css'
+import classNames from 'classnames/bind'
 
-import Button from '../../components/Button';
-import Alert from '../../components/Alert';
-import TextInput from '../../components/Forms/TextInput';
+import Button from '../../components/Button'
+import Alert from '../../components/Alert'
+import TextInput from '../../components/Forms/TextInput'
 
-import zxcvbn from 'zxcvbn';
-
-let cx = classNames.bind(styles);
+let cx = classNames.bind(styles)
 
 class ChangePassword extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       password: '',
@@ -20,15 +18,15 @@ class ChangePassword extends Component {
       newPassword2: '',
       message: '',
       strength: 0
-    };
+    }
   }
 
   render() {
     const classname = cx({
       [styles.ChangePassword]: true
-    });
+    })
 
-    const { strength } = this.state;
+    const { strength } = this.state
 
     return (
       <div className={classname}>
@@ -47,7 +45,6 @@ class ChangePassword extends Component {
             <TextInput
               type="password"
               label="New Password:"
-              onChange={this._checkStrength}
               value={this.state.newPassword}
             />
             <small className={styles.strengthMeter}>
@@ -71,54 +68,45 @@ class ChangePassword extends Component {
           <Button primary onClick={this._handleSubmit}>Confirm</Button>
         </form>
       </div>
-    );
+    )
   };
 
   _getMessage = () => {
     if (this.state.message) {
-      return <Alert type="danger" close={() => this.setState({ message: '' })}>{ this.state.message }</Alert>;
+      return <Alert type="danger" close={() => this.setState({ message: '' })}>{ this.state.message }</Alert>
     }
 
     if (this.props.message && this.props.message === 'success') {
-      return <Alert type="success" close={(this.props.clearMessage)}>Password change was succesful</Alert>;
+      return <Alert type="success" close={(this.props.clearMessage)}>Password change was succesful</Alert>
     }
 
     if (this.props.message && this.props.message === 'failure') {
-      return <Alert type="danger" close={(this.props.clearMessage)}>Old password incorrect; please try again</Alert>;
+      return <Alert type="danger" close={(this.props.clearMessage)}>Old password incorrect; please try again</Alert>
     }
 
-    return;
-  };
-
-  _checkStrength = (val) => {
-    const { score, feedback: { warning, suggestions } } = zxcvbn(val);
-    console.warn({ score, warning, suggestions });
-    this.setState(
-      { strength: score},
-      this._handleChange('newPassword', val)
-    );
+    return
   };
 
   _handleChange = (name, val) => this.setState({ ...this.state, [name]: val });
   _handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const { password, newPassword, newPassword2, strength } = this.state;
+    const { password, newPassword, newPassword2, strength } = this.state
 
     if (!password) {
       this.setState({
         message: 'Please fill out all fields'
-      });
+      })
 
-      return;
+      return
     }
 
     if (parseInt(strength) < 2) {
       this.setState({
         message: 'New password is too weak'
-      });
+      })
 
-      return;
+      return
     };
 
     if (newPassword !== newPassword2) {
@@ -126,12 +114,12 @@ class ChangePassword extends Component {
       this.setState({
         ...this.state,
         message: 'Passwords do not match'
-      });
-      return;
+      })
+      return
     }
 
-    this.props.handleSubmit({password, newPassword});
+    this.props.handleSubmit({password, newPassword})
   }
 };
 
-export default ChangePassword;
+export default ChangePassword

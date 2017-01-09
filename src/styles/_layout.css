@@ -11,18 +11,18 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-width: 1024px;
 }
 
 @define-extend row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 100%;
+  width: calc(100% - 60px);
   padding: 30px;
 }
 
 @define-extend controlBar {
+  width: 100%;
   background-color: #fff;
   margin-bottom: 15px;
   border-bottom: 1px solid #ccc;

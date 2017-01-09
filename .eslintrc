@@ -55,7 +55,7 @@
   "strict": 0,
   "vars-on-top": 2,
   "wrap-iife": [2, inside],
-  "semi": [2, "always"],
+  "semi": [2, "never"],
   "no-trailing-spaces": 2,
   "space-before-blocks": 2,
   "space-before-function-paren": [2, "never"],

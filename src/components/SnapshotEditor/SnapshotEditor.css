@@ -1,0 +1,46 @@
+@import '../../styles/globals';
+
+.SnapshotEditor {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: color($primary lightness(+55%));
+  border: 1px solid color($primary lightness(+40%));
+}
+
+.header {
+  padding: 20px 10px 10px;
+  text-align: center;
+}
+
+.meta,
+.footer {
+  margin: 10px 20px;
+}
+
+.body {
+  margin: 0 20px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding-bottom: 10px;
+
+  > * {
+    margin-right: 10px;
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 0;
+}

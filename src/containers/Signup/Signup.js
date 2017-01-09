@@ -1,17 +1,17 @@
-import React, { Component, PropTypes } from 'react';
-import styles from './Signup.css';
+import React, { Component, PropTypes } from 'react'
+import styles from './Signup.css'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import TextInput from 'components/Forms/TextInput';
-import Button from 'components/Button';
+import TextInput from 'components/Forms/TextInput'
+import Button from 'components/Button'
 
-import { validateEmail } from '../../utils';
-import { tryAcceptInvite } from 'state/actions/auth.actions';
+import { validateEmail } from '../../utils'
+import { tryAcceptInvite } from 'state/actions/auth.actions'
 
 class Signup extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       auth: {
@@ -28,18 +28,18 @@ class Signup extends Component {
         lastName: '',
         token: ''
       }
-    };
+    }
   };
 
   componentDidMount() {
-    const { id, token } = this.props.location.query;
+    const { id, token } = this.props.location.query
 
     if (!token || !validateEmail(id)) {
       this.setState({
         messages: {
           token: 'Signup link is invalid, please try again'
         }
-      });
+      })
     }
   }
 
@@ -49,7 +49,7 @@ class Signup extends Component {
       password,
       firstName,
       lastName
-    } = this.state.auth;
+    } = this.state.auth
 
     if (this.state.messages.token) {
       return (
@@ -57,20 +57,20 @@ class Signup extends Component {
           <h2>Sign Up Error</h2>
           <div className={styles.alert}>{ this.state.messages.token }</div>
         </div>
-      );
+      )
     }
 
     const passwordMessage = this.state.messages.password
     ? <div className={styles.alert}>{ this.state.messages.password }</div>
-    : undefined;
+    : undefined
 
     const firstNameMessage = this.state.messages.firstName
     ? <div className={styles.alert}>{ this.state.messages.firstName }</div>
-    : undefined;
+    : undefined
 
     const lastNameMessage = this.state.messages.lastName
     ? <div className={styles.alert}>{ this.state.messages.lastName }</div>
-    : undefined;
+    : undefined
 
 
     return (
@@ -106,11 +106,11 @@ class Signup extends Component {
           <Button primary onClick={this._submitForm}>Submit</Button>
         </form>
       </div>
-    );
+    )
   };
 
   _setInput = (key, val) => {
-    let { auth, messages } = this.state;
+    let { auth, messages } = this.state
     this.setState({
       auth: {
         ...auth,
@@ -120,23 +120,23 @@ class Signup extends Component {
         ...messages,
         [key]: null
       }
-    });
+    })
   };
 
   _submitForm = e => {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
 
-    const { auth } = this.state;
-    const { dispatch } = this.props;
+    const { auth } = this.state
+    const { dispatch } = this.props
 
     if (!(auth.password && auth.password.length > 6)) {
       this.setState({
         messages: {
           password: 'Please enter a valid password'
         }
-      });
-      return;
+      })
+      return
     }
 
     if (!auth.firstName) {
@@ -144,8 +144,8 @@ class Signup extends Component {
         messages: {
           firstName: 'Please enter your first name'
         }
-      });
-      return;
+      })
+      return
     }
 
     if (!auth.lastName) {
@@ -153,17 +153,17 @@ class Signup extends Component {
         messages: {
           firstName: 'Please enter your last name'
         }
-      });
-      return;
+      })
+      return
     }
 
-    dispatch(tryAcceptInvite(auth));
-    return;
+    dispatch(tryAcceptInvite(auth))
+    return
 
   };
 }
 
 const mapStateToProps = state => ({
-});
+})
 
-export default connect(mapStateToProps)(Signup);
+export default connect(mapStateToProps)(Signup)

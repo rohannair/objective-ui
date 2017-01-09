@@ -1,34 +1,22 @@
-import React, { Component, PropTypes } from 'react';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import React, { Component, PropTypes } from 'react'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
-import styles from './Feed.css';
-import dateformat from 'dateformat';
+import styles from './Feed.css'
+import dateformat from 'dateformat'
+
+// For the editor state
+
 
 // Components
-import Button from '../../components/Button';
-import Card from '../../components/Card';
-import LoadingBar from '../../components/LoadingBar';
-import Pill from '../../components/Pill';
-import TextArea from '../../components/Forms/TextArea';
-import UserTab from '../../components/UserTab';
-
-import Checkbox from 'react-toolbox/lib/checkbox';
-import Autocomplete from 'react-toolbox/lib/autocomplete';
-import Dropdown from 'react-toolbox/lib/dropdown';
-import FlipMove from 'react-flip-move';
+import LoadingBar from '../../components/LoadingBar'
+import ObjectiveFeed from '../../components/ObjectiveFeed'
+import PageHeader from '../../components/PageHeader'
+import Snapshot from '../../components/Snapshot'
+import SnapshotEditor from '../../components/SnapshotEditor'
+import FlipMove from 'react-flip-move'
 
 class Feed extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      body: '',
-      blocker: false,
-      objective: '',
-    };
-  }
-
   static propTypes = {
     data: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
@@ -39,89 +27,42 @@ class Feed extends Component {
   }
 
   render() {
-    const { data: { viewer, loading } } = this.props;
-    if (loading) {
-      return <LoadingBar />;
+    const { data: { viewer, loading } } = this.props
+
+    if (loading && !viewer) {
+      return <LoadingBar />
     }
 
-    const snapshots = viewer.snapshots.map(snap =>
-      <div className={`${styles.snapshot}`} key={snap.id}>
-        <header className={styles.snapshot__head} >
-          <UserTab {...snap.user}>
-            <small>{dateformat(snap.createdAt, 'mmm dd h:MM TT')}</small>
-          </UserTab>
-        </header>
-
-        <section className={styles.snapshot__body}>
-          { snap.body }
-        </section>
-
-        <footer className={styles.snapshot__footer}>
-          { snap.blocker ? <Pill danger><i className={'zmdi zmdi-alert-triangle'} /> BLOCKER!</Pill> : null}
-          &nbsp;&nbsp;
-          <Pill>{snap.objective.name}</Pill>
-        </footer>
-      </div>
-    );
-
-    const dropdownValues = viewer.objectives
-      .map(v => ({
-        value: v.id,
-        label: v.name
-      }));
+    const snapshots = viewer.snapshots && viewer.snapshots.map(snap => (
+      <Snapshot key={snap.id} snap={snap} showObjective />
+    ))
 
     return (
       <div className={styles.Feed}>
-        <div className={styles.controlBar}>
-          <h2>Feed</h2>
-        </div>
+        <PageHeader title="Feed" />
         <div className={styles.body}>
-          <div className={styles.add}>
-              <div className={styles.addSnapshotContainer}>
-                <h4>Add New Snapshot</h4>
-                <TextArea
-                  label="Snapshot body"
-                  value={this.state.body}
-                  onChange={this._handleChange.bind(this, 'body')}
-                />
-
-                <div className={styles.addSnapshotMeta}>
-
-                  <Dropdown
-                    auto
-                    label="Select Objective"
-                    onChange={this._handleChange.bind(this, 'objective')}
-                    source={dropdownValues}
-                    value={this.state.objective}
-                  />
-                  <Checkbox
-                    checked={this.state.blocker}
-                    label="Blocker"
-                    onChange={this._handleChange.bind(this, 'blocker')}
-                  />
-
-                  <Button onClick={this._submit}>Submit</Button>
-                </div>
-              </div>
-          </div>
 
           <div className={styles.feedBody}>
+            <SnapshotEditor
+              dropdownValues={viewer.objectives}
+              submit={this._submit}
+            />
             <FlipMove easing="ease-in-out">
               {snapshots}
             </FlipMove>
           </div>
         </div>
       </div>
-    );
+    )
   };
 
-  _submit = () => {
-    const { submit } = this.props;
-    const { body, blocker, objective } = this.state;
-    submit (body, blocker, objective);
-  };
+  _submit = (cb, vals) => {
+    const { submit } = this.props
+    const { body, blocker, objective } = vals
+    submit(body, blocker, objective)
 
-  _handleChange = (name, val) => this.setState({ [name]: val });
+    cb()
+  };
 }
 
 const NEW_SNAPSHOT = gql`
@@ -143,7 +84,7 @@ const NEW_SNAPSHOT = gql`
       }
     }
   }
-`;
+`
 
 const withMutation = graphql(NEW_SNAPSHOT, {
   props: ({ mutate }) => ({
@@ -173,7 +114,7 @@ const withMutation = graphql(NEW_SNAPSHOT, {
       }
     })
   })
-});
+})
 
 const GET_FEED_QUERY = gql`
   query Feed {
@@ -184,19 +125,7 @@ const GET_FEED_QUERY = gql`
       lastName
       snapshots {
         id
-        body
-        blocker
-        createdAt
-        user {
-          id
-          firstName
-          lastName
-          img
-        }
-
-        objective {
-          name
-        }
+        ...SnapshotFragment
       }
       objectives {
         id
@@ -208,9 +137,14 @@ const GET_FEED_QUERY = gql`
       }
     }
   }
-`;
+  ${Snapshot.fragments.snapshot}
+`
 
-const withData = graphql(GET_FEED_QUERY);
+const withData = graphql(GET_FEED_QUERY, {
+  options: ownProps => ({
+    forceFetch: true
+  })
+})
 
-export default withData(withMutation(Feed));
+export default withData(withMutation(Feed))
 

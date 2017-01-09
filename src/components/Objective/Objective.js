@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
-import styles from './Objective.css';
+import React, { PropTypes } from 'react'
+import styles from './Objective.css'
 
-import Button from '../../components/Button';
+import Button from '../Button'
 
 const Objective = p => {
   if (p.data) {
@@ -20,20 +20,20 @@ const Objective = p => {
 
         <div className={styles.actionBar}>
           <div className={styles.action} onClick={e => {
-            e.preventDefault();
-            p.editAction();
+            e.preventDefault()
+            p.editAction()
           }}><i className="zmdi zmdi-edit" /></div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
     <div className={styles.ObjectiveButton}>
       <Button primary onClick={p.buttonAction}>{p.buttonText}</Button>
     </div>
-  );
+  )
 
-};
+}
 
-export default Objective;
+export default Objective

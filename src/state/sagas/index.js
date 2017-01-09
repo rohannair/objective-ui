@@ -1,11 +1,11 @@
-import { takeEvery, takeLatest  } from 'redux-saga';
-import { call, put, take, fork } from 'redux-saga/effects';
+import { takeEvery, takeLatest  } from 'redux-saga'
+import { call, put, take, fork } from 'redux-saga/effects'
 
-import * as loginActions from '../constants/users.constants';
-import * as missionActions from '../constants/missions.constants';
+import * as loginActions from '../constants/users.constants'
+import * as missionActions from '../constants/missions.constants'
 
-import * as api from '../services/api';
-import { fetchEntity } from './utils';
+import * as api from '../services/api'
+import { fetchEntity } from './utils'
 
 import {
   watchGetMission,
@@ -13,17 +13,17 @@ import {
   watchAddMissionField,
   watchNewMission,
   watchNewMissionSuccess
-} from './missions.sagas';
+} from './missions.sagas'
 
 import {
   watchGetMissionList
-} from './missionList.sagas';
+} from './missionList.sagas'
 
 import {
   watchGetUserList,
   watchInviteUser,
   watchSearchUsers
-} from './userList.sagas';
+} from './userList.sagas'
 
 import {
   watchLoginAttempt,
@@ -32,17 +32,17 @@ import {
   watchAcceptInviteSuccess,
   watchGlobalObject,
   watchResetPasswordAttempt
-} from './auth.sagas';
+} from './auth.sagas'
 
 import {
   watchCreateUserAttempt,
   watchCreateUserSuccess
-} from './auth/createUser.sagas';
+} from './auth/createUser.sagas'
 
 import {
   watchGetUser,
   watchEditUser
-} from './user.sagas';
+} from './user.sagas'
 
 import {
   watchGetSquadList,
@@ -52,12 +52,12 @@ import {
   watchCreateUserOKR,
   watchCreateCheckIn,
   watchEditSquadObjective
-} from './squadList.sagas';
+} from './squadList.sagas'
 
 function* watchLogin() {
   while (true) {
-    const { username, password } = yield take(loginActions.ATTEMPT);
-    yield fork();
+    const { username, password } = yield take(loginActions.ATTEMPT)
+    yield fork()
   }
 }
 
@@ -88,5 +88,5 @@ export default function* root() {
 
     fork(watchCreateUserAttempt),
     fork(watchCreateUserSuccess)
-  ];
+  ]
 }

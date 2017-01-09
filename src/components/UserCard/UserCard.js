@@ -1,39 +1,39 @@
-import React, { PropTypes } from 'react';
-import styles from './UserCard.css';
-import classNames from 'classnames/bind';
+import React, { PropTypes } from 'react'
+import styles from './UserCard.css'
+import classNames from 'classnames/bind'
 
-import Card from '../Card';
-import Pill from '../Pill';
+import Card from '../Card'
+import Pill from '../Pill'
 
-let cx = classNames.bind(styles);
+let cx = classNames.bind(styles)
 
 const UserCard = ({ user }) => {
   const classname = cx({
     [styles.UserCard]: true
-  });
+  })
 
-  const userimg = user.img || '//placehold.it/250x250/eee?text=\?';
+  const userimg = user.img || '//placehold.it/250x250/eee?text=\?'
   const nameBox = user.firstName && user.lastName
   ? `${user.firstName } ${user.lastName }`
-  : user.email;
+  : user.email
 
   const titleBox = user.pending
   ? <Pill>Invited</Pill>
-  : user.jobTitle || 'No title';
+  : user.jobTitle || 'No title'
 
   const returnSquadPill = (squads) => {
-    const count = squads && squads.length || 0;
-    if (count === 0) return <Pill danger>No Squads</Pill>;
+    const count = squads && squads.length || 0
+    if (count === 0) return <Pill danger>No Squads</Pill>
     return count > 1
     ? <Pill info>{`In ${count} squads`}</Pill>
-    : <Pill info>{ squads[0].name }</Pill>;
-  };
+    : <Pill info>{ squads[0].name }</Pill>
+  }
 
   const returnObjectivesPill = (objectives) => {
-    const count = objectives && objectives.length || 0;
-    if (count === 0) return <Pill danger>No OKRs</Pill>;
-    return <Pill warning>{`${count} ${count === 1 ? 'OKR' : 'OKRs'}`}</Pill>;
-  };
+    const count = objectives && objectives.length || 0
+    if (count === 0) return <Pill danger>No OKRs</Pill>
+    return <Pill warning>{`${count} ${count === 1 ? 'OKR' : 'OKRs'}`}</Pill>
+  }
 
 
   return (
@@ -50,7 +50,7 @@ const UserCard = ({ user }) => {
       </div>
 
     </Card>
-  );
-};
+  )
+}
 
-export default UserCard;
+export default UserCard

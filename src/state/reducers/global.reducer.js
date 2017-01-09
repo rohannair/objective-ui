@@ -1,12 +1,12 @@
-import * as types from '../constants/auth.constants';
-import { push } from 'react-router-redux';
+import * as types from '../constants/auth.constants'
+import { push } from 'react-router-redux'
 
 const defaultState = {
   user: null,
   companyId: null,
   role: null,
   message: {}
-};
+}
 
 export default (state = defaultState, action) => {
   switch (action.type) {
@@ -19,7 +19,7 @@ export default (state = defaultState, action) => {
       role: action.auth.role,
       email: action.auth.email,
       message: {}
-    });
+    })
 
   case types.RESET_PASSWORD.SUCCESS:
     return ({
@@ -28,7 +28,7 @@ export default (state = defaultState, action) => {
         status: 0,
         body: action.auth.message
       }
-    });
+    })
 
   case types.RESET_PASSWORD.ERROR:
     return ({
@@ -37,9 +37,9 @@ export default (state = defaultState, action) => {
         status: 1,
         body: action.message
       }
-    });
+    })
 
   default:
-    return state;
+    return state
   };
-};
+}

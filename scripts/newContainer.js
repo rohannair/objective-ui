@@ -1,76 +1,76 @@
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('path');
-const isDir = require('is-dir');
-const chalk = require('chalk');
+const fs = require('fs')
+const _ = require('lodash')
+const path = require('path')
+const isDir = require('is-dir')
+const chalk = require('chalk')
 
-const name = process.argv[2];
+const name = process.argv[2]
 if (!name) {
-  console.log(chalk.red('Usage npm run newcont <container-name>'));
-  process.exit(0);
+  console.log(chalk.red('Usage npm run newcont <container-name>'))
+  process.exit(0)
 }
 
-const containerName   = _.flowRight(_.upperFirst, _.camelCase)(name);
-const dest            = path.join(__dirname, '..', 'src', 'containers', containerName);
+const containerName   = _.flowRight(_.upperFirst, _.camelCase)(name)
+const dest            = path.join(__dirname, '..', 'src', 'containers', containerName)
 
-const styleFile = `@import '../../styles/globals';
-@import '../../styles/mixins';
-@import '../../styles/layout';
-.${containerName} {
-  @extend container;
-}`;
+const styleFile = `@import '../../styles/globals'
+@import '../../styles/mixins'
+@import '../../styles/layout'
 
-const containerFile = `import React, { Component, PropTypes } from 'react';
-import styles from './${containerName}.css';
+.${containerName.toLowerCase()} {
+  @extend container
+}`
 
-import { connect } from 'react-redux';
-import Immutable from 'immutable';
+const containerFile = `import React, { Component, PropTypes } from 'react'
+import styles from './${containerName}.css'
+
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 class ${containerName} extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {
     return (
-      <div className={styles.${containerName}>
+      <div className={styles.${containerName.toLowerCase()}}>
       </div>
-    );
+    )
   }
 }
 
-const mapStateToProps = state => ({
-});
+const GET_${containerName.toUpperCase()}_QUERY = gql\`\`
 
-export default connect(mapStateToProps)(${containerName});
+export default graphql(GET_${containerName.toUpperCase()}_QUERY)(${containerName})
 
-`;
+`
 
-const indexFile = `import ${containerName} from './${containerName}';
-export default ${containerName};
-`;
+const indexFile = `import ${containerName} from './${containerName}'
+export default ${containerName}
+`
 
-const tests = `import test from 'ava';
-import React from 'react';
-import { shallow } from 'enzyme';
+const tests = `import test from 'ava'
+import React from 'react'
+import { shallow } from 'enzyme'
 
-import ${containerName} from './index';
-const wrapper = shallow(<${containerName}/>);
+import ${containerName} from './index'
+const wrapper = shallow(<${containerName}/>)
 
 test('${containerName} does not explode', t => {
-  t.plan(1);
-  t.deepEqual(wrapper.length, 1, 'It exploded...');
-});
-`;
+  t.plan(1)
+  t.deepEqual(wrapper.length, 1, 'It exploded...')
+})
+`
 
 if (isDir.sync(dest)) {
-  console.error(chalk.red(`Container ${containerName} already exists`));
-  process.exit(0);
+  console.error(chalk.red(`Container ${containerName} already exists`))
+  process.exit(0)
 }
 
-fs.mkdir(dest);
-fs.writeFileSync(path.join(dest, 'index.js'), indexFile);
-fs.writeFileSync(path.join(dest, `${containerName}.js`), containerFile);
-fs.writeFileSync(path.join(dest, `${containerName}.css`), styleFile);
+fs.mkdir(dest)
+fs.writeFileSync(path.join(dest, 'index.js'), indexFile)
+fs.writeFileSync(path.join(dest, `${containerName}.js`), containerFile)
+fs.writeFileSync(path.join(dest, `${containerName}.css`), styleFile)
 
-console.log(chalk.green(`Container ${containerName} created`));
+console.log(chalk.green(`Container ${containerName} created`))

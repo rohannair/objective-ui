@@ -1,0 +1,94 @@
+@import '../../styles/globals';
+
+.objectiveHeader {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  background-color: #fff;
+  align-items: baseline;
+  padding: 0 30px;
+}
+
+.contributorHeader,
+.contributorBar {
+  display: flex;
+  width: 100%;
+}
+
+.contributorHeader {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  height: 60px;
+  line-height: 60px;
+
+  h3 {
+    font-weight: normal;
+
+    strong {
+      margin-right: 0.75rem;
+    }
+  }
+}
+
+.meta {
+  margin-left: auto;
+}
+
+.contributorBar {
+  align-items: center;
+  line-height: 1;
+  border-top: 1px solid #e1e1e1;
+  padding: 10px 0;
+  font-size: 0.875rem;
+}
+
+.avatar {
+  height: 24px;
+  margin-left: 10px;
+}
+
+.moreMenu {
+  cursor: pointer;
+  display: block;
+  height: 32px;
+  line-height: 32px;
+  width: 32px;
+  text-align: center;
+  border-radius: 3px;
+  margin-right: 5px;
+  position: relative;
+
+  &:hover {
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.18);
+  }
+
+  .dropdown {
+    background-color: #fff;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.18);
+    display: none;
+    position: absolute;
+    text-align: left;
+    top: calc(100% - 5px);
+    width: 500%;
+  }
+
+  .dropdown__item {
+    width: 100%;
+    padding: 5px 10px;
+
+    i {
+      margin-right: 5px;
+      font-size: 0.75em;
+    }
+
+    &:hover {
+      color: $primary
+    }
+  }
+
+  &:hover .dropdown {
+    display: block;
+  }
+}

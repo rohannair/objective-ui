@@ -1,0 +1,4 @@
+exports[`Test suite for Pill component Pill should exist 1`] = `
+<span
+  className="undefined" />
+`;

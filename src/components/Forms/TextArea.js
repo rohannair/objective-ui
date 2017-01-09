@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
-import styles from './Forms.css';
+import React, { PropTypes } from 'react'
+import styles from './Forms.css'
 
-import { Input } from 'react-toolbox/lib/input';
+import { Input } from 'react-toolbox/lib/input'
 
 const TextArea = (props) =>
   <Input
@@ -11,19 +11,21 @@ const TextArea = (props) =>
     value = { props.value }
     onChange = { props.onChange }
     multiline = { true }
-  />;
+    maxLength = { props.maxLength }
+    rows = { props.rows }
+  />
 
 TextArea.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
   rows: PropTypes.number
-};
+}
 
 TextArea.defaultProps = {
   placeholder: 'Please enter text',
   rows: 3,
   onChange: (e) => console.info('text changed')
-};
+}
 
-export default TextArea;
+export default TextArea

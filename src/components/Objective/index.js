@@ -1,2 +1,2 @@
-import Objective from './Objective';
-export default Objective;
+import Objective from './Objective'
+export default Objective

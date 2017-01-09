@@ -1,63 +1,63 @@
-import 'isomorphic-fetch';
+import 'isomorphic-fetch'
 
-import axios from 'axios';
+import axios from 'axios'
 
-import camelCase from 'lodash/camelCase';
-import omit from 'lodash/omit';
-import Cookies from 'cookies-js';
+import camelCase from 'lodash/camelCase'
+import omit from 'lodash/omit'
+import Cookies from 'cookies-js'
 
-const API_ROOT = '/api/v1/';
-const PUBLIC_ROOT = '/api/public/';
+const API_ROOT = '/api/v1/'
+const PUBLIC_ROOT = '/api/public/'
 // let token = localStorage.getItem('qm.tid');
 
-///// Meta
+// /// Meta
 const getHeaders = () => {
-  let token = token || localStorage.getItem('qm.tid');
+  let token = token || localStorage.getItem('qm.tid')
   return {
     'Accept': 'application/json',
     'content-type': 'application/json',
     'Authorization': token ? `Bearer ${token}` : null
-  };
-};
+  }
+}
 
 const getUrl = endpoint => (endpoint.indexOf(API_ROOT) === -1)
   ? API_ROOT + endpoint
-  : endpoint;
+  : endpoint
 
-///// Base
+// /// Base
 const apiRequest = axios.create({
   baseUrl: API_ROOT
-});
+})
 
 const publicRequest = axios.create({
   baseUrl: PUBLIC_ROOT
-});
+})
 
 export const getPublic = endpoint => axios({
   method: 'get',
   url: PUBLIC_ROOT + endpoint,
   headers: getHeaders()
-});
+})
 
 export const postPublic = (endpoint, data) => axios({
   method: 'post',
   url: PUBLIC_ROOT + endpoint,
   headers: getHeaders(),
   data
-});
+})
 
 const handleError = (e) => {
   if (e.response) {
     // The request was made, but the server responded with a status code
     // that falls out of the range of 2xx
-    console.error(e.response.data);
-    console.error(e.response.status);
-    console.error(e.response.headers);
+    console.error(e.response.data)
+    console.error(e.response.status)
+    console.error(e.response.headers)
   } else {
-    console.error('Error', e.message);
+    console.error('Error', e.message)
   }
-  console.error(e.config);
-};
+  console.error(e.config)
+}
 
 const callApi = (endpoint) =>
   fetch(getUrl(endpoint), {
@@ -65,7 +65,7 @@ const callApi = (endpoint) =>
     credentials: 'same-origin'
   })
   .then(response => response.json())
-  .catch(err => console.error(err));
+  .catch(err => console.error(err))
 
 const postApi = (endpoint, body) =>
   fetch(getUrl(endpoint), {
@@ -75,12 +75,12 @@ const postApi = (endpoint, body) =>
   })
   .then(response => {
     if (response.status >= 400 && response.status < 600) {
-      throw new Error(response.statusText);
+      throw new Error(response.statusText)
     }
-    return response.json();
-  });
+    return response.json()
+  })
 
-////// Public
+// //// Public
 export const login = payload =>
   fetch(PUBLIC_ROOT + 'login', {
     method: 'POST',
@@ -91,9 +91,9 @@ export const login = payload =>
   .then(response => {
     Cookies.set('qm.tid', response.token,
       { expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 1.95)) }
-    );
-    return omit(response, 'token');
-  });
+    )
+    return omit(response, 'token')
+  })
 
 export const acceptInvite = payload =>
   fetch(PUBLIC_ROOT + 'finishinvite', {
@@ -105,9 +105,9 @@ export const acceptInvite = payload =>
   .then(response => {
     Cookies.set('qm.tid', response.token,
       { expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 1.95)) }
-    );
-    return omit(response, 'token');
-  });
+    )
+    return omit(response, 'token')
+  })
 
 export const resetPassword = payload =>
   fetch(PUBLIC_ROOT + 'forgotpassword', {
@@ -116,72 +116,72 @@ export const resetPassword = payload =>
     body: JSON.stringify(payload)
   })
   .then(response => {
-    if (!response.ok) throw new Error(response.statusText);
-    return response;
+    if (!response.ok) throw new Error(response.statusText)
+    return response
   })
-  .then(response => response.json());
+  .then(response => response.json())
 
-///// Apis
+// /// Apis
 export const fetchMission = id =>
-  callApi(`missions/${id}`);
+  callApi(`missions/${id}`)
 
 export const fetchMissionList = (limit, offset) =>
-  callApi(`missions?limit=${limit}&offset=${offset}`);
+  callApi(`missions?limit=${limit}&offset=${offset}`)
 
 export const updateMissionField = (payload) => {
-  const { id, field, data } = payload;
+  const { id, field, data } = payload
 
   const url = data.id
     ? `missions/${id}/${field[0]}/${data.id}`
-    : `missions/${id}?field=${field[0]}`; // If a regular field
+    : `missions/${id}?field=${field[0]}` // If a regular field
 
-  return postApi(url, omit(data, ['id']));
-};
+  return postApi(url, omit(data, ['id']))
+}
 
 export const addMissionField = (payload) =>
-  callApi(`missions/${payload.id}/${payload.field[0]}/add`);
+  callApi(`missions/${payload.id}/${payload.field[0]}/add`)
 
 export const newMission = () =>
-  callApi('missions/new');
+  callApi('missions/new')
 
 // / ******** CURRENT ******** ///
 // / Users
 export const fetchUserList = (limit, offset, sort, order) =>
-  callApi(`users?limit=${limit}&offset=${offset}`);
+  callApi(`users?limit=${limit}&offset=${offset}`)
 
 export const fetchUser = (id) =>
-  callApi(`user/${id}`);
+  callApi(`user/${id}`)
 
 export const editUser = (payload) =>
-  postApi(`user/${payload.id}`, payload);
+  postApi(`user/${payload.id}`, payload)
 
 export const editUserPassword = (payload) =>
-  postApi(`user/${payload.id}`, payload);
+  postApi(`user/${payload.id}`, payload)
 
 export const inviteUser = payload =>
-  postApi('user/invite', payload);
+  postApi('user/invite', payload)
 
 export const searchUsers = payload =>
-  callApi(`users/search?q=${payload.query}`);
+  callApi(`users/search?q=${payload.query}`)
 
 export const assignUserToSquad = payload =>
-  postApi('squads/assign', payload);
+  postApi('squads/assign', payload)
 
 export const createUserOKR = payload =>
-  postApi(`user/${payload.userId}/objective`, payload);
+  postApi(`user/${payload.userId}/objective`, payload)
 
   // / Squads
 export const fetchSquadList = () =>
-  callApi('squads');
+  callApi('squads')
 
 export const createSquadMission = payload =>
-  postApi('objectives/add', payload);
+  postApi('objectives/add', payload)
 
 export const editSquadObjective = payload =>
-  postApi(`objectives/${payload.squadId}/edit`, payload);
+  postApi(`objectives/${payload.squadId}/edit`, payload)
 
 export const createSquad = payload =>
-  postApi('squads', payload);
+  postApi('squads', payload)
 
 export const createCheckIn = payload =>
-postApi(`objectives/${payload.objectiveId}/check_in`, payload);
+postApi(`objectives/${payload.objectiveId}/check_in`, payload)

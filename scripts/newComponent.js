@@ -1,68 +1,63 @@
-import fs from 'fs';
-import _ from 'lodash';
-import path from 'path';
-import isDir from 'is-dir';
-import chalk from 'chalk';
+import fs from 'fs'
+import _ from 'lodash'
+import path from 'path'
+import isDir from 'is-dir'
+import chalk from 'chalk'
 
-const name = process.argv[2];
+const name = process.argv[2]
 if (!name) {
-  console.log(chalk.red('Usage npm run newcomp <component-name>'));
-  process.exit(0);
+  console.log(chalk.red('Usage npm run newcomp <component-name>'))
+  process.exit(0)
 }
 
-const componentName   = _.flowRight(_.upperFirst, _.camelCase)(name);
-const dest            = path.join(__dirname, '..', 'src', 'components', componentName);
+const componentName   = _.flowRight(_.upperFirst, _.camelCase)(name)
+const dest            = path.join(__dirname, '..', 'src', 'components', componentName)
 
-const styleFile = `.${componentName} {
+const styleFile = `.${componentName.toLowerCase()} {
 
-}`;
+}`
 
-const componentFile = `import React, { PropTypes } from 'react';
-import styles from './${componentName}.css';
-import classNames from 'classnames/bind';
-
-let cx = classNames.bind(styles);
+const componentFile = `import React, { PropTypes } from 'react'
+import styles from './${componentName}.css'
 
 const ${componentName} = p => {
-  const classname = cx({
-    [styles.${componentName}]: true
-  });
 
   return (
-    <div className={classname}>
+    <div className={styles.${componentName.toLowerCase()}}>
       { p.children }
     </div>
-  );
-};
+  )
+}
 
-export default ${componentName};
-`;
+export default ${componentName}
+`
 
-const indexFile = `import ${componentName} from './${componentName}';
-export default ${componentName};
-`;
+const indexFile = `import ${componentName} from './${componentName}'
+export default ${componentName}
+`
 
-const tests = `import test from 'ava';
-import React from 'react';
-import { shallow } from 'enzyme';
+const tests = `import React from 'react'
+import { shallow } from 'enzyme'
 
-import ${componentName} from './index.jsx';
-const wrapper = shallow(<${componentName}/>);
+import ${componentName} from './index.jsx'
 
-test('${componentName} does not explode', t => {
-  t.plan(1);
-  t.deepEqual(wrapper.length, 1, 'It exploded...');
-});
-`;
+describe('Test suite for ${componentName} component', () => {
+  it('${componentName} should exist', () => {
+    let wrapper = shallow(<${componentName}/>)
+    expect(wrapper).to.exist
+  })
+})
+
+`
 
 
 if (isDir.sync(dest)) {
-  console.error(chalk.red(`Component ${componentName} exists`));
-  process.exit(0);
+  console.error(chalk.red(`Component ${componentName} exists`))
+  process.exit(0)
 }
 
-fs.mkdir(dest);
-fs.writeFileSync(path.join(dest, 'index.js'), indexFile);
-fs.writeFileSync(path.join(dest, `${componentName}.js`), componentFile);
-fs.writeFileSync(path.join(dest, `${componentName}.css`), styleFile);
-console.log(chalk.green('Component Created'));
+fs.mkdir(dest)
+fs.writeFileSync(path.join(dest, 'index.js'), indexFile)
+fs.writeFileSync(path.join(dest, `${componentName}.js`), componentFile)
+fs.writeFileSync(path.join(dest, `${componentName}.css`), styleFile)
+console.log(chalk.green('Component Created'))

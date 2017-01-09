@@ -1,11 +1,11 @@
-import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
+import React, { PropTypes } from 'react'
+import { Link } from 'react-router'
 
-import LogoImage from '../../images/objectiveiq-logo.svg';
+import LogoImage from '../../images/objectiveiq-logo.svg'
 
 // Styles
-import classes from './AuthLayout.css';
-import Header from '../../components/Global/Header';
+import classes from './AuthLayout.css'
+import Header from '../../components/Global/Header'
 
 const AuthLayout = ({ children }) =>
   <div className={classes.mainContainer}>
@@ -13,10 +13,10 @@ const AuthLayout = ({ children }) =>
       <LogoImage className={ classes.logo} />
       { children }
     </div>
-  </div>;
+  </div>
 
 AuthLayout.propTypes = {
   children: PropTypes.element.isRequired
-};
+}
 
-export default AuthLayout;
+export default AuthLayout

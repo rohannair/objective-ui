@@ -1,10 +1,10 @@
-import Auth0Lock from 'auth0-lock';
-import { browserHistory } from 'react-router';
+import Auth0Lock from 'auth0-lock'
+import { browserHistory } from 'react-router'
 
-const REDIRECT_URL = `${document.location.origin}/auth/login`;
+const REDIRECT_URL = `${document.location.origin}/auth/login`
 
 const AuthService = (clientId, domain, onAuthenticate) => {
-  const COOKIE_KEY = 'qm.tid';
+  const COOKIE_KEY = 'qm.tid'
 
   const lock = new Auth0Lock(clientId, domain, {
     auth: {
@@ -14,15 +14,15 @@ const AuthService = (clientId, domain, onAuthenticate) => {
         scope: 'openid app_metadata role email'
       }
     }
-  });
+  })
 
   lock.on('authenticated', result => {
-    setToken(result.idToken);
-    window.location.replace('/');
-  });
+    setToken(result.idToken)
+    window.location.replace('/')
+  })
 
-  const getToken = () => localStorage.getItem(COOKIE_KEY);
-  const setToken = idToken => localStorage.setItem(COOKIE_KEY, idToken);
+  const getToken = () => localStorage.getItem(COOKIE_KEY)
+  const setToken = idToken => localStorage.setItem(COOKIE_KEY, idToken)
 
   return {
     login: () => lock.show(),
@@ -30,7 +30,7 @@ const AuthService = (clientId, domain, onAuthenticate) => {
     setToken,
     getToken,
     logout: () => localStorage.removeItem(COOKIE_KEY),
-  };
-};
+  }
+}
 
-export default AuthService;
+export default AuthService

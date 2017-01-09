@@ -1,18 +1,17 @@
-const webpack  = require('webpack');
-const path     = require('path');
+const webpack  = require('webpack')
+const path     = require('path')
 
-const postcss  = require('./postcss');
+const postcss  = require('./postcss')
 
-const basePath = path.join(__dirname, '..');
-const paths    = require('./paths');
+const basePath = path.join(__dirname, '..')
+const paths    = require('./paths')
 
 // Plugins
-const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
-const CommonsPlugin      = require('webpack/lib/optimize/CommonsChunkPlugin');
-const DashboardPlugin    = require('webpack-dashboard/plugin');
-const ExtractText        = require('extract-text-webpack-plugin');
-const FaviconsPlugin     = require('favicons-webpack-plugin');
-const HtmlPlugin         = require('html-webpack-plugin');
+const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin')
+const CommonsPlugin      = require('webpack/lib/optimize/CommonsChunkPlugin')
+const ExtractText        = require('extract-text-webpack-plugin')
+const FaviconsPlugin     = require('favicons-webpack-plugin')
+const HtmlPlugin         = require('html-webpack-plugin')
 
 module.exports = {
   cache: true,
@@ -21,19 +20,25 @@ module.exports = {
 
   entry: {
     bundle: [
-      'webpack-dev-server/client?http://127.0.0.1:8080/',
       'react-hot-loader/patch',
+      'webpack-dev-server/client?http://127.0.0.1:8080/',
+      'webpack/hot/only-dev-server',
       path.join(basePath, 'src', 'index.js')
     ],
     vendor: [
+      'apollo-client',
+      'auth0-lock',
+      'axios',
       'classnames',
       'cookies-js',
       'dateformat',
+      'draft-js',
       'immutable',
       'isomorphic-fetch',
       'jwt-decode',
       'ramda',
       'react',
+      'react-apollo',
       'react-dom',
       'react-hot-loader',
       'react-redux',
@@ -43,7 +48,8 @@ module.exports = {
       'redux',
       'redux-immutable',
       'redux-logger',
-      'redux-saga'
+      'redux-saga',
+      'styled-components'
     ]
   },
 
@@ -119,7 +125,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        include: paths.appNodeModules, // For node CSS only
+        include: paths.appNodeModules, // For node SCSS only
         loaders: [
           'style',
           'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
@@ -154,12 +160,12 @@ module.exports = {
 
   plugins: [
     new CaseSensitivePaths(),
-    new DashboardPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       __DEV__: true
     }),
-    new webpack.HotModuleReplacementPlugin(),
     new ExtractText('styles.css' , {
       allChunks: true,
     }),
@@ -169,7 +175,8 @@ module.exports = {
     }),
     new HtmlPlugin({
       template: path.join(basePath, 'src', 'index.html'),
-      inject: 'body'
+      inject: 'body',
+      favicon: path.join(basePath, 'favicon.ico')
     })
   ]
-};
+}

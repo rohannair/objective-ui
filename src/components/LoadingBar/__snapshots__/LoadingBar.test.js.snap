@@ -1,0 +1,17 @@
+exports[`Test suite for LoadingBar component LoadingBar should exist 1`] = `
+<div
+  className="undefined">
+  <div>
+    <ThemedProgressBar
+      buffer={0}
+      className=""
+      composeTheme="deeply"
+      max={100}
+      min={0}
+      mode="indeterminate"
+      multicolor={true}
+      type="circular"
+      value={0} />
+  </div>
+</div>
+`;

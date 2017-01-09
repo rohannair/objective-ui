@@ -1,32 +1,32 @@
-import React, { PropTypes } from 'react';
-import styles from './User.css';
+import React, { PropTypes } from 'react'
+import styles from './User.css'
 
-import Button from '../../components/Button';
-import Pill from '../Pill';
+import Button from '../../components/Button'
+import Pill from '../Pill'
 
 const User = p => {
   if (!(p.data && p.data.objectives)) {
-    return <div></div>;
+    return <div></div>
   }
 
-  const user = p.data;
+  const user = p.data
   const checkInCount = user.objectives.length > 0
   ? user.objectives[0].check_ins.length
-  : 0;
+  : 0
 
   const leaderBadge = false || p.leader
   ? <Pill info>Leader</Pill>
-  : undefined;
+  : undefined
 
   const openOKRMenu = (e) => {
-    e.preventDefault();
-    p.onMenuClick(p.data.id);
-  };
+    e.preventDefault()
+    p.onMenuClick(p.data.id)
+  }
 
   const closeOKRMenu = (e) => {
-    e.preventDefault();
-    p.onMenuClick('');
-  };
+    e.preventDefault()
+    p.onMenuClick('')
+  }
 
   const objective = user.objectives.length > 0
   ? user.objectives
@@ -41,10 +41,10 @@ const User = p => {
       </div>)
   : <div className={styles.buttonContainer}>
       <Button primary onClick={ e => {
-        e.preventDefault();
-        p.showOKRModal(p.squadId, p.data.id);
+        e.preventDefault()
+        p.showOKRModal(p.squadId, p.data.id)
       }}>Add Objective</Button>
-    </div>;
+    </div>
 
   const moreDropdown = p.openMenu
   ? <div className={styles.moreDropdown}>
@@ -55,13 +55,13 @@ const User = p => {
         Edit Objective
       </li> */}
       <li onClick={(e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         // TODO: fix this hackery
         const { id } = user.objectives
-          .filter(o => o.squadId === p.squadId)[0];
+          .filter(o => o.squadId === p.squadId)[0]
 
-        p.onNewCheckinClick(id, p.data.id);
+        p.onNewCheckinClick(id, p.data.id)
       }}>
         <i className="zmdi zmdi-comment-edit"></i>
         &nbsp;&nbsp;
@@ -69,7 +69,7 @@ const User = p => {
       </li>
       <li onClick={(e) => {
         if (p.data.objectives.length > 0) {
-          p.viewCheckIn(p.data.objectives[0].check_ins);
+          p.viewCheckIn(p.data.objectives[0].check_ins)
         }
       }}>
         <i className="zmdi zmdi-comment"></i>
@@ -78,7 +78,7 @@ const User = p => {
       </li>
     </ul>
   </div>
-  : undefined;
+  : undefined
 
   return (
     <div className={styles.user}>
@@ -97,13 +97,13 @@ const User = p => {
       </div>
       <div className={styles.actionBar}>
         <li className={styles.action} onClick={(e) => {
-          e.preventDefault();
+          e.preventDefault()
 
           // TODO: fix this hackery
           const { id } = user.objectives
-            .filter(o => o.squadId === p.squadId)[0];
+            .filter(o => o.squadId === p.squadId)[0]
 
-          p.onNewCheckinClick(id, p.data.id);
+          p.onNewCheckinClick(id, p.data.id)
         }}>
           <i className="zmdi zmdi-comment-edit"></i>
           <div className={styles.caption}>Add Snapshot</div>
@@ -111,7 +111,7 @@ const User = p => {
 
         <div className={styles.action} onClick={(e) => {
           if (p.data.objectives.length > 0) {
-            p.viewCheckIn(p.data.objectives[0].check_ins);
+            p.viewCheckIn(p.data.objectives[0].check_ins)
           }
         }}>
           <i className="zmdi zmdi-comment"></i>
@@ -121,7 +121,7 @@ const User = p => {
 
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default User;
+export default User

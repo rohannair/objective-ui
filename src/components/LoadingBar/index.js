@@ -1,2 +1,2 @@
-import LoadingBar from './LoadingBar';
-export default LoadingBar;
+import LoadingBar from './LoadingBar'
+export default LoadingBar

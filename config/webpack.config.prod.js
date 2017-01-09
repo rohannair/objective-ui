@@ -22,14 +22,19 @@ module.exports = {
       paths.appIndexJs
     ],
     vendor: [
+      'apollo-client',
+      'auth0-lock',
+      'axios',
       'classnames',
       'cookies-js',
       'dateformat',
+      'draft-js',
       'immutable',
       'isomorphic-fetch',
       'jwt-decode',
       'ramda',
       'react',
+      'react-apollo',
       'react-dom',
       'react-hot-loader',
       'react-redux',
@@ -39,7 +44,8 @@ module.exports = {
       'redux',
       'redux-immutable',
       'redux-logger',
-      'redux-saga'
+      'redux-saga',
+      'styled-components'
     ]
   },
 

@@ -1,10 +1,10 @@
-import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
+import React, { PropTypes } from 'react'
+import { Link } from 'react-router'
 
 // Styles
-import classes from './CoreLayout.css';
+import classes from './CoreLayout.css'
 
-import Header from '../../components/Global/Header';
+import Header from '../../components/Global/Header'
 
 const CoreLayout = ({ children }) =>
   <div className={classes.mainContainer}>
@@ -16,9 +16,9 @@ const CoreLayout = ({ children }) =>
           <i className="zmdi zmdi-graphic-eq" />
           <span className={classes.nav__legend}>Feed</span>
         </Link>
-        <Link to={'/squads'}>
-          <i className="zmdi zmdi-tab" />
-          <span className={classes.nav__legend}>Squads</span>
+        <Link to={'/objectives'}>
+          <i className="zmdi zmdi-compass" />
+          <span className={classes.nav__legend}>Objectives</span>
         </Link>
         <Link to={'/users'}>
           <i className="zmdi zmdi-accounts-alt" />
@@ -47,10 +47,10 @@ const CoreLayout = ({ children }) =>
     <div className={ classes.body }>
       { children }
     </div>
-  </div>;
+  </div>
 
 CoreLayout.propTypes = {
   children: PropTypes.element.isRequired
-};
+}
 
-export default CoreLayout;
+export default CoreLayout

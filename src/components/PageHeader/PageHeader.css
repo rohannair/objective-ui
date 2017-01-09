@@ -1,0 +1,14 @@
+@import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
+
+.PageHeader {
+  @extend row;
+  @extend controlBar;
+}
+
+.children {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+}

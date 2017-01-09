@@ -1,30 +1,30 @@
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 
-import createSagaMiddleware from 'redux-saga';
-import createLogger from 'redux-logger';
-import { routerReducer } from 'react-router-redux';
+import createSagaMiddleware from 'redux-saga'
+import createLogger from 'redux-logger'
+import { routerReducer } from 'react-router-redux'
 
-import driftLogger from '../middleware/driftIdentifier';
-import crashReporter from '../middleware/crashReporter';
+import driftLogger from '../middleware/driftIdentifier'
+import crashReporter from '../middleware/crashReporter'
 
-import reducers from '../reducers';
-import rootSaga from '../sagas';
+import reducers from '../reducers'
+import rootSaga from '../sagas'
 
-const sagaMiddleware = createSagaMiddleware();
-const NOOP = () => noop => noop;
+const sagaMiddleware = createSagaMiddleware()
+const NOOP = () => noop => noop
 const loggerMiddleware = (__DEV__)
 ? createLogger(state => state)
-: NOOP;
+: NOOP
 
 const driftLoggerMiddleware = !(__DEV__)
 ? driftLogger
-: NOOP;
+: NOOP
 
 const crashReporterMiddleware = !(__DEV__)
 ? crashReporter
-: NOOP;
+: NOOP
 
-const devtools = window.devToolsExtension || (() => noop => noop);
+const devtools = window.devToolsExtension || (() => noop => noop)
 
 export default function configureStore(initialState = {}, history, client) {
   const store = createStore(
@@ -44,10 +44,10 @@ export default function configureStore(initialState = {}, history, client) {
       ),
       devtools(),
     )
-  );
+  )
 
   // Extensions
-  sagaMiddleware.run(rootSaga);
+  sagaMiddleware.run(rootSaga)
 
-  return store;
+  return store
 }

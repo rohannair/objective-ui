@@ -1,0 +1,48 @@
+@import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.objective__item {
+  cursor: pointer;
+  padding: 10px 20px;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.newObjectiveInput {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.2)
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+  margin-top: 20px;
+  padding-bottom: 40px;
+}
+
+.objectivelist {
+  @extend container;
+}
+
+.body {
+  @extend row;
+}
+
+.mainWindow {
+  width: 100%;
+  max-width: 800px;
+}

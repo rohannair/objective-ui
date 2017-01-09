@@ -1,98 +1,98 @@
 // Setting up Sentry Logging
-const Raven = window.Raven;
-Raven && Raven.config('https://e588c23d6c4842dfadb1a8e06fafe380@sentry.io/114849').install();
+const Raven = window.Raven
+Raven && Raven.config('https://e588c23d6c4842dfadb1a8e06fafe380@sentry.io/114849').install()
 
-import 'babel-polyfill';
+import 'babel-polyfill'
 
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
-import FontFaceObserver from 'fontfaceobserver';
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+import { AppContainer as HotLoaderContainer } from 'react-hot-loader'
+import FontFaceObserver from 'fontfaceobserver'
 
-import { browserHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
+import { browserHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import ApolloClient, { createNetworkInterface } from 'apollo-client'
 
-import Root from './containers/Root';
-const ROOT_NODE = document.getElementById('app');
+import Root from './containers/Root'
+const ROOT_NODE = document.getElementById('app')
 
-import reducers from './state/reducers';
-import configureStore from './state/store';
-import configureRoutes from './routes/index';
+import reducers from './state/reducers'
+import configureStore from './state/store'
+import configureRoutes from './routes/index'
 
-import { getToken } from './utils/auth';
-import AuthService from './utils/AuthService';
+import { getToken } from './utils/auth'
+import AuthService from './utils/AuthService'
 
-const auth = new AuthService('t1FpGvQBC9DqqbaIzhKedem3yca1CQNB', 'objective.auth0.com');
+const auth = new AuthService('t1FpGvQBC9DqqbaIzhKedem3yca1CQNB', 'objective.auth0.com')
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
     uri: 'api/graphql'
   })
-});
+})
 
 client.networkInterface.use([{
   applyMiddleware(req, next) {
     if (!req.options.headers) {
-      req.options.headers = new Headers();
+      req.options.headers = new Headers()
     }
 
-    req.options.headers.authorization = `Bearer ${getToken()}`;
-    next();
+    req.options.headers.authorization = `Bearer ${getToken()}`
+    next()
   }
-}]);
+}])
 
 client.networkInterface.useAfter([{
   applyAfterware({ response }, next) {
     if (response.status === 401) {
-      auth.logout();
+      auth.logout()
     }
-    next();
+    next()
   }
-}]);
+}])
 
-const store = configureStore({}, browserHistory, client);
+const store = configureStore({}, browserHistory, client)
 
 const history = syncHistoryWithStore(
   browserHistory,
   store,
   {
     selectLocationState(state) {
-      return state.route;
+      return state.route
     }
   }
-);
+)
 
-const routes = configureRoutes(store, history, auth);
+const routes = configureRoutes(store, history, auth)
 let render = () => {
   ReactDOM.render(
     <HotLoaderContainer>
       <Root store={ store } routes={ routes } client={ client } />
     </HotLoaderContainer>,
     ROOT_NODE
-  );
-};
+  )
+}
 
 if (__DEV__) {
   if (module.hot) {
-    const renderApp = render;
+    const renderApp = render
     const renderError = error => {
-      const RedBox = require('redbox-react').default;
-      ReactDOM.render(<RedBox error={error} />, ROOT_NODE);
-    };
+      const RedBox = require('redbox-react').default
+      ReactDOM.render(<RedBox error={error} />, ROOT_NODE)
+    }
 
     render = () => {
       try {
-        renderApp();
+        renderApp()
       } catch (error) {
-        console.error(error);
-        renderApp();
+        console.error(error)
+        renderApp()
       }
-    };
+    }
 
     module.hot.accept('containers/Root', () => {
-      const NextRoot = require('containers/Root').default;
+      const NextRoot = require('containers/Root').default
 
       render = () => {
         ReactDOM.render(
@@ -100,15 +100,15 @@ if (__DEV__) {
             <NextRoot store={ store } routes={ routes } client={ client } />
           </HotLoaderContainer>,
           ROOT_NODE
-        );
-      };
+        )
+      }
 
       setTimeout(() => {
-        render();
-      });
-    });
+        render()
+      })
+    })
   }
 }
 
-const roboto = new FontFaceObserver('Roboto');
-roboto.load().then(render);
+const roboto = new FontFaceObserver('Roboto')
+roboto.load().then(render)

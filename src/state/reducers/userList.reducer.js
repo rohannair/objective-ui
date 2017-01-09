@@ -1,10 +1,10 @@
-import * as ACTION from '../constants/users.constants';
+import * as ACTION from '../constants/users.constants'
 
 const defaultState = {
   offset: 0,
   limit: 25,
   results: []
-};
+}
 
 export default (state = defaultState, action) => {
 
@@ -16,7 +16,7 @@ export default (state = defaultState, action) => {
       offset: parseInt(action.users.nextOffset),
       limit: parseInt(action.users.nextLimit),
       results: [...action.users.results]
-    };
+    }
 
   case ACTION.INVITE_USER.SUCCESS:
     return {
@@ -27,7 +27,7 @@ export default (state = defaultState, action) => {
         missions: [],
         squads: []
       ]
-    };
+    }
 
   case ACTION.SEARCH_USERS.SUCCESS:
     return {
@@ -35,9 +35,9 @@ export default (state = defaultState, action) => {
       results: [
         ...action.users.results
       ]
-    };
+    }
 
   default:
-    return state;
+    return state
   }
-};
+}

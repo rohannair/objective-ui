@@ -1,2 +1,2 @@
-import UserTab from './UserTab';
-export default UserTab;
+import UserTab from './UserTab'
+export default UserTab

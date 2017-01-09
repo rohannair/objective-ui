@@ -1,14 +1,14 @@
-import React, { PropTypes } from 'react';
-import styles from './Section.css';
+import React, { PropTypes } from 'react'
+import styles from './Section.css'
 
 const Section = props => {
   const textClasses = props.splash
   ? { heading: styles.splashHeading, sub: styles.splashSub }
-  : { heading: styles.heading, sub: styles.sub };
+  : { heading: styles.heading, sub: styles.sub }
 
   const sectionClasses = props.splash
   ? styles.sectionSplash
-  : styles.section;
+  : styles.section
 
   return (
     <div className={ sectionClasses } style= {{ backgroundColor: props.bgColor }}>
@@ -18,14 +18,14 @@ const Section = props => {
         { props.children }
       </div>
     </div>
-  );
-};
+  )
+}
 
 Section.defaultProps = {
   bgColor: 'transparent',
   title: '',
   splash: false,
-};
+}
 
 Section.propTypes = {
   bgColor: PropTypes.string,
@@ -33,6 +33,6 @@ Section.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
   splash: PropTypes.bool,
-};
+}
 
-export default Section;
+export default Section

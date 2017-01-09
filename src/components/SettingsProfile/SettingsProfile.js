@@ -1,34 +1,35 @@
-import React, { Component, PropTypes } from 'react';
-import styles from './SettingsProfile.css';
-import classNames from 'classnames/bind';
+import React, { Component, PropTypes } from 'react'
+import styles from './SettingsProfile.css'
+import classNames from 'classnames/bind'
 
-import Button from 'components/Button';
-import Input from 'components/Forms/TextInput';
+import Button from '../Button'
+import Input from '../Forms/TextInput'
 
-let cx = classNames.bind(styles);
+let cx = classNames.bind(styles)
 
 class SettingsProfile extends Component {
   constructor(props) {
-    super(props);
-    const { img, firstName, lastName, jobTitle } = this.props.user;
+    super(props)
+
+    const { img, firstName, lastName, jobTitle } = this.props.user
 
     this.state = {
       img,
       firstName,
       lastName,
       jobTitle
-    };
+    }
   };
 
   render() {
     const classname = cx({
       [styles.SettingsProfile]: true
-    });
+    })
 
-    const user = this.state;
+    const user = this.state
     const img = user.img
     ? <img className={styles.image} src={user.img} />
-    : <div className={styles.placeholder}><i className="zmdi zmdi-account" /></div>;
+    : <div className={styles.placeholder}><i className="zmdi zmdi-account" /></div>
 
     return (
       <div className={classname}>
@@ -43,11 +44,11 @@ class SettingsProfile extends Component {
           </div>
           <div className={styles.avatarButtonContainer}>
             <Button link onClick={e => {
-              e.preventDefault();
+              e.preventDefault()
               this.setState({
                 ...this.state,
                 img: ''
-              });
+              })
             }}>Delete</Button>
           </div>
         </section>
@@ -79,21 +80,21 @@ class SettingsProfile extends Component {
           <Button primary onClick={this._handleSubmit}>Confirm</Button>
         </section>
       </div>
-    );
+    )
   };
 
   _handleChange = (name, value) => {
     this.setState({
       ...this.state,
       [name]: value
-    });
+    })
   };
 
   _handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.handleSubmit(this.state);
+    e.preventDefault()
+    this.props.handleSubmit(this.state)
   };
 
 };
 
-export default SettingsProfile;
+export default SettingsProfile

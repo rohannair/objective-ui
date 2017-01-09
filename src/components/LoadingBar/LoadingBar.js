@@ -1,15 +1,15 @@
-import React, { PropTypes } from 'react';
-import styles from './LoadingBar.css';
-import classNames from 'classnames/bind';
+import React, { PropTypes } from 'react'
+import styles from './LoadingBar.css'
+import classNames from 'classnames/bind'
 
-import ProgressBar from 'react-toolbox/lib/progress_bar';
+import ProgressBar from 'react-toolbox/lib/progress_bar'
 
-let cx = classNames.bind(styles);
+let cx = classNames.bind(styles)
 
 const LoadingBar = p => {
   const classname = cx({
     [styles.LoadingBar]: true
-  });
+  })
 
   return (
     <div className={classname}>
@@ -17,7 +17,7 @@ const LoadingBar = p => {
         <ProgressBar multicolor type="circular" mode="indeterminate" />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoadingBar;
+export default LoadingBar

@@ -1,2 +1,2 @@
-import SettingsProfile from './SettingsProfile';
-export default SettingsProfile;
+import SettingsProfile from './SettingsProfile'
+export default SettingsProfile
