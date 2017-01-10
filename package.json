@@ -168,7 +168,11 @@
     ],
     "moduleNameMapper": {
       "\\.(css|scss)$": "<rootDir>/node_modules/jest-css-modules"
-    }
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/codemods/"
+    ]
   },
   "optionalDependencies": {
     "fsevents": "*"
