@@ -61,6 +61,7 @@ module.exports = {
   },
 
   devServer: {
+    host: '0.0.0.0',
     inline: true,
     historyApiFallback: true,
     contentBase: path.join(basePath, 'dist'),
