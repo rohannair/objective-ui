@@ -21,7 +21,7 @@ class SnapshotEditor extends Component {
       blocker: false,
       body: '',
       objective: '',
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.createEmpty(),
     })
 
     this.state = {

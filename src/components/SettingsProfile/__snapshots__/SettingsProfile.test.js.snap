@@ -1,0 +1,57 @@
+exports[`Test suite for SettingsProfile component SettingsProfile should exist 1`] = `
+<div
+  className="undefined">
+  <h2>
+    Edit Profile
+  </h2>
+  <section>
+    <div>
+      <div>
+        <i
+          className="zmdi zmdi-account" />
+      </div>
+    </div>
+    <div>
+      <Button
+        onClick={[Function]}
+        primary={true}>
+        Upload New Avatar
+      </Button>
+    </div>
+    <div>
+      <Button
+        link={true}
+        onClick={[Function]}>
+        Delete
+      </Button>
+    </div>
+  </section>
+  <section>
+    <TextInput
+      inputType="text"
+      label="First Name"
+      onChange={[Function]}
+      type="text"
+      value="" />
+    <TextInput
+      inputType="text"
+      label="Last Name"
+      onChange={[Function]}
+      type="text"
+      value="" />
+    <TextInput
+      inputType="text"
+      label="Title"
+      onChange={[Function]}
+      type="text"
+      value="" />
+  </section>
+  <section>
+    <Button
+      onClick={[Function]}
+      primary={true}>
+      Confirm
+    </Button>
+  </section>
+</div>
+`;

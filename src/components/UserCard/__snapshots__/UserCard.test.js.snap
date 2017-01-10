@@ -1,0 +1,26 @@
+exports[`Test suite for UserCard component UserCard should exist 1`] = `
+<Component>
+  <div>
+    <img
+      src="//placehold.it/250x250/eee?text=?" />
+    <h3 />
+    <small>
+      No title
+    </small>
+  </div>
+  <div>
+    <p>
+      <Pill
+        danger={true}>
+        No Squads
+      </Pill>
+    </p>
+    <p>
+      <Pill
+        danger={true}>
+        No OKRs
+      </Pill>
+    </p>
+  </div>
+</Component>
+`;

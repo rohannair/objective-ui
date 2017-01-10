@@ -3,13 +3,16 @@ exports[`Test suite for Snapshot component Snapshot should exist 1`] = `
   <header>
     <UserTab>
       <small>
-        Jan 04 12:57 PM
+        Dec 31 7:00 PM
       </small>
     </UserTab>
   </header>
-  <section />
-  <footer>
-      
-  </footer>
+  <section
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": undefined,
+      }
+    } />
+  <footer />
 </div>
 `;
