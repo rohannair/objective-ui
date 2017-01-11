@@ -38,7 +38,7 @@ client.networkInterface.use([{
       req.options.headers = new Headers()
     }
 
-    req.options.headers.authorization = `Bearer ${getToken()}`
+    req.options.headers.Authorization = `Bearer ${getToken()}`
     next()
   }
 }])

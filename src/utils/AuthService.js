@@ -41,7 +41,10 @@ const AuthService = (clientId, domain, onAuthenticate) => {
     loggedIn: () => !!getToken(),
     setToken,
     getToken,
-    logout: () => localStorage.removeItem(COOKIE_KEY),
+    logout: () => {
+      localStorage.removeItem(COOKIE_KEY)
+      browserHistory.replace('/auth/login')
+    },
   }
 }
 

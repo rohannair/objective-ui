@@ -25,7 +25,6 @@ const lock = new AuthService('t1FpGvQBC9DqqbaIzhKedem3yca1CQNB', 'objective.auth
 export default (store, history, lock) => {
   const logout = (nextState, replace) => {
     lock.logout()
-    replace('/auth/login')
   }
 
   return (
