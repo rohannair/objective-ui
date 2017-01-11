@@ -153,7 +153,7 @@ module.exports = {
       compressor: { warnings: false }
     }),
     new CopyPlugin([{
-      from: './favicon.ico'
+      from: './favicon.png'
     }]),
     new webpack.optimize.DedupePlugin()
   ]
