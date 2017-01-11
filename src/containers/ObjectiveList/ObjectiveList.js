@@ -161,7 +161,7 @@ class ObjectiveList extends Component {
             title='Edit Objective'
             actions={[
               { label: 'Cancel', onClick: this._handleObjectiveToggle.bind(this, 'editingObjective') },
-              { label: 'Edit', onClick: this._editObjective }
+              { label: 'Save', onClick: this._editObjective }
             ]}
           >
             <TextInput
