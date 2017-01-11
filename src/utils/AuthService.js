@@ -13,12 +13,24 @@ const AuthService = (clientId, domain, onAuthenticate) => {
       params: {
         scope: 'openid app_metadata role email'
       }
+    },
+    theme: {
+      primaryColor: '#009ED9'
     }
   })
 
   lock.on('authenticated', result => {
     setToken(result.idToken)
-    window.location.replace('/')
+    browserHistory.replace('/')
+  })
+
+  lock.on('authorization_error', function(error) {
+    lock.show({
+      flashMessage: {
+        type: 'error',
+        text: error.error_description
+      }
+    })
   })
 
   const getToken = () => localStorage.getItem(COOKIE_KEY)

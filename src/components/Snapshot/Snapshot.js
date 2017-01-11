@@ -15,9 +15,7 @@ import UserTab from '../UserTab'
  */
 class Snapshot extends Component {
   render() {
-
     const { snap, showObjective } = this.props
-    console.log('BLOCKER??', snap)
     return (
       <div className={styles.snapshot}>
         <header className={styles.snapshot__head} >
