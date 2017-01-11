@@ -10,7 +10,7 @@ import IconButton from '../IconButton'
 import Tag from '../Tag'
 import TagContainer from '../TagContainer'
 
-import { EditorState } from 'draft-js'
+import { EditorState, convertToRaw } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 
 class SnapshotEditor extends Component {
@@ -28,7 +28,6 @@ class SnapshotEditor extends Component {
       ...this.getDefaultState()
     }
   }
-
 
   render() {
     const tagValues = this.props.dropdownValues
@@ -96,6 +95,7 @@ class SnapshotEditor extends Component {
     e.stopPropagation()
 
     const { editorState, objective, blocker } = this.state
+    if (!(editorState.getCurrentContent().getBlockMap().reduce((acc, val) => acc + val.getText().trim().length, 0) > 5)) return
 
     const body = stateToHTML(editorState.getCurrentContent()).toString()
     this.props.submit(this._clearState, {
