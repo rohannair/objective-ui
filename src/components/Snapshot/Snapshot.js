@@ -15,10 +15,15 @@ import Reaction from '../Reaction'
  * the lifecycle methods
  */
 class Snapshot extends Component {
+  static defaultProps = {
+    viewer: { id: null },
+    deleteReaction: () => {},
+    addReaction: () => {},
+  }
+
   render() {
     const { viewer: { id: viewerId }, snap, showObjective, addReaction, deleteReaction } = this.props
-    const isLiked = snap.reactions.reduce((val, reaction) => reaction.user.id === viewerId, false)
-    console.log(isLiked)
+    const isLiked = snap.reactions && snap.reactions.reduce((val, reaction) => reaction.user.id === viewerId, false)
 
     return (
       <div className={styles.snapshot}>
@@ -48,7 +53,7 @@ class Snapshot extends Component {
              fontSize: '0.85em',
              color: '#f36',
              fontWeight: 'bold'
-           }}>{snap.reactions.length}</span>
+           }}>{ snap.reactions && snap.reactions.length}</span>
         </footer>
       </div>
     )
