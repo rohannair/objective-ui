@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import styles from './Feed.css'
@@ -23,18 +23,20 @@ class Feed extends Component {
       viewer: PropTypes.object
     }).isRequired,
 
-    submit: PropTypes.func.isRequired
+    submit: PropTypes.func.isRequired,
+    addReaction: PropTypes.func.isRequired,
+    deleteReaction: PropTypes.func.isRequired
   }
 
   render() {
-    const { data: { viewer, loading } } = this.props
+    const { data: { viewer, loading }, addReaction, deleteReaction } = this.props
 
     if (loading && !viewer) {
       return <LoadingBar />
     }
 
     const snapshots = viewer.snapshots && viewer.snapshots.map(snap => (
-      <Snapshot key={snap.id} snap={snap} showObjective />
+      <Snapshot addReaction={addReaction} deleteReaction={deleteReaction} key={snap.id} snap={snap} showObjective viewer={viewer} />
     ))
 
     return (
@@ -116,6 +118,80 @@ const withMutation = graphql(NEW_SNAPSHOT, {
   })
 })
 
+const withAddReactionMutation = graphql(Snapshot.mutations.addReaction, {
+  props: ({ mutate }) => ({
+    addReaction: (reactionId, snapshotId) => mutate({
+      variables: { reactionId, snapshotId },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        addReaction: {
+          __typename: 'Reaction',
+          id: Math.random().toString(16).slice(2),
+          name: 'like',
+          user: {}
+        }
+      },
+      updateQueries: {
+        Feed: (prev, { mutationResult}) => {
+          const snapshotIdx = prev.viewer.snapshots.findIndex(s => s.id === snapshotId)
+          return ({
+            ...prev,
+            viewer: {
+              ...prev.viewer,
+              snapshots: [
+                ...prev.viewer.snapshots.slice(0, snapshotIdx),
+                {
+                  ...prev.viewer.snapshots[snapshotIdx],
+                  reactions: [
+                    ...prev.viewer.snapshots[snapshotIdx].reactions,
+                    mutationResult.data.addReaction,
+                  ]
+                },
+                ...prev.viewer.snapshots.slice(snapshotIdx + 1),
+              ]
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
+const withDeleteReactionMutation = graphql(Snapshot.mutations.deleteReaction, {
+  props: ({ mutate }) => ({
+    deleteReaction: (reactionId, snapshotId) => mutate({
+      variables: { reactionId, snapshotId },
+      updateQueries: {
+        Feed: (prev, { mutationResult}) => {
+          const snapshotIdx = prev.viewer.snapshots.findIndex(s => s.id === snapshotId)
+          const snapshot = prev.viewer.snapshots[snapshotIdx]
+
+          // I need to find the index of the reaction
+          const reactionIdx = snapshot.reactions.findIndex(r => r.id === mutationResult.data.deleteReaction.id)
+          return ({
+            ...prev,
+            viewer: {
+              ...prev.viewer,
+              snapshots: [
+                ...prev.viewer.snapshots.slice(0, snapshotIdx),
+                {
+                  ...snapshot,
+                  reactions: [
+                    ...snapshot.reactions.slice(0, reactionIdx),
+                    ...snapshot.reactions.slice(reactionIdx, 1),
+                    ,
+                  ]
+                },
+                ...prev.viewer.snapshots.slice(snapshotIdx + 1),
+              ]
+            }
+          })
+        }
+      }
+    }),
+  })
+})
+
 const GET_FEED_QUERY = gql`
   query Feed {
     viewer {
@@ -146,5 +222,10 @@ const withData = graphql(GET_FEED_QUERY, {
   })
 })
 
-export default withData(withMutation(Feed))
+export default compose(
+  withData,
+  withMutation,
+  withAddReactionMutation,
+  withDeleteReactionMutation
+)(Feed)
 

@@ -1,0 +1,6 @@
+exports[`Test suite for Reaction component Reaction should exist 1`] = `
+<div>
+  <i
+    class="zmdi zmdi-thumb-up" />
+</div>
+`;

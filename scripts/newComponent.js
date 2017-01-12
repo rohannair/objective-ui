@@ -37,14 +37,13 @@ export default ${componentName}
 `
 
 const tests = `import React from 'react'
-import { shallow } from 'enzyme'
 
-import ${componentName} from './index.jsx'
+import ${componentName} from './index.js'
 
 describe('Test suite for ${componentName} component', () => {
   it('${componentName} should exist', () => {
     let wrapper = shallow(<${componentName}/>)
-    expect(wrapper).to.exist
+    expect(wrapper).toMatchSnapshot()
   })
 })
 
@@ -60,4 +59,5 @@ fs.mkdir(dest)
 fs.writeFileSync(path.join(dest, 'index.js'), indexFile)
 fs.writeFileSync(path.join(dest, `${componentName}.js`), componentFile)
 fs.writeFileSync(path.join(dest, `${componentName}.css`), styleFile)
+fs.writeFileSync(path.join(dest, `${componentName.toLowerCase()}.test.js`), tests)
 console.log(chalk.green('Component Created'))

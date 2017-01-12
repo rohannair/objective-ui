@@ -19,10 +19,13 @@
 }
 
 .snapshot__footer {
+  display: flex;
+  flex-direction: row;
   border-top: 1px dashed color($secondaryaccent saturation(0));
   padding-top: 15px;
+  align-items: center;
 
   &:empty {
-    display: none
+    display: none;
   }
 }
