@@ -5,6 +5,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "test": "jest",
+    "test:update": "jest -u",
     "dev": "better-npm-run dev",
     "build:dll": "webpack --config ./config/webpack.dll.js",
     "build:webpack": "better-npm-run build:webpack",
