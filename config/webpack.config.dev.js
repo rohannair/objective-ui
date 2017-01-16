@@ -10,7 +10,6 @@ const paths    = require('./paths')
 const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin')
 const CommonsPlugin      = require('webpack/lib/optimize/CommonsChunkPlugin')
 const ExtractText        = require('extract-text-webpack-plugin')
-const FaviconsPlugin     = require('favicons-webpack-plugin')
 const HtmlPlugin         = require('html-webpack-plugin')
 
 module.exports = {
