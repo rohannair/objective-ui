@@ -1,17 +1,17 @@
-const webpack  = require('webpack');
-const path     = require('path');
+const webpack  = require('webpack')
+const path     = require('path')
 
-const postcss  = require('./postcss');
+const postcss  = require('./postcss')
 
-const basePath = path.join(__dirname, '..');
-const paths    = require('./paths');
+const basePath = path.join(__dirname, '..')
+const paths    = require('./paths')
 
 // Plugins
-const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin');
-const CommonsPlugin      = new require('webpack/lib/optimize/CommonsChunkPlugin');
-const ExtractText        = require('extract-text-webpack-plugin');
-const CopyPlugin         = require('copy-webpack-plugin');
-const HtmlPlugin         = require('html-webpack-plugin');
+const CaseSensitivePaths = require('case-sensitive-paths-webpack-plugin')
+const CommonsPlugin      = require('webpack/lib/optimize/CommonsChunkPlugin')
+const ExtractText        = require('extract-text-webpack-plugin')
+const FaviconsPlugin     = require('favicons-webpack-plugin')
+const HtmlPlugin         = require('html-webpack-plugin')
 
 module.exports = {
   bail: true,
@@ -147,14 +147,12 @@ module.exports = {
     new HtmlPlugin({
       template: path.join(basePath, 'src', 'index.html'),
       inject: 'body',
-      minify: { collapseWhitespace: true }
+      minify: { collapseWhitespace: true },
+      favicon: path.join(basePath, 'favicon.ico')
     }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: { warnings: false }
     }),
-    new CopyPlugin([{
-      from: './favicon.png'
-    }]),
     new webpack.optimize.DedupePlugin()
   ]
-};
+}

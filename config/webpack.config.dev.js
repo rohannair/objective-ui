@@ -177,7 +177,7 @@ module.exports = {
     new HtmlPlugin({
       template: path.join(basePath, 'src', 'index.html'),
       inject: 'body',
-      favicon: path.join(basePath, 'favicon.ico')
+      favicon: path.join(basePath, 'favicon-dev.ico')
     })
   ]
 }
