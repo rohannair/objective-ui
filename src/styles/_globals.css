@@ -80,4 +80,11 @@ $top: 100;
     width: 95%;
     margin: 15px 0;
   }
+
+  @media screen and (max-width: 480px) {
+    .auth0-lock-container,
+    .auth0-lock-widget {
+      height: 100vh !important;
+    }
+  }
 }
