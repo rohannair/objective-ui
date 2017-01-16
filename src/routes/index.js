@@ -14,6 +14,7 @@ import UserList from '../containers/UserList'
 import CreateUser from '../containers/CreateUser'
 import Login from '../containers/Login'
 import Preferences from '../containers/Preferences'
+import Privacy from '../containers/Privacy'
 import Signup from '../containers/Signup'
 
 import AuthService from '../utils/AuthService'
@@ -47,6 +48,7 @@ export default (store, history, lock) => {
         <Route path="objectives" component={ ObjectiveList } />
         <Route path="users" component={ UserList } />
         <Route path="settings" component={ Preferences } />
+        <Route path="privacy" component={ Privacy } />
       </Route>
     </Router>
   )
