@@ -1,0 +1,38 @@
+@import '../../styles/globals'
+@import '../../styles/mixins'
+@import '../../styles/layout'
+
+.privacy {
+  @extend container;
+  width: 100%;
+}
+
+.innerPrivacy {
+  @extend row;
+
+  background-color: #fff;
+  max-width: 900px;
+  padding: 30px;
+
+  h2,
+  h3 {
+    padding: 10px 0;
+  }
+
+  ol,
+  ul {
+    margin-left: 1em;
+
+    li {
+      // margin-bottom: 10px;
+    }
+
+    &.i {
+      margin: 10px 0;
+    }
+  }
+
+  ol li {
+    list-style-type: decimal;
+  }
+}
