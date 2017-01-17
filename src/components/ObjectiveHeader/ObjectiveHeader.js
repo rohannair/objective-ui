@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 
 import styles from './ObjectiveHeader.css'
 import Avatar from 'react-toolbox/lib/avatar'
+import dateformat from 'dateformat'
 
 const ObjectiveHeader = p => {
   if (!p.objective) return null
@@ -27,7 +28,7 @@ const ObjectiveHeader = p => {
         { p.menuLeft && menu}
         <h3>{p.objective.name}</h3>
         <div className={styles.meta}>
-          Timeline: { p.objective.endsAt || 'N/A' }
+          Target end date: { dateformat(p.objective.endsAt, 'mmmm dd, yyyy') || 'N/A' }
         </div>
         { p.menuRight && menu}
       </div>
