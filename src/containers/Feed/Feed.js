@@ -88,35 +88,18 @@ const NEW_SNAPSHOT = gql`
     addSnapshot(body: $body, objective: $objective, blocker: $blocker) {
       id
       body
-      blocker
-      createdAt
-      user {
-        id
-        firstName
-        lastName
-        img
-      }
-      objective {
-        name
-      }
+      ...SnapshotHeaderFragment
+      ...SnapshotFooterFragment
     }
   }
+  ${SnapshotHeader.fragments.header}
+  ${SnapshotFooter.fragments.footer}
 `
 
 const withMutation = graphql(NEW_SNAPSHOT, {
   props: ({ mutate }) => ({
     submit: (body, blocker, objective) => mutate({
       variables: { body, blocker, objective },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        addSnapshot: {
-          __typename: 'CheckIn', // TODO: Rename checkin to snapshot
-          id: Math.random().toString(16).slice(2),
-          body,
-          createdAt: Date.now()
-        }
-      },
-
       updateQueries: {
         Feed: (prev, { mutationResult}) => ({
           ...prev,
