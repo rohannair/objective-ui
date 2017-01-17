@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 
 import styled from 'styled-components'
 
-const Reaction = styled(({ isLiked, onClick, className }) => (
+const Reaction = styled(({ isLiked, onClick, className, readOnly }) => (
   <div onClick={onClick} className={className}>
     <i className="zmdi zmdi-thumb-up"></i>
   </div>
@@ -21,7 +21,11 @@ const Reaction = styled(({ isLiked, onClick, className }) => (
     return '1px solid #ddd;'
   }};
 
-  cursor: pointer;
+  cursor: ${props => {
+    if (props.readOnly) return 'initial'
+    return 'pointer'
+  }};
+
   border-radius: 3px;
   padding: 2px 5px;
   margin-left: auto;
@@ -32,10 +36,14 @@ const Reaction = styled(({ isLiked, onClick, className }) => (
 
   &:hover {
     color: ${props => {
+      if (props.readOnly) return
       if (props.isLiked) return '#fff'
       return '#f36'
     }};
-    border-color: #f36;
+    border-color: ${props => {
+      if (props.readOnly) return
+      return '#f36'
+    }};
   }
 `
 

@@ -5,16 +5,16 @@ import gql from 'graphql-tag'
 import styles from './Feed.css'
 import dateformat from 'dateformat'
 
-// For the editor state
-
-
 // Components
 import LoadingBar from '../../components/LoadingBar'
 import ObjectiveFeed from '../../components/ObjectiveFeed'
 import PageHeader from '../../components/PageHeader'
-import Snapshot from '../../components/Snapshot'
 import SnapshotEditor from '../../components/SnapshotEditor'
 import FlipMove from 'react-flip-move'
+
+import SnapshotContainer from '../../components/SnapshotContainer'
+import SnapshotHeader from '../../components/SnapshotHeader'
+import SnapshotFooter from '../../components/SnapshotFooter'
 
 class Feed extends Component {
   static propTypes = {
@@ -28,30 +28,46 @@ class Feed extends Component {
     deleteReaction: PropTypes.func.isRequired
   }
 
+  toggleReaction(isLiked, id) {
+    if (isLiked) return this.props.deleteReaction(1, id)
+    return this.props.addReaction(1, id)
+  }
+
   render() {
-    const { data: { viewer, loading }, addReaction, deleteReaction } = this.props
+    const {data: { viewer, loading }} = this.props
 
     if (loading && !viewer) {
       return <LoadingBar />
     }
 
-    const snapshots = viewer.snapshots && viewer.snapshots.map(snap => (
-      <Snapshot addReaction={addReaction} deleteReaction={deleteReaction} key={snap.id} snap={snap} showObjective viewer={viewer} />
-    ))
+    const snapshots = viewer.snapshots && viewer.snapshots.map(snap => {
+      const isLiked = snap.reactions.some(r => r && r.user.id === viewer.id)
+      return (
+        <SnapshotContainer key={snap.id}>
+          <SnapshotHeader {...snap} />
+          <section
+            className={styles.snapshot__body}
+            dangerouslySetInnerHTML={{ __html: snap.body }}
+          />
+          <SnapshotFooter
+            count={snap.reactions.length}
+            toggleAction={this.toggleReaction.bind(this, isLiked, snap.id)}
+            isLiked={isLiked}
+          />
+        </SnapshotContainer>
+      )
+    })
 
     return (
       <div className={styles.Feed}>
         <PageHeader title="Feed" />
         <div className={styles.body}>
-
           <div className={styles.feedBody}>
             <SnapshotEditor
               dropdownValues={viewer.objectives}
               submit={this._submit}
             />
-            <FlipMove easing="ease-in-out">
               {snapshots}
-            </FlipMove>
           </div>
         </div>
       </div>
@@ -80,7 +96,6 @@ const NEW_SNAPSHOT = gql`
         lastName
         img
       }
-
       objective {
         name
       }
@@ -118,7 +133,7 @@ const withMutation = graphql(NEW_SNAPSHOT, {
   })
 })
 
-const withAddReactionMutation = graphql(Snapshot.mutations.addReaction, {
+const withAddReactionMutation = graphql(SnapshotFooter.mutations.addReaction, {
   props: ({ mutate }) => ({
     addReaction: (reactionId, snapshotId) => mutate({
       variables: { reactionId, snapshotId },
@@ -157,17 +172,16 @@ const withAddReactionMutation = graphql(Snapshot.mutations.addReaction, {
   })
 })
 
-const withDeleteReactionMutation = graphql(Snapshot.mutations.deleteReaction, {
+const withDeleteReactionMutation = graphql(SnapshotFooter.mutations.deleteReaction, {
   props: ({ mutate }) => ({
     deleteReaction: (reactionId, snapshotId) => mutate({
       variables: { reactionId, snapshotId },
       updateQueries: {
-        Feed: (prev, { mutationResult}) => {
+        Feed: (prev) => {
           const snapshotIdx = prev.viewer.snapshots.findIndex(s => s.id === snapshotId)
           const snapshot = prev.viewer.snapshots[snapshotIdx]
+          const reactionIdx = snapshot.reactions.findIndex(r => r.user.id === prev.viewer.id)
 
-          // I need to find the index of the reaction
-          const reactionIdx = snapshot.reactions.findIndex(r => r.id === mutationResult.data.deleteReaction.id)
           return ({
             ...prev,
             viewer: {
@@ -178,8 +192,7 @@ const withDeleteReactionMutation = graphql(Snapshot.mutations.deleteReaction, {
                   ...snapshot,
                   reactions: [
                     ...snapshot.reactions.slice(0, reactionIdx),
-                    ...snapshot.reactions.slice(reactionIdx, 1),
-                    ,
+                    ...snapshot.reactions.slice(reactionIdx + 1)
                   ]
                 },
                 ...prev.viewer.snapshots.slice(snapshotIdx + 1),
@@ -201,7 +214,9 @@ const GET_FEED_QUERY = gql`
       lastName
       snapshots {
         id
-        ...SnapshotFragment
+        body
+        ...SnapshotHeaderFragment
+        ...SnapshotFooterFragment
       }
       objectives {
         id
@@ -213,7 +228,8 @@ const GET_FEED_QUERY = gql`
       }
     }
   }
-  ${Snapshot.fragments.snapshot}
+  ${SnapshotHeader.fragments.header}
+  ${SnapshotFooter.fragments.footer}
 `
 
 const withData = graphql(GET_FEED_QUERY, {

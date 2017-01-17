@@ -76,8 +76,7 @@ class SnapshotEditor extends Component {
           </div>
       </div>
     )
-  };
-
+  }
 
   _clearState = () => {
     const editorState = EditorState.push(this.state.editorState, ContentState.createFromText(''))
