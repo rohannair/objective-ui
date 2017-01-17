@@ -80,7 +80,7 @@ class SnapshotEditor extends Component {
 
 
   _clearState = () => {
-    const editorState = EditorState.push(this.state.editorState, ContentState.createFromText(''));
+    const editorState = EditorState.push(this.state.editorState, ContentState.createFromText(''))
 
     this.setState({
       ...this.getDefaultState(),

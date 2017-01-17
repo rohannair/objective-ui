@@ -1,2 +1,2 @@
-import TagContainer from './TagContainer';
-export default TagContainer;
+import TagContainer from './TagContainer'
+export default TagContainer
