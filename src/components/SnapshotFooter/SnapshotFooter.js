@@ -30,7 +30,7 @@ const SnapshotFooter = styled(({
   display: flex;
   flex-direction: row;
   border-top: 1px dashed #ddd;
-  padding-top: 15px;
+  padding: 15px 10px 0;
   align-items: center;
 `
 
