@@ -6,7 +6,7 @@ const SnapshotContainer = styled.div`
   flex-direction: column;
   background-color: #fff;
   width: 100%;
-  padding: 20px;
+  padding: 20px 0;
   border: 1px solid #ddd;
   border-top: 0;
 `

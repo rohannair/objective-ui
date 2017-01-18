@@ -14,6 +14,7 @@ import FlipMove from 'react-flip-move'
 
 import SnapshotContainer from '../../components/SnapshotContainer'
 import SnapshotHeader from '../../components/SnapshotHeader'
+import SnapshotBody from '../../components/SnapshotBody'
 import SnapshotFooter from '../../components/SnapshotFooter'
 
 class Feed extends Component {
@@ -45,9 +46,10 @@ class Feed extends Component {
       return (
         <SnapshotContainer key={snap.id}>
           <SnapshotHeader {...snap} />
-          <section
+          <SnapshotBody
             className={styles.snapshot__body}
-            dangerouslySetInnerHTML={{ __html: snap.body }}
+            body={snap.body}
+            img={snap.img}
           />
           <SnapshotFooter
             count={snap.reactions.length}
@@ -76,18 +78,19 @@ class Feed extends Component {
 
   _submit = (cb, vals) => {
     const { submit } = this.props
-    const { body, blocker, objective } = vals
-    submit(body, blocker, objective)
+    const { body, blocker, objective, img } = vals
+    submit(body, blocker, objective, img)
 
     cb()
   };
 }
 
 const NEW_SNAPSHOT = gql`
-  mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean) {
-    addSnapshot(body: $body, objective: $objective, blocker: $blocker) {
+  mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean, $img: String) {
+    addSnapshot(body: $body, objective: $objective, blocker: $blocker, img: $img) {
       id
       body
+      img
       ...SnapshotHeaderFragment
       ...SnapshotFooterFragment
     }
@@ -98,8 +101,8 @@ const NEW_SNAPSHOT = gql`
 
 const withMutation = graphql(NEW_SNAPSHOT, {
   props: ({ mutate }) => ({
-    submit: (body, blocker, objective) => mutate({
-      variables: { body, blocker, objective },
+    submit: (body, blocker, objective, img) => mutate({
+      variables: { body, blocker, objective, img },
       updateQueries: {
         Feed: (prev, { mutationResult}) => ({
           ...prev,
@@ -198,6 +201,7 @@ const GET_FEED_QUERY = gql`
       snapshots {
         id
         body
+        img
         ...SnapshotHeaderFragment
         ...SnapshotFooterFragment
       }

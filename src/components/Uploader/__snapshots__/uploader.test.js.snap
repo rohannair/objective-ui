@@ -1,0 +1,5 @@
+exports[`Test suite for Uploader component Uploader should exist 1`] = `
+<Uploader
+  className="bSARLX"
+  submitImage={[Function]} />
+`;

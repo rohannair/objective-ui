@@ -7,6 +7,7 @@ import styles from './ObjectiveFeed.css'
 
 import SnapshotContainer from '../../components/SnapshotContainer'
 import SnapshotHeader from '../../components/SnapshotHeader'
+import SnapshotBody from '../../components/SnapshotBody'
 import SnapshotFooter from '../../components/SnapshotFooter'
 
 const ObjectiveFeed = p => {
@@ -17,9 +18,9 @@ const ObjectiveFeed = p => {
     return (
       <SnapshotContainer key={snap.id}>
         <SnapshotHeader {...snap} />
-        <section
-          className={styles.snapshot__body}
-          dangerouslySetInnerHTML={{ __html: snap.body }}
+        <SnapshotBody
+          img={snap.img}
+          body= {snap.body }
         />
         <SnapshotFooter
           count={snap.reactions.length}
@@ -43,6 +44,7 @@ ObjectiveFeed.fragments = {
       snapshots {
         id
         body
+        img
         ...SnapshotHeaderFragment
         ...SnapshotFooterFragment
       }
