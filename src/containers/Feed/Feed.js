@@ -90,6 +90,7 @@ const NEW_SNAPSHOT = gql`
     addSnapshot(body: $body, objective: $objective, blocker: $blocker, img: $img) {
       id
       body
+      img
       ...SnapshotHeaderFragment
       ...SnapshotFooterFragment
     }
