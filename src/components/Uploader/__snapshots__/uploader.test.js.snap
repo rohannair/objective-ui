@@ -1,0 +1,7 @@
+exports[`Test suite for Uploader component Uploader should exist 1`] = `
+<label>
+  <input
+    onChange={[Function]}
+    type="file" />
+</label>
+`;

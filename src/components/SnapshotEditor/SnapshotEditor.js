@@ -9,6 +9,7 @@ import Checkbox from 'react-toolbox/lib/checkbox'
 import IconButton from '../IconButton'
 import Tag from '../Tag'
 import TagContainer from '../TagContainer'
+import Uploader from '../Uploader'
 
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
@@ -21,6 +22,7 @@ class SnapshotEditor extends Component {
       blocker: false,
       body: '',
       objective: '',
+      img: {},
       editorState: EditorState.createEmpty(),
     })
 
@@ -62,13 +64,10 @@ class SnapshotEditor extends Component {
             tooltipPosition="bottom"
             onClick={this._handleChange.bind(this, 'blocker')}
           />
-          <IconButton
-            disabled
+          <Uploader
             icon="image"
-            tooltip="Upload Image"
-            tooltipPosition="bottom"
-            onClick={() => alert('Coming soon!')}
-          />
+            submitImage={this._handleChange.bind(this, 'img')}
+           />
           <div className={styles.buttonContainer}>
             <Button primary small
               onClick={this._onSubmit}>Post Snapshot</Button>
@@ -99,14 +98,15 @@ class SnapshotEditor extends Component {
     e.preventDefault()
     e.stopPropagation()
 
-    const { editorState, objective, blocker } = this.state
+    const { editorState, objective, blocker, img } = this.state
     if (!(editorState.getCurrentContent().getBlockMap().reduce((acc, val) => acc + val.getText().trim().length, 0) > 5)) return
 
     const body = stateToHTML(editorState.getCurrentContent()).toString()
     this.props.submit(this._clearState, {
       objective: objective.value,
       blocker,
-      body
+      body,
+      img
     })
   }
 };

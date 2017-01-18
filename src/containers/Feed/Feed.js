@@ -76,16 +76,16 @@ class Feed extends Component {
 
   _submit = (cb, vals) => {
     const { submit } = this.props
-    const { body, blocker, objective } = vals
-    submit(body, blocker, objective)
+    const { body, blocker, objective, img } = vals
+    submit(body, blocker, objective, img)
 
     cb()
   };
 }
 
 const NEW_SNAPSHOT = gql`
-  mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean) {
-    addSnapshot(body: $body, objective: $objective, blocker: $blocker) {
+  mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean, $img: String) {
+    addSnapshot(body: $body, objective: $objective, blocker: $blocker, img: $img) {
       id
       body
       ...SnapshotHeaderFragment
@@ -98,8 +98,8 @@ const NEW_SNAPSHOT = gql`
 
 const withMutation = graphql(NEW_SNAPSHOT, {
   props: ({ mutate }) => ({
-    submit: (body, blocker, objective) => mutate({
-      variables: { body, blocker, objective },
+    submit: (body, blocker, objective, img) => mutate({
+      variables: { body, blocker, objective, img },
       updateQueries: {
         Feed: (prev, { mutationResult}) => ({
           ...prev,

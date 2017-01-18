@@ -1,0 +1,26 @@
+@import '../../styles/globals';
+
+.label {
+  font-size: 1.2em;
+  cursor: pointer;
+  color: #ccc;
+  padding: 5px;
+  transition: color 0.25s ease-in-out;
+
+  i {
+    font-weight: bold;
+  }
+
+  &:hover {
+    color: $primary;
+  }
+
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+}
+
+.fileInput {
+  display: none;
+}
