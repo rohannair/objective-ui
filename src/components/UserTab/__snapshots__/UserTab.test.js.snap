@@ -1,6 +1,5 @@
 exports[`Test suite for UserTab component UserTab should exist 1`] = `
-<div
-  className="undefined">
+<div>
   <div>
     <img />
   </div>

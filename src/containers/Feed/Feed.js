@@ -1,20 +1,20 @@
 import React, { Component, PropTypes } from 'react'
-import { graphql } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import styles from './Feed.css'
 import dateformat from 'dateformat'
 
-// For the editor state
-
-
 // Components
 import LoadingBar from '../../components/LoadingBar'
 import ObjectiveFeed from '../../components/ObjectiveFeed'
 import PageHeader from '../../components/PageHeader'
-import Snapshot from '../../components/Snapshot'
 import SnapshotEditor from '../../components/SnapshotEditor'
 import FlipMove from 'react-flip-move'
+
+import SnapshotContainer from '../../components/SnapshotContainer'
+import SnapshotHeader from '../../components/SnapshotHeader'
+import SnapshotFooter from '../../components/SnapshotFooter'
 
 class Feed extends Component {
   static propTypes = {
@@ -23,33 +23,51 @@ class Feed extends Component {
       viewer: PropTypes.object
     }).isRequired,
 
-    submit: PropTypes.func.isRequired
+    submit: PropTypes.func.isRequired,
+    addReaction: PropTypes.func.isRequired,
+    deleteReaction: PropTypes.func.isRequired
+  }
+
+  toggleReaction(isLiked, id) {
+    if (isLiked) return this.props.deleteReaction(1, id)
+    return this.props.addReaction(1, id)
   }
 
   render() {
-    const { data: { viewer, loading } } = this.props
+    const {data: { viewer, loading }} = this.props
 
     if (loading && !viewer) {
       return <LoadingBar />
     }
 
-    const snapshots = viewer.snapshots && viewer.snapshots.map(snap => (
-      <Snapshot key={snap.id} snap={snap} showObjective />
-    ))
+    const snapshots = viewer.snapshots && viewer.snapshots.map(snap => {
+      const isLiked = snap.reactions.some(r => r && r.user.id === viewer.id)
+      return (
+        <SnapshotContainer key={snap.id}>
+          <SnapshotHeader {...snap} />
+          <section
+            className={styles.snapshot__body}
+            dangerouslySetInnerHTML={{ __html: snap.body }}
+          />
+          <SnapshotFooter
+            count={snap.reactions.length}
+            toggleAction={this.toggleReaction.bind(this, isLiked, snap.id)}
+            isLiked={isLiked}
+          />
+        </SnapshotContainer>
+      )
+    })
 
     return (
       <div className={styles.Feed}>
         <PageHeader title="Feed" />
         <div className={styles.body}>
-
           <div className={styles.feedBody}>
             <SnapshotEditor
               dropdownValues={viewer.objectives}
               submit={this._submit}
             />
-            <FlipMove easing="ease-in-out">
               {snapshots}
-            </FlipMove>
           </div>
         </div>
       </div>
@@ -70,36 +88,18 @@ const NEW_SNAPSHOT = gql`
     addSnapshot(body: $body, objective: $objective, blocker: $blocker) {
       id
       body
-      blocker
-      createdAt
-      user {
-        id
-        firstName
-        lastName
-        img
-      }
-
-      objective {
-        name
-      }
+      ...SnapshotHeaderFragment
+      ...SnapshotFooterFragment
     }
   }
+  ${SnapshotHeader.fragments.header}
+  ${SnapshotFooter.fragments.footer}
 `
 
 const withMutation = graphql(NEW_SNAPSHOT, {
   props: ({ mutate }) => ({
     submit: (body, blocker, objective) => mutate({
       variables: { body, blocker, objective },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        addSnapshot: {
-          __typename: 'CheckIn', // TODO: Rename checkin to snapshot
-          id: Math.random().toString(16).slice(2),
-          body,
-          createdAt: Date.now()
-        }
-      },
-
       updateQueries: {
         Feed: (prev, { mutationResult}) => ({
           ...prev,
@@ -116,6 +116,78 @@ const withMutation = graphql(NEW_SNAPSHOT, {
   })
 })
 
+const withAddReactionMutation = graphql(SnapshotFooter.mutations.addReaction, {
+  props: ({ mutate }) => ({
+    addReaction: (reactionId, snapshotId) => mutate({
+      variables: { reactionId, snapshotId },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        addReaction: {
+          __typename: 'Reaction',
+          id: Math.random().toString(16).slice(2),
+          name: 'like',
+          user: {}
+        }
+      },
+      updateQueries: {
+        Feed: (prev, { mutationResult}) => {
+          const snapshotIdx = prev.viewer.snapshots.findIndex(s => s.id === snapshotId)
+          return ({
+            ...prev,
+            viewer: {
+              ...prev.viewer,
+              snapshots: [
+                ...prev.viewer.snapshots.slice(0, snapshotIdx),
+                {
+                  ...prev.viewer.snapshots[snapshotIdx],
+                  reactions: [
+                    ...prev.viewer.snapshots[snapshotIdx].reactions,
+                    mutationResult.data.addReaction,
+                  ]
+                },
+                ...prev.viewer.snapshots.slice(snapshotIdx + 1),
+              ]
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
+const withDeleteReactionMutation = graphql(SnapshotFooter.mutations.deleteReaction, {
+  props: ({ mutate }) => ({
+    deleteReaction: (reactionId, snapshotId) => mutate({
+      variables: { reactionId, snapshotId },
+      updateQueries: {
+        Feed: (prev) => {
+          const snapshotIdx = prev.viewer.snapshots.findIndex(s => s.id === snapshotId)
+          const snapshot = prev.viewer.snapshots[snapshotIdx]
+          const reactionIdx = snapshot.reactions.findIndex(r => r.user.id === prev.viewer.id)
+
+          return ({
+            ...prev,
+            viewer: {
+              ...prev.viewer,
+              snapshots: [
+                ...prev.viewer.snapshots.slice(0, snapshotIdx),
+                {
+                  ...snapshot,
+                  reactions: [
+                    ...snapshot.reactions.slice(0, reactionIdx),
+                    ...snapshot.reactions.slice(reactionIdx + 1)
+                  ]
+                },
+                ...prev.viewer.snapshots.slice(snapshotIdx + 1),
+              ]
+            }
+          })
+        }
+      }
+    }),
+  })
+})
+
 const GET_FEED_QUERY = gql`
   query Feed {
     viewer {
@@ -125,7 +197,9 @@ const GET_FEED_QUERY = gql`
       lastName
       snapshots {
         id
-        ...SnapshotFragment
+        body
+        ...SnapshotHeaderFragment
+        ...SnapshotFooterFragment
       }
       objectives {
         id
@@ -137,7 +211,8 @@ const GET_FEED_QUERY = gql`
       }
     }
   }
-  ${Snapshot.fragments.snapshot}
+  ${SnapshotHeader.fragments.header}
+  ${SnapshotFooter.fragments.footer}
 `
 
 const withData = graphql(GET_FEED_QUERY, {
@@ -146,5 +221,10 @@ const withData = graphql(GET_FEED_QUERY, {
   })
 })
 
-export default withData(withMutation(Feed))
+export default compose(
+  withData,
+  withMutation,
+  withAddReactionMutation,
+  withDeleteReactionMutation
+)(Feed)
 

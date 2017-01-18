@@ -10,7 +10,7 @@ import IconButton from '../IconButton'
 import Tag from '../Tag'
 import TagContainer from '../TagContainer'
 
-import { EditorState, convertToRaw } from 'draft-js'
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 
 class SnapshotEditor extends Component {
@@ -21,7 +21,7 @@ class SnapshotEditor extends Component {
       blocker: false,
       body: '',
       objective: '',
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.createEmpty(),
     })
 
     this.state = {
@@ -76,12 +76,17 @@ class SnapshotEditor extends Component {
           </div>
       </div>
     )
-  };
-
+  }
 
   _clearState = () => {
-    this.setState({ ...this.getDefaultState() })
+    const editorState = EditorState.push(this.state.editorState, ContentState.createFromText(''))
+
+    this.setState({
+      ...this.getDefaultState(),
+      editorState
+    })
   }
+
   _clearStateProperty = (property) => {
     this.setState(prev => ({
       ...prev.state,

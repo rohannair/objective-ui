@@ -3,14 +3,36 @@ import gql from 'graphql-tag'
 
 import styles from './ObjectiveFeed.css'
 
-import Snapshot from '../../components/Snapshot'
+// import Snapshot from '../../components/Snapshot'
+
+import SnapshotContainer from '../../components/SnapshotContainer'
+import SnapshotHeader from '../../components/SnapshotHeader'
+import SnapshotFooter from '../../components/SnapshotFooter'
 
 const ObjectiveFeed = p => {
   if (p.snapshots.length < 1) return <div>Add some snapshots</div>
 
+  const snapshots = p.snapshots.map(snap => {
+    const isLiked = snap.reactions.some(r => r && r.user.id === p.viewer.id)
+    return (
+      <SnapshotContainer key={snap.id}>
+        <SnapshotHeader {...snap} />
+        <section
+          className={styles.snapshot__body}
+          dangerouslySetInnerHTML={{ __html: snap.body }}
+        />
+        <SnapshotFooter
+          count={snap.reactions.length}
+          isLiked={isLiked}
+          readOnly
+        />
+      </SnapshotContainer>
+    )
+  })
+
   return (
     <div className={styles.objectivefeed}>
-      { p.snapshots.map(s => <Snapshot key={s.id} snap={s} />)}
+      { snapshots }
     </div>
   )
 }
@@ -20,10 +42,13 @@ ObjectiveFeed.fragments = {
     fragment ObjectiveFeedFragment on Objective {
       snapshots {
         id
-        ...SnapshotFragment
+        body
+        ...SnapshotHeaderFragment
+        ...SnapshotFooterFragment
       }
     }
-    ${Snapshot.fragments.snapshot}
+    ${SnapshotHeader.fragments.header}
+    ${SnapshotFooter.fragments.footer}
   `
 }
 

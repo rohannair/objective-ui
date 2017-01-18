@@ -31,9 +31,9 @@ const CoreLayout = ({ children }) =>
       </nav>
 
       <nav className={classes.bottomNav}>
-        <Link to={'/help'}>
-          <i className="zmdi zmdi-help" />
-          <span className={classes.nav__legend}>Help</span>
+        <Link to={'/privacy'}>
+          <i className="zmdi zmdi-info" />
+          <span className={classes.nav__legend}>Privacy</span>
         </Link>
         <Link to={'/logout'}>
           <i className="zmdi zmdi-sign-in" />
@@ -47,6 +47,7 @@ const CoreLayout = ({ children }) =>
     <div className={ classes.body }>
       { children }
     </div>
+
   </div>
 
 CoreLayout.propTypes = {
