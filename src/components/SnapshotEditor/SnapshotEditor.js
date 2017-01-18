@@ -45,7 +45,7 @@ class SnapshotEditor extends Component {
           {
             this.state.img && (
               <img
-                src={this.state.img}
+                src={`data:image/jpeg;base64,${this.state.img}`}
                 className={styles.imgPreview}
               />
             )

@@ -74,7 +74,9 @@ class Uploader extends Component {
         canvasCtx = canvas.getContext('2d')
         canvasCtx.drawImage(img, 0, 0, width, height)
 
-        let dataurl = canvas.toDataURL('image/jpeg', 0.7)
+        const preableLength = 'data:image/jpeg;base64,'.length
+        let dataurl = canvas.toDataURL('image/jpeg', 0.7).slice(preableLength)
+
         cb(dataurl)
         this.setState({ loading: false })
       }
