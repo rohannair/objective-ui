@@ -261,7 +261,8 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
                 ...prev.viewer.objectives.slice(0, idx),
                 editObjective,
                 ...prev.viewer.objectives.slice(idx + 1)
-              ]
+              ],
+              objective: editObjective
             }
           })
         }
