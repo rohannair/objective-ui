@@ -14,6 +14,7 @@ import FlipMove from 'react-flip-move'
 
 import SnapshotContainer from '../../components/SnapshotContainer'
 import SnapshotHeader from '../../components/SnapshotHeader'
+import SnapshotBody from '../../components/SnapshotBody'
 import SnapshotFooter from '../../components/SnapshotFooter'
 
 class Feed extends Component {
@@ -45,9 +46,10 @@ class Feed extends Component {
       return (
         <SnapshotContainer key={snap.id}>
           <SnapshotHeader {...snap} />
-          <section
+          <SnapshotBody
             className={styles.snapshot__body}
-            dangerouslySetInnerHTML={{ __html: snap.body }}
+            body={snap.body}
+            img={snap.img}
           />
           <SnapshotFooter
             count={snap.reactions.length}
@@ -198,6 +200,7 @@ const GET_FEED_QUERY = gql`
       snapshots {
         id
         body
+        img
         ...SnapshotHeaderFragment
         ...SnapshotFooterFragment
       }
