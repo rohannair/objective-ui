@@ -10,7 +10,7 @@ import UserTab from '../UserTab'
 const SnapshotHeader = styled((snap) => (
   <UserTab {...snap.user} className={snap.className}>
     { snap.objective && <Pill info>{snap.objective.name}</Pill>}
-    { snap.blocker && <Pill danger><i className={'zmdi zmdi-alert-triangle'} /> BLOCKER!</Pill>}
+    { snap.blocker && <Pill danger><i className={'zmdi zmdi-alert-circle-o'} /> BLOCKER!</Pill>}
     <small>{dateformat(snap.createdAt, 'mmm dd h:MM TT')}</small>
   </UserTab>
 ))`

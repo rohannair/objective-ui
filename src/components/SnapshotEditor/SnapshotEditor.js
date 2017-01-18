@@ -22,7 +22,7 @@ class SnapshotEditor extends Component {
       blocker: false,
       body: '',
       objective: '',
-      img: {},
+      img: '',
       editorState: EditorState.createEmpty(),
     })
 
@@ -42,6 +42,14 @@ class SnapshotEditor extends Component {
       <div className={styles.SnapshotEditor}>
         <h4 className={styles.header}>Post New Snapshot</h4>
         <div className={styles.body}>
+          {
+            this.state.img && (
+              <img
+                src={`data:image/png;base64,${this.state.img}`}
+                className={styles.imgPreview}
+              />
+            )
+          }
           <Editor
             placeholder="Snapshot Body"
             editorState={this.state.editorState}
@@ -59,7 +67,7 @@ class SnapshotEditor extends Component {
           />
           <IconButton
             checked={this.state.blocker}
-            icon="block"
+            icon="alert-circle-o"
             tooltip="Blocker"
             tooltipPosition="bottom"
             onClick={this._handleChange.bind(this, 'blocker')}
@@ -67,6 +75,7 @@ class SnapshotEditor extends Component {
           <Uploader
             icon="image"
             submitImage={this._handleChange.bind(this, 'img')}
+            imageExists={!!this.state.img}
            />
           <div className={styles.buttonContainer}>
             <Button primary small
