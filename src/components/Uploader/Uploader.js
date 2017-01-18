@@ -49,8 +49,6 @@ class Uploader extends Component {
 
       reader.readAsBinaryString(uploadedFile)
     }
-
-    // cb(form)
   }
 }
 

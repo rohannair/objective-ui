@@ -11,7 +11,6 @@ const IconButton = p => {
   return (
     <div className={classes} onClick={p.onClick.bind(this, !p.checked)}>
       <i className={`zmdi zmdi-${p.icon}`} />
-      { p.children }
     </div>
   )
 }
