@@ -73,10 +73,11 @@ class SnapshotEditor extends Component {
             onClick={this._handleChange.bind(this, 'blocker')}
           />
           <Uploader
-            icon="image"
             submitImage={this._handleChange.bind(this, 'img')}
             imageExists={!!this.state.img}
-           />
+           >
+            <i className={'zmdi zmdi-image'} />
+           </Uploader>
           <div className={styles.buttonContainer}>
             <Button primary small
               onClick={this._onSubmit}>Post Snapshot</Button>

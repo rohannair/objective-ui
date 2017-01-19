@@ -14,17 +14,16 @@ class Uploader extends Component {
 
   static propTypes = {
     submitImage: PropTypes.func.isRequired,
-    imageExists: PropTypes.bool,
-    icon: PropTypes.string
+    imageExists: PropTypes.bool
   }
 
   render() {
-    const { icon, submitImage, className } = this.props
+    const { icon, submitImage, className, children } = this.props
     if (this.state.loading) return <LoadingBar />
 
     return (
       <label className={className}>
-        { icon && <i className={`zmdi zmdi-${icon}`} />}
+        { children }
         <input
           className="fileInput"
           type="file"
