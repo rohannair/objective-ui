@@ -36,5 +36,6 @@ export default styled(SnapshotBody)`
 
   .body {
     padding: 0 20px;
+    word-wrap: break-word;
   }
 `
