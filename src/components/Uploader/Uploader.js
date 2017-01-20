@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import styled from 'styled-components'
 
 import LoadingBar from '../LoadingBar'
-import { resizeImageToFitAsJPEG } from '../../utils/image'
+import { resizeImageToFitAsJPEG, cropImageToMaxSizeAsJPEG } from '../../utils/image'
 
 class Uploader extends Component {
   constructor(props) {
@@ -18,7 +18,8 @@ class Uploader extends Component {
     imageExists: PropTypes.bool,
     resizeOptions: PropTypes.shape({
       width: PropTypes.number,
-      height: PropTypes.number
+      height: PropTypes.number,
+      type: PropTypes.oneOf(['crop', 'resize'])
     })
   }
 
@@ -48,7 +49,11 @@ class Uploader extends Component {
       const reader  = new FileReader()
 
       reader.onload = (ev) => {
-        let dataurl = resizeImageToFitAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result)
+        if (resizeOptions.type == 'crop') {
+          let dataurl = cropImageToMaxSizeAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result)
+        } else {
+          let dataurl = resizeImageToFitAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result)
+        }
 
         cb(dataurl)
         this.setState({ loading: false })

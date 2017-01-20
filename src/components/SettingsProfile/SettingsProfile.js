@@ -4,6 +4,7 @@ import classNames from 'classnames/bind'
 
 import Button from '../Button'
 import Input from '../Forms/TextInput'
+import Uploader from '../Uploader'
 
 let cx = classNames.bind(styles)
 
@@ -40,7 +41,13 @@ class SettingsProfile extends Component {
             { img }
           </div>
           <div className={styles.avatarButtonContainer}>
-            <Button primary onClick={e => e.preventDefault()}>Upload New Avatar</Button>
+            <Uploader
+              submitImage={this._handleChange.bind(this, 'img')}
+              imageExists={!!this.state.img}
+              resizeOptions={{ height: 250, width: 250, type: 'crop' }}>
+              <Button primary>Upload New Avatar</Button>
+            </Uploader>
+
           </div>
           <div className={styles.avatarButtonContainer}>
             <Button link onClick={e => {
