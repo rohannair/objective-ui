@@ -75,6 +75,7 @@ class SnapshotEditor extends Component {
           <Uploader
             submitImage={this._handleChange.bind(this, 'img')}
             imageExists={!!this.state.img}
+            resizeOptions={{ height: 720, width: 1280 }}
            >
             <i className={'zmdi zmdi-image'} />
            </Uploader>
