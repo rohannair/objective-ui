@@ -12,11 +12,21 @@ exports[`Test suite for SettingsProfile component SettingsProfile should exist 1
       </div>
     </div>
     <div>
-      <Button
-        onClick={[Function]}
-        primary={true}>
-        Upload New Avatar
-      </Button>
+      <Styled(undefined)
+        imageExists={false}
+        resizeOptions={
+          Object {
+            "height": 250,
+            "type": "crop",
+            "width": 250,
+          }
+        }
+        submitImage={[Function]}>
+        <Button
+          primary={true}>
+          Upload New Avatar
+        </Button>
+      </Styled(undefined)>
     </div>
     <div>
       <Button
