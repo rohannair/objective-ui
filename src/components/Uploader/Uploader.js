@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import styled from 'styled-components'
 
 import LoadingBar from '../LoadingBar'
+import { resizeImageToFitAsJPEG } from '../../utils/image'
 
 class Uploader extends Component {
   constructor(props) {
@@ -44,41 +45,10 @@ class Uploader extends Component {
     const { resizeOptions } = this.props
 
     if (uploadedFile) {
-      const MAX_WIDTH = resizeOptions.width
-      const MAX_HEIGHT = resizeOptions.height
-
-      const img = new Image()
       const reader  = new FileReader()
 
       reader.onload = (ev) => {
-        img.src = ev.target.result
-
-        let canvas = document.createElement('canvas')
-        let canvasCtx = canvas.getContext('2d')
-        canvasCtx.drawImage(img, 0, 0)
-
-        let width = img.width
-        let height = img.height
-
-        if (width > height) {
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width
-            width = MAX_WIDTH
-          }
-        } else {
-          if (height > MAX_HEIGHT) {
-            width *= MAX_HEIGHT / height
-            height = MAX_HEIGHT
-          }
-        }
-
-        canvas.width = width
-        canvas.height = height
-
-        canvasCtx = canvas.getContext('2d')
-        canvasCtx.drawImage(img, 0, 0, width, height)
-
-        let dataurl = canvas.toDataURL('image/jpeg', 0.7)
+        let dataurl = resizeImageToFitAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result)
 
         cb(dataurl)
         this.setState({ loading: false })
