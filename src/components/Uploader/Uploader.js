@@ -49,13 +49,17 @@ class Uploader extends Component {
       const reader  = new FileReader()
 
       reader.onload = (ev) => {
-        if (resizeOptions.type == 'crop') {
-          let dataurl = cropImageToMaxSizeAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result)
-        } else {
-          let dataurl = resizeImageToFitAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result)
+        switch (resizeOptions.type) {
+        case 'crop':
+          cb(cropImageToMaxSizeAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result))
+          break
+        case 'resize':
+          cb(resizeImageToFitAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result))
+          break
+        default:
+          break
         }
 
-        cb(dataurl)
         this.setState({ loading: false })
       }
       reader.readAsDataURL(uploadedFile)
