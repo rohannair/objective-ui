@@ -122,7 +122,7 @@ class ObjectiveList extends Component {
     }
 
     const objectiveFeed = viewer.objective
-    ? <ObjectiveFeed {...viewer.objective} viewer={viewer}/>
+    ? <ObjectiveFeed {...viewer.objective} viewer={viewer} />
     : <div>Select an Objective</div>
 
     return (
