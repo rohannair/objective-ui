@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import styled from 'styled-components'
 
 import LoadingBar from '../LoadingBar'
+import { resizeImageToFitAsJPEG, cropImageToMaxSizeAsJPEG } from '../../utils/image'
 
 class Uploader extends Component {
   constructor(props) {
@@ -15,16 +16,20 @@ class Uploader extends Component {
   static propTypes = {
     submitImage: PropTypes.func.isRequired,
     imageExists: PropTypes.bool,
-    icon: PropTypes.string
+    resizeOptions: PropTypes.shape({
+      width: PropTypes.number,
+      height: PropTypes.number,
+      type: PropTypes.oneOf(['crop', 'resize'])
+    })
   }
 
   render() {
-    const { icon, submitImage, className } = this.props
+    const { icon, submitImage, className, children } = this.props
     if (this.state.loading) return <LoadingBar />
 
     return (
       <label className={className}>
-        { icon && <i className={`zmdi zmdi-${icon}`} />}
+        { children }
         <input
           className="fileInput"
           type="file"
@@ -38,46 +43,25 @@ class Uploader extends Component {
   _validateUpload = (cb, e) => {
     this.setState({ loading: true })
     const uploadedFile = e.target.files[0]
+    const { resizeOptions } = this.props
 
     if (uploadedFile) {
-      const MAX_WIDTH = 1280
-      const MAX_HEIGHT = 720
-
-      const img = new Image()
       const reader  = new FileReader()
 
       reader.onload = (ev) => {
-        img.src = ev.target.result
-
-        let canvas = document.createElement('canvas')
-        let canvasCtx = canvas.getContext('2d')
-        canvasCtx.drawImage(img, 0, 0)
-
-        let width = img.width
-        let height = img.height
-
-        if (width > height) {
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width
-            width = MAX_WIDTH
-          }
-        } else {
-          if (height > MAX_HEIGHT) {
-            width *= MAX_HEIGHT / height
-            height = MAX_HEIGHT
-          }
+        switch (resizeOptions.type) {
+        case 'crop':
+          let croppedImage = cropImageToMaxSizeAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result)
+          cb(croppedImage)
+          break
+        case 'resize':
+          let resizedImage = resizeImageToFitAsJPEG(resizeOptions.width, resizeOptions.height, ev.target.result)
+          cb(resizedImage)
+          break
+        default:
+          break
         }
 
-        canvas.width = width
-        canvas.height = height
-
-        canvasCtx = canvas.getContext('2d')
-        canvasCtx.drawImage(img, 0, 0, width, height)
-
-        const preableLength = 'data:image/jpeg;base64,'.length
-        let dataurl = canvas.toDataURL('image/jpeg', 0.7).slice(preableLength)
-
-        cb(dataurl)
         this.setState({ loading: false })
       }
       reader.readAsDataURL(uploadedFile)
