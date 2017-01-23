@@ -32,7 +32,7 @@ class SettingsProfile extends Component {
     ? user.img
     : `data:image/jpeg;base64,${user.img}`
 
-    const img = imgSrc
+    const img = user.img
     ? <img className={styles.image} src={imgSrc} />
     : <div className={styles.placeholder}><i className="zmdi zmdi-account" /></div>
 
