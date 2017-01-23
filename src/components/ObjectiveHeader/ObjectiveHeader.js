@@ -26,6 +26,8 @@ const ObjectiveHeader = p => {
   ? (<Avatar className={styles.ownerAvatar} image={p.objective.owner.img} cover />)
   : (<Avatar className={styles.noOwnerAvatar} title="?" onClick={p.setOwner} />)
 
+  const addMore = <Avatar className={styles.addCollaboratorAvatar} title="+" />
+
   return (
     <div className={styles.objectiveHeader}>
       <div className={styles.contributorHeader}>
@@ -47,6 +49,7 @@ const ObjectiveHeader = p => {
             </Avatar>
           ))
         }
+        { addMore }
       </div>
     </div>
   )

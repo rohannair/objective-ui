@@ -125,21 +125,21 @@ class ObjectiveList extends Component {
     ? <ObjectiveFeed {...viewer.objective} viewer={viewer} />
     : <div>Select an Objective</div>
 
+    const objectives = viewer.objectives.map(o => (
+      <div
+        key={o.id}
+        className="item"
+        onClick={() => this._getObjective(o.id) }
+      >
+        { o.name }
+      </div>
+    ))
+
     return (
       <div className={styles.mainContainer}>
         <ObjectiveListSidebar>
           <h3>{viewer.company.name}</h3>
-          {
-            viewer.objectives.map(o => (
-              <div
-                key={o.id}
-                className="item"
-                onClick={() => this._getObjective(o.id) }
-              >
-                { o.name }
-              </div>
-            ))
-          }
+          { objectives }
 
           {
             /**
@@ -256,6 +256,17 @@ class ObjectiveList extends Component {
     )
   }
 }
+
+const ADD_COLLABORATOR = gql`
+  mutation addCollaborator($id: String!, $user: String!) {
+    addCollaborator(id: $id, user: $user) {
+      id
+      img
+      firstName
+      lastName
+    }
+  }
+`
 
 const EDIT_OBJECTIVE = gql`
   mutation editObjective($id: String!, $name: String) {

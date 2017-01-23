@@ -46,7 +46,8 @@
 
 .avatar,
 .ownerAvatar,
-.noOwnerAvatar {
+.noOwnerAvatar,
+.addCollaboratorAvatar {
   height: 24px;
   margin-left: 10px;
 }
@@ -58,6 +59,14 @@
 .noOwnerAvatar {
   line-height: 1;
   font-weight: bold;
+}
+
+.addCollaboratorAvatar.addCollaboratorAvatar {
+  line-height: 1;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px dashed $primary;
+  color: $primary;
 }
 
 .moreMenu {
