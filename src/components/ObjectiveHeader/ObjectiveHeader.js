@@ -41,7 +41,7 @@ const ObjectiveHeader = p => {
         Contributors:
         { ownerAvatar }
         {
-          p.squad && p.squad.users.map(u => (
+          p.collaborators && p.collaborators.map(u => (
             <Avatar key={u.id} className={styles.avatar}>
               <img src={u.img} />
             </Avatar>
@@ -57,7 +57,6 @@ ObjectiveHeader.fragments = {
     fragment ObjectiveHeaderFragment on Objective {
       name
       endsAt
-      timeline
       status
       owner {
         id
@@ -65,13 +64,11 @@ ObjectiveHeader.fragments = {
         firstName
         lastName
       }
-      squad {
-        users {
-          id
-          firstName
-          lastName
-          img
-        }
+      collaborators {
+        id
+        firstName
+        lastName
+        img
       }
     }
   `,
