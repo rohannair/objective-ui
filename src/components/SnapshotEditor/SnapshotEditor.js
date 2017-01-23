@@ -40,7 +40,7 @@ class SnapshotEditor extends Component {
 
     return (
       <div className={styles.SnapshotEditor}>
-        <h4 className={styles.header}>Post New Snapshot</h4>
+        <h4 className={styles.header}>What are you working on?</h4>
         <div className={styles.body}>
           {
             this.state.img && (
