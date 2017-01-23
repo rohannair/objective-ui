@@ -22,6 +22,10 @@ const ObjectiveHeader = p => {
     </div>
   )
 
+  const ownerAvatar = p.objective.owner
+  ? (<Avatar className={styles.ownerAvatar} image={p.objective.owner.img} cover />)
+  : (<Avatar className={styles.noOwnerAvatar} title="?" onClick={p.setOwner} />)
+
   return (
     <div className={styles.objectiveHeader}>
       <div className={styles.contributorHeader}>
@@ -35,6 +39,7 @@ const ObjectiveHeader = p => {
 
       <div className={styles.contributorBar}>
         Contributors:
+        { ownerAvatar }
         {
           p.squad && p.squad.users.map(u => (
             <Avatar key={u.id} className={styles.avatar}>
@@ -54,6 +59,12 @@ ObjectiveHeader.fragments = {
       endsAt
       timeline
       status
+      owner {
+        id
+        img
+        firstName
+        lastName
+      }
       squad {
         users {
           id

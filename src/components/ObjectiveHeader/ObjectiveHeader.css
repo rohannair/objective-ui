@@ -44,9 +44,20 @@
   font-size: 0.875rem;
 }
 
-.avatar {
+.avatar,
+.ownerAvatar,
+.noOwnerAvatar {
   height: 24px;
   margin-left: 10px;
+}
+
+.ownerAvatar {
+  border: 2px $primary solid;
+}
+
+.noOwnerAvatar {
+  line-height: 1;
+  font-weight: bold;
 }
 
 .moreMenu {

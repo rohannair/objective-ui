@@ -3,6 +3,7 @@ import styles from './ObjectiveList.css'
 
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import update from 'immutability-helper'
 
 import LoadingBar from '../../components/LoadingBar'
 import ObjectiveFeed from '../../components/ObjectiveFeed'
@@ -36,6 +37,7 @@ class ObjectiveList extends Component {
   state = {
     addingNewObjective: false,
     editingObjective: false,
+    settingOwner: false,
     objective: this.defaultObjectiveState
   }
 
@@ -92,6 +94,26 @@ class ObjectiveList extends Component {
     })
   }
 
+  _setOwner = () => {
+    this.setState(prevState => ({
+      settingOwner: !prevState.settingOwner
+    }))
+  }
+
+  _claimOwnership = (owner) => {
+    const { editObjective, data: {viewer} } = this.props
+    editObjective({
+      objective: {
+        ...viewer.objective,
+        owner: viewer.id
+      }
+    })
+
+    this.setState(prevState => ({
+      settingOwner: !prevState.settingOwner
+    }))
+  }
+
   render() {
     const { data: { viewer, loading } } = this.props
 
@@ -100,7 +122,7 @@ class ObjectiveList extends Component {
     }
 
     const objectiveFeed = viewer.objective
-    ? <ObjectiveFeed {...viewer.objective} viewer={viewer}/>
+    ? <ObjectiveFeed {...viewer.objective} viewer={viewer} />
     : <div>Select an Objective</div>
 
     return (
@@ -178,6 +200,24 @@ class ObjectiveList extends Component {
             />
           </Dialog>
 
+          {
+            /**
+             *  SetOwner Modal here
+             */
+          }
+          <Dialog
+            active={this.state.settingOwner}
+            onEscKeyDown={this._handleObjectiveToggle.bind(this, 'settingOwner')}
+            onOverlayClick={this._handleObjectiveToggle.bind(this, 'settingOwner')}
+            title='This Objective needs an Owner!'
+            actions={[
+              { label: 'Cancel', onClick: this._setOwner },
+              { label: 'Claim Ownership', onClick: this._claimOwnership }
+            ]}
+          >
+            <p>It seems like this Objective was created without an owner. Would you like to set yourself as the owner?</p>
+          </Dialog>
+
           <div className={styles.buttonContainer}>
             <StyledButton
               secondary
@@ -191,7 +231,13 @@ class ObjectiveList extends Component {
           <ObjectiveHeader
             objective={viewer.objective}
             edit={this._handleObjectiveToggle.bind(this, '')}
+            setOwner={this._setOwner}
             menuLeft
+            isOwner={
+              viewer.objective
+                && viewer.objective.owner
+                && viewer.objective.owner.id === viewer.id
+            }
             dropdownOptions={[
               { name: 'Edit', onClick: e => {
                 e.preventDefault()
@@ -211,14 +257,18 @@ class ObjectiveList extends Component {
   }
 }
 
-// TODO: EDIT_OBJECTIVE mutation
-
 const EDIT_OBJECTIVE = gql`
   mutation editObjective($id: String!, $name: String) {
     editObjective(id: $id, name: $name) {
       id
       name
       status
+      owner {
+        id
+        img
+        firstName
+        lastName
+      }
     }
   }
 `
@@ -235,8 +285,8 @@ const NEW_OBJECTIVE = gql`
 
 const withEditMutation = graphql(EDIT_OBJECTIVE, {
   props: ({ mutate }) => ({
-    editObjective: ({ objective: { id, name, endsAt }}) => mutate ({
-      variables: { id, name, endsAt },
+    editObjective: ({ objective: { id, name, endsAt, owner }}) => mutate ({
+      variables: { id, name, endsAt, owner },
       optimisticResponse: {
         __typename: 'Mutation',
         editObjective: {
@@ -244,7 +294,10 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
           id,
           name,
           endsAt: endsAt,
-          status: 'draft'
+          status: 'draft',
+          owner: {
+            id: owner
+          }
         }
       },
 
@@ -253,19 +306,14 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
           const { editObjective } = mutationResult.data
           const idx = prev.viewer.objectives.findIndex(o => o.id === editObjective.id)
 
-          return ({
-            ...prev,
+          const objectives = update(prev.viewer.objectives, {
+            $splice: [[idx, 1, editObjective]]
+          })
+
+          return update(prev, {
             viewer: {
-              ...prev.viewer,
-              objectives: [
-                ...prev.viewer.objectives.slice(0, idx),
-                editObjective,
-                ...prev.viewer.objectives.slice(idx + 1)
-              ],
-              objective: {
-                ...prev.viewer.objective,
-                ...editObjective
-              }
+              objectives: { $set: objectives },
+              objective: { $merge: editObjective }
             }
           })
         }
@@ -291,14 +339,14 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
 
       updateQueries: {
         ObjectiveList: (prev, { mutationResult }) => {
-          return ({
-            ...prev,
+          const { createObjective } = mutationResult.data
+          const objectives = update(prev.viewer.objectives, {
+            $unshift: [createObjective]
+          })
+
+          return update(prev, {
             viewer: {
-              ...prev.viewer,
-              objectives: [
-                mutationResult.data.createObjective,
-                ...prev.viewer.objectives
-              ]
+              objectives: { $set: objectives },
             }
           })
         }
@@ -310,6 +358,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
 const GET_OBJECTIVELIST_QUERY = gql`
   query ObjectiveList($id: String) {
     viewer {
+      id
       company {
         id
         name
@@ -326,8 +375,8 @@ const GET_OBJECTIVELIST_QUERY = gql`
       }
     }
   }
-  ${ObjectiveFeed.fragments.feed}
   ${ObjectiveHeader.fragments.objective}
+  ${ObjectiveFeed.fragments.feed}
 `
 
 const withData = graphql(GET_OBJECTIVELIST_QUERY, {
