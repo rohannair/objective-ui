@@ -46,7 +46,6 @@ export default (store, history, lock) => {
 
         <Route path="feed" component={ Feed } />
         <Route path="objectives" component={ ObjectiveList } />
-        <Route path="users" component={ UserList } />
         <Route path="settings" component={ Preferences } />
         <Route path="privacy" component={ Privacy } />
       </Route>

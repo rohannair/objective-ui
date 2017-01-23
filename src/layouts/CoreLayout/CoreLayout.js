@@ -20,21 +20,19 @@ const CoreLayout = ({ children }) =>
           <i className="zmdi zmdi-compass" />
           <span className={classes.nav__legend}>Objectives</span>
         </Link>
-        <Link to={'/users'}>
-          <i className="zmdi zmdi-accounts-alt" />
-          <span className={classes.nav__legend}>Users</span>
-        </Link>
+      </nav>
+
+      <nav className={classes.bottomNav}>
         <Link to={'/settings'}>
           <i className="zmdi zmdi-settings" />
           <span className={classes.nav__legend}>Settings</span>
         </Link>
-      </nav>
 
-      <nav className={classes.bottomNav}>
         <Link to={'/privacy'}>
           <i className="zmdi zmdi-info" />
           <span className={classes.nav__legend}>Privacy</span>
         </Link>
+
         <Link to={'/logout'}>
           <i className="zmdi zmdi-sign-in" />
           <span className={classes.nav__legend}>
