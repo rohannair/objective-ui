@@ -5,8 +5,6 @@ import styles from './ObjectiveHeader.css'
 import Avatar from 'react-toolbox/lib/avatar'
 import dateformat from 'dateformat'
 
-import Time from 'react-time'
-
 import Tooltip from 'react-aria-tooltip'
 
 const ObjectiveHeader = p => {

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import styles from './ObjectiveList.css'
+import styles from './Objectives.css'
 
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -18,7 +18,7 @@ import { StyledButton } from '../../components/Button/Button'
 const datetime = new Date(2015, 10, 16)
 const min_datetime = new Date(new Date(datetime).setDate(8))
 
-class ObjectiveList extends Component {
+class Objectives extends Component {
   static propTypes = {
     data: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
@@ -38,80 +38,8 @@ class ObjectiveList extends Component {
     addingNewObjective: false,
     editingObjective: false,
     settingOwner: false,
+    addingCollaborators: false,
     objective: this.defaultObjectiveState
-  }
-
-  _getObjective = (id) => {
-    this.props.data.refetch({ id })
-  }
-
-  _handleObjectiveToggle = (name, e) => {
-    e && e.preventDefault()
-    this.setState({
-      [name]: !this.state[name]
-    })
-  }
-
-  _handleObjectiveChange = (name, val) => {
-    this.setState({
-      objective: {
-        ...this.state.objective,
-        [name]: val
-      }
-    })
-  }
-
-  _createNewObjective = () => {
-    this._handleObjectiveToggle('addingNewObjective')
-
-    const { objective } = this.state
-    this.props.createObjective({ objective })
-
-    this.setState({
-      objective: this.defaultObjectiveState
-    })
-  }
-
-  _handleEditObjective = ({id, name, endsAt}) => {
-    this.setState({
-      editingObjective: true,
-      objective: {
-        id,
-        name,
-        endsAt
-      }
-    })
-  }
-
-  _editObjective = () => {
-    this._handleObjectiveToggle('editingObjective')
-
-    const { objective } = this.state
-    this.props.editObjective({ objective })
-
-    this.setState({
-      objective: this.defaultObjectiveState
-    })
-  }
-
-  _setOwner = () => {
-    this.setState(prevState => ({
-      settingOwner: !prevState.settingOwner
-    }))
-  }
-
-  _claimOwnership = (owner) => {
-    const { editObjective, data: {viewer} } = this.props
-    editObjective({
-      objective: {
-        ...viewer.objective,
-        owner: viewer.id
-      }
-    })
-
-    this.setState(prevState => ({
-      settingOwner: !prevState.settingOwner
-    }))
   }
 
   render() {
@@ -125,7 +53,7 @@ class ObjectiveList extends Component {
     ? <ObjectiveFeed {...viewer.objective} viewer={viewer} />
     : <div>Select an Objective</div>
 
-    const objectives = viewer.objectives.map(o => (
+    const objective = viewer.objectives.map(o => (
       <div
         key={o.id}
         className="item"
@@ -139,7 +67,7 @@ class ObjectiveList extends Component {
       <div className={styles.mainContainer}>
         <ObjectiveListSidebar>
           <h3>{viewer.company.name}</h3>
-          { objectives }
+          { objective }
 
           {
             /**
@@ -232,6 +160,7 @@ class ObjectiveList extends Component {
             objective={viewer.objective}
             edit={this._handleObjectiveToggle.bind(this, '')}
             setOwner={this._setOwner}
+            addingCollaborators={this._toggleCollaboratorsModal}
             menuLeft
             isOwner={
               viewer.objective
@@ -254,6 +183,85 @@ class ObjectiveList extends Component {
         </div>
       </div>
     )
+  }
+
+  _claimOwnership = (owner) => {
+    const { editObjective, data: {viewer} } = this.props
+    editObjective({
+      objective: {
+        ...viewer.objective,
+        owner: viewer.id
+      }
+    })
+
+    this.setState(prevState => ({
+      settingOwner: !prevState.settingOwner
+    }))
+  }
+
+  _createNewObjective = () => {
+    this._handleObjectiveToggle('addingNewObjective')
+
+    const { objective } = this.state
+    this.props.createObjective({ objective })
+
+    this.setState({
+      objective: this.defaultObjectiveState
+    })
+  }
+
+  _editObjective = () => {
+    this._handleObjectiveToggle('editingObjective')
+
+    const { objective } = this.state
+    this.props.editObjective({ objective })
+
+    this.setState({
+      objective: this.defaultObjectiveState
+    })
+  }
+
+  _getObjective = (id) => {
+    this.props.data.refetch({ id })
+  }
+
+  _handleEditObjective = ({id, name, endsAt}) => {
+    this.setState({
+      editingObjective: true,
+      objective: {
+        id,
+        name,
+        endsAt
+      }
+    })
+  }
+
+  _handleObjectiveToggle = (name, e) => {
+    e && e.preventDefault()
+    this.setState({
+      [name]: !this.state[name]
+    })
+  }
+
+  _handleObjectiveChange = (name, val) => {
+    this.setState({
+      objective: {
+        ...this.state.objective,
+        [name]: val
+      }
+    })
+  }
+
+  _setOwner = () => {
+    this.setState(prev => ({
+      settingOwner: !prev.settingOwner
+    }))
+  }
+
+  _toggleCollaboratorsModal = () => {
+    this.setState(prev => ({
+      addingCollaborators: !prev.addingCollaborators
+    }))
   }
 }
 
@@ -403,5 +411,5 @@ export default compose(
   withEditMutation,
   withCreateMutation,
   withData
-)(ObjectiveList)
+)(Objectives)
 
