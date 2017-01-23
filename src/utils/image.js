@@ -72,3 +72,8 @@ export const cropImageToMaxSizeAsJPEG = (MAX_WIDTH, MAX_HEIGHT, src) => {
 
   return canvas.toDataURL('image/jpeg', 0.7)
 }
+
+export const removeDataUrl = (url) => {
+  let preludeLength = 'data:image/jpeg;base64,'.length
+  return url.slice(preludeLength)
+}

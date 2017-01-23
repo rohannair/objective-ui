@@ -5,6 +5,7 @@ import classNames from 'classnames/bind'
 import Button from '../Button'
 import Input from '../Forms/TextInput'
 import Uploader from '../Uploader'
+import { removeDataUrl } from '../../utils/image'
 
 let cx = classNames.bind(styles)
 
@@ -28,12 +29,8 @@ class SettingsProfile extends Component {
     })
 
     const user = this.state
-    const imgSrc = /^http/.test(user.img)
-    ? user.img
-    : `data:image/jpeg;base64,${user.img}`
-
     const img = user.img
-    ? <img className={styles.image} src={imgSrc} />
+    ? <img className={styles.image} src={user.img} />
     : <div className={styles.placeholder}><i className="zmdi zmdi-account" /></div>
 
     return (
@@ -103,7 +100,14 @@ class SettingsProfile extends Component {
 
   _handleSubmit = (e) => {
     e.preventDefault()
-    this.props.handleSubmit(this.state)
+    const img = removeDataUrl(this.state.img)
+
+    const state = {
+      ...this.state,
+      img
+    }
+
+    this.props.handleSubmit(state)
   };
 
 };
