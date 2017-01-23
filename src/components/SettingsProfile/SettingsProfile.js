@@ -28,8 +28,12 @@ class SettingsProfile extends Component {
     })
 
     const user = this.state
-    const img = user.img
-    ? <img className={styles.image} src={user.img} />
+    const imgSrc = /^http/.test(user.img)
+    ? user.img
+    : `data:image/jpeg;base64,${user.img}`
+
+    const img = imgSrc
+    ? <img className={styles.image} src={imgSrc} />
     : <div className={styles.placeholder}><i className="zmdi zmdi-account" /></div>
 
     return (
