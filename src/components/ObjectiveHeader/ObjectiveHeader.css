@@ -42,6 +42,7 @@
   border-top: 1px solid #e1e1e1;
   padding: 10px 0;
   font-size: 0.875rem;
+
 }
 
 .avatar,
@@ -49,7 +50,7 @@
 .noOwnerAvatar,
 .addCollaboratorAvatar {
   height: 24px;
-  margin-left: 10px;
+  margin: 0 10px;
 }
 
 .ownerAvatar {
