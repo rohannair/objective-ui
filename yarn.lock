@@ -2286,6 +2286,10 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
 
+consolidated-events@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/consolidated-events/-/consolidated-events-1.0.1.tgz#70f475f4a5d6d20428e702da1b8870d9cc031a14"
+
 constants-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
@@ -7179,6 +7183,12 @@ react-toolbox:
     core-js "~2.4.0"
     normalize.css "~4.2.0"
     react-css-themr "~1.4.1"
+
+react-waypoint@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/react-waypoint/-/react-waypoint-5.0.3.tgz#2ae688dd02a6eda06ea6a23d8387bc272a34e317"
+  dependencies:
+    consolidated-events "^1.0.1"
 
 react@15.4.1, react@>=15.1.0, react@>=15.3.1, "react@^15.0.0 || ^16.0.0":
   version "15.4.1"
