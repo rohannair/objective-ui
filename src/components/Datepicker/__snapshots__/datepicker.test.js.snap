@@ -3,7 +3,7 @@ exports[`Test suite for Datepicker component Datepicker should exist 1`] = `
   active={false}
   composeTheme="deeply"
   locale="en"
-  minDate={2015-11-08T05:00:00.000Z}
+  minDate={2017-01-01T00:00:00.000Z}
   sundayFirstDayOfWeek={false}
   theme={
     Object {
