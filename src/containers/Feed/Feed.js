@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 
 import styles from './Feed.css'
 import dateformat from 'dateformat'
+import Waypoint from 'react-waypoint'
 
 // Components
 import LoadingBar from '../../components/LoadingBar'
@@ -26,12 +27,45 @@ class Feed extends Component {
 
     submit: PropTypes.func.isRequired,
     addReaction: PropTypes.func.isRequired,
-    deleteReaction: PropTypes.func.isRequired
+    deleteReaction: PropTypes.func.isRequired,
+    loadMoreSnapshots: PropTypes.func.isRequired
   }
 
   toggleReaction(isLiked, id) {
     if (isLiked) return this.props.deleteReaction(1, id)
     return this.props.addReaction(1, id)
+  }
+
+  _debounce = (func, wait, immediate) => {
+    let timeout
+    return () => {
+      let context = this, args = arguments
+      let later = () => {
+        timeout = null
+        if (!immediate) func.apply(context, args)
+      }
+      let callNow = immediate && !timeout
+      clearTimeout(timeout)
+      timeout = setTimeout(later, wait)
+      if (callNow) func.apply(context, args)
+    }
+  }
+
+  _loadMore = this._debounce(() => {
+    const {snapshots, _snapshotsCount} = this.props.data.viewer
+    if (snapshots.length === _snapshotsCount) return
+    this.props.loadMoreSnapshots()
+  }, 100)
+
+  _renderWaypoint = () => {
+    const {snapshots, _snapshotsCount} = this.props.data.viewer
+    if (!this.props.data.loading && snapshots.length !== _snapshotsCount) {
+      return (
+        <Waypoint
+          onEnter={this._loadMore}
+          threshold={0.5}/>
+      )
+    }
   }
 
   render() {
@@ -60,6 +94,13 @@ class Feed extends Component {
       )
     })
 
+    const snapshotsRemaining = () => {
+      const snapshotsToLoad = viewer._snapshotsCount - viewer.snapshots.length
+      if (viewer.snapshots.length < viewer._snapshotsCount) {
+        return <strong> Scroll to load more snapshots ({snapshotsToLoad} remaining)</strong>
+      }
+    }
+
     return (
       <div className={styles.Feed}>
         <PageHeader title="Feed" />
@@ -70,6 +111,8 @@ class Feed extends Component {
               submit={this._submit}
             />
               {snapshots}
+              {snapshotsRemaining()}
+              {this._renderWaypoint()}
           </div>
         </div>
       </div>
@@ -110,7 +153,7 @@ const withMutation = graphql(NEW_SNAPSHOT, {
             ...prev.viewer,
             snapshots: [
               mutationResult.data.addSnapshot,
-              ...prev.viewer.snapshots
+              ...prev.viewer.snapshots.slice(0, LIMIT_PER_PAGE - 1)
             ]
           }
         })
@@ -192,13 +235,13 @@ const withDeleteReactionMutation = graphql(SnapshotFooter.mutations.deleteReacti
 })
 
 const GET_FEED_QUERY = gql`
-  query Feed {
+  query Feed ($first: Int, $offset: Int) {
     viewer {
       id
       img
       firstName
       lastName
-      snapshots {
+      snapshots (first: $first, offset: $offset) {
         id
         body
         img
@@ -213,15 +256,42 @@ const GET_FEED_QUERY = gql`
         id
         name
       }
+      _snapshotsCount
     }
   }
   ${SnapshotHeader.fragments.header}
   ${SnapshotFooter.fragments.footer}
 `
-
+const LIMIT_PER_PAGE = 25
 const withData = graphql(GET_FEED_QUERY, {
   options: ownProps => ({
+    variables: {
+      first: LIMIT_PER_PAGE,
+      offset: 0
+    },
     forceFetch: true
+  }),
+  props: ({ data, data: { fetchMore, viewer} }) => ({
+    data,
+    loadMoreSnapshots: () => fetchMore({
+      variables: {
+        offset: viewer.snapshots.length,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult.data) return prev
+        const moreSnaphots = fetchMoreResult.data.viewer.snapshots
+        return ({
+          ...prev,
+          viewer: {
+            ...prev.viewer,
+            snapshots: [
+              ...prev.viewer.snapshots,
+              ...moreSnaphots
+            ]
+          }
+        })
+      }
+    })
   })
 })
 
