@@ -10,9 +10,9 @@ const ThemedDatepicker = p => (
   <DatePicker
     theme={theme}
     label={ p.label }
-    minDate={min_datetime}
+    minDate={ min_datetime }
     onChange={ p.onChange }
-    value={ p.value }
+    defaultValue={ p.defaultValue }
   />
 )
 

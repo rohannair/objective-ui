@@ -5,9 +5,11 @@ import { Link } from 'react-router'
 import classes from './CoreLayout.css'
 
 import Header from '../../components/Global/Header'
+import Modal from '../../components/Modal'
 
 const CoreLayout = ({ children }) =>
   <div className={classes.mainContainer}>
+    <Modal />
     <header className={classes.header}>
       <Header />
 

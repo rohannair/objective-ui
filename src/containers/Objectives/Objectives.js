@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import styles from './Objectives.css'
 
 import { compose, graphql } from 'react-apollo'
+import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
 
@@ -11,11 +12,12 @@ import ObjectiveHeader from '../../components/ObjectiveHeader'
 import ObjectivesSidebar from '../../components/ObjectivesSidebar'
 import DatePicker from '../../components/Datepicker'
 
+import Button from '../../components/Button'
+import Modal from '../../components/Modal'
+
 import Dialog from 'react-toolbox/lib/dialog'
 import TextInput from '../../components/Forms/TextInput'
 import { StyledButton } from '../../components/Button/Button'
-
-
 
 class Objectives extends Component {
   static propTypes = {
@@ -27,22 +29,26 @@ class Objectives extends Component {
     editObjective: PropTypes.func.isRequired
   };
 
-  defaultObjectiveState = {
-    id: '',
-    name: '',
-    endsAt: ''
-  }
+  constructor(props) {
+    super(props)
 
-  state = {
-    addingNewObjective: false,
-    editingObjective: false,
-    settingOwner: false,
-    addingCollaborators: false,
-    objective: this.defaultObjectiveState
+    this.defaultObjectiveState = {
+      id: '',
+      name: '',
+      endsAt: Date.now()
+    }
+
+    this.state = {
+      objective: this.defaultObjectiveState
+    }
+
+    this.modalAction = {
+      type: 'SHOW_MODAL',
+    }
   }
 
   render() {
-    const { data: { viewer, loading } } = this.props
+    const { dispatch, data: { viewer, loading } } = this.props
 
     if (loading && !viewer) {
       return <LoadingBar />
@@ -67,87 +73,11 @@ class Objectives extends Component {
         <ObjectivesSidebar>
           <h3>{viewer.company.name}</h3>
           { objective }
-
-          {
-            /**
-             *  Creating Modal here
-             */
-          }
-
-          <Dialog
-            active={this.state.addingNewObjective}
-            onEscKeyDown={this._handleObjectiveToggle.bind(this, 'addingNewObjective')}
-            onOverlayClick={this._handleObjectiveToggle.bind(this, 'addingNewObjective')}
-            title='Create New Objective'
-            actions={[
-              { label: 'Cancel', onClick: this._handleObjectiveToggle.bind(this, 'addingNewObjective') },
-              { label: 'Create', onClick: this._createNewObjective }
-            ]}
-          >
-            <TextInput
-              type="text"
-              label="Objective name"
-              onChange={this._handleObjectiveChange.bind(this, 'name')}
-              value={this.state.objective.name}
-            />
-            <DatePicker
-              label='End date'
-              onChange={this._handleObjectiveChange.bind(this, 'endsAt')}
-              value={this.state.objective.endsAt}
-            />
-          </Dialog>
-
-          {
-            /**
-             *  Editing Modal here
-             */
-          }
-          <Dialog
-            active={this.state.editingObjective}
-            onEscKeyDown={this._handleObjectiveToggle.bind(this, 'editingObjective')}
-            onOverlayClick={this._handleObjectiveToggle.bind(this, 'editingObjective')}
-            title='Edit Objective'
-            actions={[
-              { label: 'Cancel', onClick: this._handleObjectiveToggle.bind(this, 'editingObjective') },
-              { label: 'Save', onClick: this._editObjective }
-            ]}
-          >
-            <TextInput
-              type="text"
-              label="Objective name"
-              onChange={this._handleObjectiveChange.bind(this, 'name')}
-              value={this.state.objective.name}
-            />
-            <DatePicker
-              label='End date'
-              onChange={this._handleObjectiveChange.bind(this, 'endsAt')}
-              value={this.state.objective.endsAt}
-            />
-          </Dialog>
-
-          {
-            /**
-             *  SetOwner Modal here
-             */
-          }
-          <Dialog
-            active={this.state.settingOwner}
-            onEscKeyDown={this._handleObjectiveToggle.bind(this, 'settingOwner')}
-            onOverlayClick={this._handleObjectiveToggle.bind(this, 'settingOwner')}
-            title='This Objective needs an Owner!'
-            actions={[
-              { label: 'Cancel', onClick: this._setOwner },
-              { label: 'Claim Ownership', onClick: this._claimOwnership }
-            ]}
-          >
-            <p>It seems like this Objective was created without an owner. Would you like to set yourself as the owner?</p>
-          </Dialog>
-
           <div className={styles.buttonContainer}>
             <StyledButton
               secondary
               squared
-              onClick={this._handleObjectiveToggle.bind(this, 'addingNewObjective')}
+              onClick={() => dispatch(this._showNewObjectiveModal())}
             >+</StyledButton>
           </div>
         </ObjectivesSidebar>
@@ -155,8 +85,7 @@ class Objectives extends Component {
         <div className={styles.objectivelist}>
           <ObjectiveHeader
             objective={viewer.objective}
-            edit={this._handleObjectiveToggle.bind(this, '')}
-            setOwner={this._setOwner}
+            setOwner={() => dispatch(this._showSetOwnerModal())}
             addingCollaborators={this._toggleCollaboratorsModal}
             menuLeft
             isOwner={
@@ -167,7 +96,7 @@ class Objectives extends Component {
             dropdownOptions={[
               { name: 'Edit', onClick: e => {
                 e.preventDefault()
-                this._handleEditObjective(viewer.objective)
+                this._showEditObjectiveModal(viewer.objective)
               }, icon: 'edit' }
             ]}
           />
@@ -190,15 +119,9 @@ class Objectives extends Component {
         owner: viewer.id
       }
     })
-
-    this.setState(prevState => ({
-      settingOwner: !prevState.settingOwner
-    }))
   }
 
   _createNewObjective = () => {
-    this._handleObjectiveToggle('addingNewObjective')
-
     const { objective } = this.state
     this.props.createObjective({ objective })
 
@@ -208,8 +131,6 @@ class Objectives extends Component {
   }
 
   _editObjective = () => {
-    this._handleObjectiveToggle('editingObjective')
-
     const { objective } = this.state
     this.props.editObjective({ objective })
 
@@ -222,31 +143,13 @@ class Objectives extends Component {
     this.props.data.refetch({ id })
   }
 
-  _handleEditObjective = ({id, name, endsAt}) => {
-    this.setState({
-      editingObjective: true,
+  _handleObjectiveChange = (name) => val => {
+    this.setState(prev => ({
       objective: {
-        id,
-        name,
-        endsAt
-      }
-    })
-  }
-
-  _handleObjectiveToggle = (name, e) => {
-    e && e.preventDefault()
-    this.setState({
-      [name]: !this.state[name]
-    })
-  }
-
-  _handleObjectiveChange = (name, val) => {
-    this.setState({
-      objective: {
-        ...this.state.objective,
+        ...prev.objective,
         [name]: val
       }
-    })
+    }))
   }
 
   _setOwner = () => {
@@ -255,11 +158,41 @@ class Objectives extends Component {
     }))
   }
 
-  _toggleCollaboratorsModal = () => {
-    this.setState(prev => ({
-      addingCollaborators: !prev.addingCollaborators
-    }))
-  }
+
+  _showNewObjectiveModal = () => ({
+    ...this.modalAction,
+    title: 'Create New Objective',
+    action: {
+      label: 'Create Objective',
+      event: this._createNewObjective
+    },
+    modalComponent: (<div>
+      <TextInput
+        label="Objective name"
+        onChange={this._handleObjectiveChange('name')}
+        defaultValue={this.state.objective.name}
+      />
+      <DatePicker
+        label='End date'
+        onChange={this._handleObjectiveChange('endsAt')}
+        defaultValue={this.state.objective.endsAt}
+      />
+    </div>)
+  })
+
+  _showEditObjectiveModal = ({id, name, endsAt}) => this.setState({
+    objective: { id, name, endsAt }
+  }, () => this.props.dispatch(this._showNewObjectiveModal()))
+
+  _showSetOwnerModal = () => ({
+    ...this.modalAction,
+    title: 'This Objective need an Owner!',
+    action: {
+      label: 'Claim Ownership',
+      event: this._claimOwnership
+    },
+    modalComponent: (<p>It seems like this Objective was created without an owner. Would you like to set yourself as the owner?</p>)
+  })
 }
 
 const ADD_COLLABORATOR = gql`
@@ -407,6 +340,7 @@ const withData = graphql(GET_OBJECTIVELIST_QUERY, {
 export default compose(
   withEditMutation,
   withCreateMutation,
-  withData
-)(Objectives)
+  withData,
+  connect(state => state.global)
+)((Objectives))
 
