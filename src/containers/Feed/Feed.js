@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import styles from './Feed.css'
 import dateformat from 'dateformat'
 import Waypoint from 'react-waypoint'
+import debounce from 'lodash/debounce'
 
 // Components
 import LoadingBar from '../../components/LoadingBar'
@@ -36,22 +37,7 @@ class Feed extends Component {
     return this.props.addReaction(1, id)
   }
 
-  _debounce = (func, wait, immediate) => {
-    let timeout
-    return () => {
-      let context = this, args = arguments
-      let later = () => {
-        timeout = null
-        if (!immediate) func.apply(context, args)
-      }
-      let callNow = immediate && !timeout
-      clearTimeout(timeout)
-      timeout = setTimeout(later, wait)
-      if (callNow) func.apply(context, args)
-    }
-  }
-
-  _loadMore = this._debounce(() => {
+  _loadMore = debounce(() => {
     const {snapshots, _snapshotsCount} = this.props.data.viewer
     if (snapshots.length === _snapshotsCount) return
     this.props.loadMoreSnapshots()
@@ -59,13 +45,13 @@ class Feed extends Component {
 
   _renderWaypoint = () => {
     const {snapshots, _snapshotsCount} = this.props.data.viewer
-    if (!this.props.data.loading && snapshots.length !== _snapshotsCount) {
-      return (
-        <Waypoint
-          onEnter={this._loadMore}
-          threshold={0.5}/>
-      )
-    }
+    if (this.props.data.loading && snapshots.length === _snapshotsCount) return
+    return (
+      <Waypoint
+        onEnter={this._loadMore}
+        threshold={0.5}
+      />
+    )
   }
 
   render() {
@@ -94,13 +80,6 @@ class Feed extends Component {
       )
     })
 
-    const snapshotsRemaining = () => {
-      const snapshotsToLoad = viewer._snapshotsCount - viewer.snapshots.length
-      if (viewer.snapshots.length < viewer._snapshotsCount) {
-        return <strong> Scroll to load more snapshots ({snapshotsToLoad} remaining)</strong>
-      }
-    }
-
     return (
       <div className={styles.Feed}>
         <PageHeader title="Feed" />
@@ -111,7 +90,6 @@ class Feed extends Component {
               submit={this._submit}
             />
               {snapshots}
-              {snapshotsRemaining()}
               {this._renderWaypoint()}
           </div>
         </div>
