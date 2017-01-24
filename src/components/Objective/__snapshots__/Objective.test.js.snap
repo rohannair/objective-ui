@@ -1,6 +1,0 @@
-exports[`Test suite for Objective component Objective should exist 1`] = `
-<div>
-  <Button
-    primary={true} />
-</div>
-`;
