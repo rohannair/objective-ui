@@ -8,15 +8,14 @@ import update from 'immutability-helper'
 import LoadingBar from '../../components/LoadingBar'
 import ObjectiveFeed from '../../components/ObjectiveFeed'
 import ObjectiveHeader from '../../components/ObjectiveHeader'
-import ObjectiveListSidebar from '../../components/ObjectiveListSidebar'
+import ObjectivesSidebar from '../../components/ObjectivesSidebar'
+import DatePicker from '../../components/Datepicker'
 
-import DatePicker from 'react-toolbox/lib/date_picker'
 import Dialog from 'react-toolbox/lib/dialog'
 import TextInput from '../../components/Forms/TextInput'
 import { StyledButton } from '../../components/Button/Button'
 
-const datetime = new Date(2015, 10, 16)
-const min_datetime = new Date(new Date(datetime).setDate(8))
+
 
 class Objectives extends Component {
   static propTypes = {
@@ -65,7 +64,7 @@ class Objectives extends Component {
 
     return (
       <div className={styles.mainContainer}>
-        <ObjectiveListSidebar>
+        <ObjectivesSidebar>
           <h3>{viewer.company.name}</h3>
           { objective }
 
@@ -93,7 +92,6 @@ class Objectives extends Component {
             />
             <DatePicker
               label='End date'
-              minDate={min_datetime}
               onChange={this._handleObjectiveChange.bind(this, 'endsAt')}
               value={this.state.objective.endsAt}
             />
@@ -122,7 +120,6 @@ class Objectives extends Component {
             />
             <DatePicker
               label='End date'
-              minDate={min_datetime}
               onChange={this._handleObjectiveChange.bind(this, 'endsAt')}
               value={this.state.objective.endsAt}
             />
@@ -153,7 +150,7 @@ class Objectives extends Component {
               onClick={this._handleObjectiveToggle.bind(this, 'addingNewObjective')}
             >+</StyledButton>
           </div>
-        </ObjectiveListSidebar>
+        </ObjectivesSidebar>
 
         <div className={styles.objectivelist}>
           <ObjectiveHeader
