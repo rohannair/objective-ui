@@ -16,14 +16,4 @@ export default styled.div`
     padding: 0 20px 20px;
     border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
   }
-
-  .item {
-    cursor: pointer;
-    font-size: 0.85em;
-    padding: 10px 20px;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.15);
-    }
-  }
 `

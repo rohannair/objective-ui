@@ -4,8 +4,6 @@ import { Link } from 'react-router'
 
 import styles from './ObjectiveFeed.css'
 
-// import Snapshot from '../../components/Snapshot'
-
 import Alert from '../Alert'
 import SnapshotContainer from '../SnapshotContainer'
 import SnapshotHeader from '../SnapshotHeader'
@@ -33,11 +31,10 @@ const ObjectiveFeed = p => {
     )
   })
 
-  const hasNoOwner = !p.owner
   return (
     <div className={styles.objectivefeed}>
       {
-        hasNoOwner && (
+        !p.owner && (
           <Alert type="warn">This objective has no owner. To claim it as your own, click the <strong>?</strong> above</Alert>
         )
       }

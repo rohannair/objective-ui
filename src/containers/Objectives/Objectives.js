@@ -9,7 +9,9 @@ import update from 'immutability-helper'
 import LoadingBar from '../../components/LoadingBar'
 import ObjectiveFeed from '../../components/ObjectiveFeed'
 import ObjectiveHeader from '../../components/ObjectiveHeader'
+import ObjectiveCollaboratorBar from '../../components/ObjectiveCollaboratorBar'
 import ObjectivesSidebar from '../../components/ObjectivesSidebar'
+import ObjectiveSidebarList from '../../components/ObjectiveSidebarList'
 import DatePicker from '../../components/Datepicker'
 
 import Button from '../../components/Button'
@@ -53,25 +55,11 @@ class Objectives extends Component {
       return <LoadingBar />
     }
 
-    const objectiveFeed = viewer.objective
-    ? <ObjectiveFeed {...viewer.objective} viewer={viewer} />
-    : <div>Select an Objective</div>
-
-    const objective = viewer.objectives.map(o => (
-      <div
-        key={o.id}
-        className="item"
-        onClick={() => this._getObjective(o.id) }
-      >
-        { o.name }
-      </div>
-    ))
-
     return (
       <div className={styles.mainContainer}>
         <ObjectivesSidebar>
           <h3>{viewer.company.name}</h3>
-          { objective }
+          <ObjectiveSidebarList list={viewer.objectives} getObjective={this._getObjective}/>
           <div className={styles.buttonContainer}>
             <StyledButton
               secondary
@@ -83,27 +71,22 @@ class Objectives extends Component {
 
         <div className={styles.objectivelist}>
           <ObjectiveHeader
+            menuLeft
+            objective={viewer.objective}
+            dropdownOptions={[
+              { name: 'Edit', onClick: e => this._showEditObjectiveModal(viewer.objective), icon: 'edit' }
+            ]}
+          />
+          <ObjectiveCollaboratorBar
             objective={viewer.objective}
             setOwner={() => dispatch(this._showSetOwnerModal())}
+            addCollaborator={() => dispatch(this._showAddCollaboratorModal())}
             addingCollaborators={this._toggleCollaboratorsModal}
-            menuLeft
-            isOwner={
-              viewer.objective
-                && viewer.objective.owner
-                && viewer.objective.owner.id === viewer.id
-            }
-            dropdownOptions={[
-              { name: 'Edit', onClick: e => {
-                e.preventDefault()
-                this._showEditObjectiveModal(viewer.objective)
-              }, icon: 'edit' }
-            ]}
+            isOwner={viewer.objective && viewer.objective.owner && viewer.objective.owner.id === viewer.id}
           />
 
           <div className={styles.body}>
-            <div className={styles.mainWindow}>
-              { objectiveFeed }
-            </div>
+            { viewer.objective && <ObjectiveFeed {...viewer.objective} viewer={viewer} /> }
           </div>
         </div>
       </div>
@@ -157,6 +140,17 @@ class Objectives extends Component {
     }))
   }
 
+  _showAddCollaboratorModal = () => ({
+    ...this.modalAction,
+    title: 'Add Collaborator',
+    action: {
+      label: 'Add Collaborator',
+      event: console.warn
+    },
+    modalComponent: (
+      <div>Hello world!</div>
+    )
+  })
 
   _showNewObjectiveModal = () => ({
     ...this.modalAction,
