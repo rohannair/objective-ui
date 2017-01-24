@@ -13,7 +13,6 @@ import ObjectivesSidebar from '../../components/ObjectivesSidebar'
 import DatePicker from '../../components/Datepicker'
 
 import Button from '../../components/Button'
-import Modal from '../../components/Modal'
 
 import Dialog from 'react-toolbox/lib/dialog'
 import TextInput from '../../components/Forms/TextInput'
