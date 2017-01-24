@@ -5,6 +5,8 @@ import styles from './ObjectiveHeader.css'
 import Avatar from 'react-toolbox/lib/avatar'
 import dateformat from 'dateformat'
 
+import Tooltip from 'react-aria-tooltip'
+
 const ObjectiveHeader = p => {
   if (!p.objective) return null
 
@@ -24,7 +26,17 @@ const ObjectiveHeader = p => {
 
   const ownerAvatar = p.objective.owner
   ? (<Avatar className={styles.ownerAvatar} image={p.objective.owner.img} cover />)
-  : (<Avatar className={styles.noOwnerAvatar} title="?" onClick={p.setOwner} />)
+  : (
+      <Tooltip message="Claim ownership" eventType="hover" direction="bottom">
+        <Avatar className={styles.noOwnerAvatar} title="?" onClick={p.setOwner} />
+      </Tooltip>
+    )
+
+  const addMore = (
+    <Tooltip message="Add Collaborators" eventType="hover" direction="bottom">
+      <Avatar className={styles.addCollaboratorAvatar} title="+" />
+    </Tooltip>
+  )
 
   return (
     <div className={styles.objectiveHeader}>
@@ -38,8 +50,9 @@ const ObjectiveHeader = p => {
       </div>
 
       <div className={styles.contributorBar}>
-        Contributors:
+        Owner:
         { ownerAvatar }
+        Collaborators:
         {
           p.collaborators && p.collaborators.map(u => (
             <Avatar key={u.id} className={styles.avatar}>
@@ -47,6 +60,7 @@ const ObjectiveHeader = p => {
             </Avatar>
           ))
         }
+        { addMore }
       </div>
     </div>
   )

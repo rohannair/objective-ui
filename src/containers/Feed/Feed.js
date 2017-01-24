@@ -221,7 +221,7 @@ const GET_FEED_QUERY = gql`
 
 const withData = graphql(GET_FEED_QUERY, {
   options: ownProps => ({
-    forceFetch: true
+    // forceFetch: true
   })
 })
 

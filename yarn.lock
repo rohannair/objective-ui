@@ -7024,6 +7024,12 @@ react-apollo:
     lodash.pick "^4.4.0"
     object-assign "^4.0.1"
 
+react-aria-tooltip@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-aria-tooltip/-/react-aria-tooltip-1.1.1.tgz#82651e5415e17655ddcd25d07a484ad851fc7b4a"
+  dependencies:
+    styled-components "^1.0.10"
+
 react-css-themr@~1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/react-css-themr/-/react-css-themr-1.4.1.tgz#26fa63fe0a8f7343b019f088f88475ca89da2d5a"
@@ -8055,7 +8061,7 @@ style-search@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/style-search/-/style-search-0.1.0.tgz#7958c793e47e32e07d2b5cafe5c0bf8e12e77902"
 
-styled-components@1.2.1:
+styled-components@1.2.1, styled-components@^1.0.10:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-1.2.1.tgz#5884267dd9c6a8199d4abd3e0714afb973772b42"
   dependencies:
