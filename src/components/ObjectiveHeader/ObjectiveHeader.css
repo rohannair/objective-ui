@@ -2,24 +2,11 @@
 
 .objectiveHeader {
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   background-color: #fff;
   align-items: baseline;
   padding: 0 30px;
-}
-
-.contributorHeader,
-.contributorBar {
-  display: flex;
-  width: 100%;
-}
-
-.contributorHeader {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: baseline;
   height: 60px;
   line-height: 60px;
 
@@ -34,40 +21,7 @@
 
 .meta {
   margin-left: auto;
-}
-
-.contributorBar {
-  align-items: center;
-  line-height: 1;
-  border-top: 1px solid #e1e1e1;
-  padding: 10px 0;
-  font-size: 0.875rem;
-
-}
-
-.avatar,
-.ownerAvatar,
-.noOwnerAvatar,
-.addCollaboratorAvatar {
-  height: 24px;
-  margin: 0 10px;
-}
-
-.ownerAvatar {
-  border: 2px $primary solid;
-}
-
-.noOwnerAvatar {
-  line-height: 1;
-  font-weight: bold;
-}
-
-.addCollaboratorAvatar.addCollaboratorAvatar {
-  line-height: 1;
-  cursor: pointer;
-  background-color: #fff;
-  border: 1px dashed $primary;
-  color: $primary;
+  font-size: 0.85em;
 }
 
 .moreMenu {
@@ -105,7 +59,7 @@
     }
 
     &:hover {
-      color: $primary
+      color: $primary;
     }
   }
 

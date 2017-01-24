@@ -9,14 +9,16 @@ import update from 'immutability-helper'
 import LoadingBar from '../../components/LoadingBar'
 import ObjectiveFeed from '../../components/ObjectiveFeed'
 import ObjectiveHeader from '../../components/ObjectiveHeader'
+import ObjectiveCollaboratorBar from '../../components/ObjectiveCollaboratorBar'
 import ObjectivesSidebar from '../../components/ObjectivesSidebar'
-import DatePicker from '../../components/Datepicker'
+import ObjectiveSidebarList from '../../components/ObjectiveSidebarList'
+
 
 import Button from '../../components/Button'
 
-import Dialog from 'react-toolbox/lib/dialog'
-import TextInput from '../../components/Forms/TextInput'
 import { StyledButton } from '../../components/Button/Button'
+
+import { ObjectiveChangeModal, SetOwnerModal } from './Modals'
 
 class Objectives extends Component {
   static propTypes = {
@@ -37,13 +39,8 @@ class Objectives extends Component {
       endsAt: Date.now()
     }
 
-    this.state = {
-      objective: this.defaultObjectiveState
-    }
-
-    this.modalAction = {
-      type: 'SHOW_MODAL',
-    }
+    this.state = { objective: this.defaultObjectiveState }
+    this.modalAction = { type: 'SHOW_MODAL' }
   }
 
   render() {
@@ -53,57 +50,37 @@ class Objectives extends Component {
       return <LoadingBar />
     }
 
-    const objectiveFeed = viewer.objective
-    ? <ObjectiveFeed {...viewer.objective} viewer={viewer} />
-    : <div>Select an Objective</div>
-
-    const objective = viewer.objectives.map(o => (
-      <div
-        key={o.id}
-        className="item"
-        onClick={() => this._getObjective(o.id) }
-      >
-        { o.name }
-      </div>
-    ))
-
     return (
       <div className={styles.mainContainer}>
         <ObjectivesSidebar>
           <h3>{viewer.company.name}</h3>
-          { objective }
+          <ObjectiveSidebarList list={viewer.objectives} getObjective={this._getObjective}/>
           <div className={styles.buttonContainer}>
             <StyledButton
               secondary
               squared
-              onClick={() => dispatch(this._showNewObjectiveModal())}
+              onClick={this._showNewObjectiveModal}
             >+</StyledButton>
           </div>
         </ObjectivesSidebar>
 
         <div className={styles.objectivelist}>
           <ObjectiveHeader
-            objective={viewer.objective}
-            setOwner={() => dispatch(this._showSetOwnerModal())}
-            addingCollaborators={this._toggleCollaboratorsModal}
             menuLeft
-            isOwner={
-              viewer.objective
-                && viewer.objective.owner
-                && viewer.objective.owner.id === viewer.id
-            }
+            objective={viewer.objective}
             dropdownOptions={[
-              { name: 'Edit', onClick: e => {
-                e.preventDefault()
-                this._showEditObjectiveModal(viewer.objective)
-              }, icon: 'edit' }
+              { name: 'Edit', onClick: e => this._showEditObjectiveModal(viewer.objective), icon: 'edit' }
             ]}
+          />
+          <ObjectiveCollaboratorBar
+            objective={viewer.objective}
+            setOwner={this._showSetOwnerModal}
+            addCollaborator={ this._showAddCollaboratorModal }
+            isOwner={viewer.objective && viewer.objective.owner && viewer.objective.owner.id === viewer.id}
           />
 
           <div className={styles.body}>
-            <div className={styles.mainWindow}>
-              { objectiveFeed }
-            </div>
+            { viewer.objective && <ObjectiveFeed {...viewer.objective} viewer={viewer} /> }
           </div>
         </div>
       </div>
@@ -157,41 +134,57 @@ class Objectives extends Component {
     }))
   }
 
-
-  _showNewObjectiveModal = () => ({
+  _showModal = (title, label, event, modalComponent) => ({
     ...this.modalAction,
-    title: 'Create New Objective',
-    action: {
-      label: 'Create Objective',
-      event: this._createNewObjective
-    },
-    modalComponent: (<div>
-      <TextInput
-        label="Objective name"
-        onChange={this._handleObjectiveChange('name')}
-        defaultValue={this.state.objective.name}
-      />
-      <DatePicker
-        label='End date'
-        onChange={this._handleObjectiveChange('endsAt')}
-        defaultValue={this.state.objective.endsAt}
-      />
-    </div>)
+    title,
+    action: { label, event },
+    modalComponent
   })
+
+  _showAddCollaboratorModal = () =>
+    this.props.dispatch(
+      this._showModal(
+        'Add Collaborator',
+        'Add Collaborator',
+        console.warn,
+
+      )
+    )
+
+  _showNewObjectiveModal = () => this.props.dispatch(
+    this._showModal(
+      'Create New Objective',
+      'Create Objective',
+      this._createNewObjective,
+      <ObjectiveChangeModal
+        onChange={this._handleObjectiveChange}
+        defaultName={this.state.objective.name}
+        defaultEndsAt={this.state.objective.endsAt}
+      />
+    ))
 
   _showEditObjectiveModal = ({id, name, endsAt}) => this.setState({
     objective: { id, name, endsAt }
-  }, () => this.props.dispatch(this._showNewObjectiveModal()))
+  }, () => this.props.dispatch(
+    this._showModal(
+      'Edit Objective',
+      'Save Objective',
+      this._editObjective,
+      <ObjectiveChangeModal
+        onChange={this._handleObjectiveChange}
+        defaultName={this.state.objective.name}
+        defaultEndsAt={this.state.objective.endsAt}
+      />
+    )
+  ))
 
-  _showSetOwnerModal = () => ({
-    ...this.modalAction,
-    title: 'This Objective need an Owner!',
-    action: {
-      label: 'Claim Ownership',
-      event: this._claimOwnership
-    },
-    modalComponent: (<p>It seems like this Objective was created without an owner. Would you like to set yourself as the owner?</p>)
-  })
+  _showSetOwnerModal = () =>
+    this.props.dispatch(this._showModal(
+      'This Objective need an Owner!',
+      'Claim Ownership',
+      this._claimOwnership,
+      <SetOwnerModal />
+  ))
 }
 
 const ADD_COLLABORATOR = gql`
@@ -341,5 +334,5 @@ export default compose(
   withCreateMutation,
   withData,
   connect(state => state.global)
-)((Objectives))
+)(Objectives)
 
