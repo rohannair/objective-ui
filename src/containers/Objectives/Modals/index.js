@@ -1,21 +1,22 @@
 import React, { Component, PropTypes } from 'react'
 
-import Dialog from 'react-toolbox/lib/dialog'
 import TextInput from '../../../components/Forms/TextInput'
+import DatePicker from '../../../components/Datepicker'
 
 export const ObjectiveChangeModal = ({
   defaultName,
-  defaultEndsAt
+  defaultEndsAt,
+  onChange
 }) => (
   <div>
     <TextInput
       label="Objective name"
-      onChange={this._handleObjectiveChange('name')}
+      onChange={onChange('name')}
       defaultValue={defaultName}
     />
     <DatePicker
       label='End date'
-      onChange={this._handleObjectiveChange('endsAt')}
+      onChange={onChange('endsAt')}
       defaultValue={defaultEndsAt}
     />
   </div>

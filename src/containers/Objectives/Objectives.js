@@ -12,7 +12,7 @@ import ObjectiveHeader from '../../components/ObjectiveHeader'
 import ObjectiveCollaboratorBar from '../../components/ObjectiveCollaboratorBar'
 import ObjectivesSidebar from '../../components/ObjectivesSidebar'
 import ObjectiveSidebarList from '../../components/ObjectiveSidebarList'
-import DatePicker from '../../components/Datepicker'
+
 
 import Button from '../../components/Button'
 
@@ -157,6 +157,7 @@ class Objectives extends Component {
       'Create Objective',
       this._createNewObjective,
       <ObjectiveChangeModal
+        onChange={this._handleObjectiveChange}
         defaultName={this.state.objective.name}
         defaultEndsAt={this.state.objective.endsAt}
       />
@@ -170,6 +171,7 @@ class Objectives extends Component {
       'Save Objective',
       this._editObjective,
       <ObjectiveChangeModal
+        onChange={this._handleObjectiveChange}
         defaultName={this.state.objective.name}
         defaultEndsAt={this.state.objective.endsAt}
       />
