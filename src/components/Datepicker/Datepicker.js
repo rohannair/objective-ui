@@ -2,10 +2,11 @@ import DatePicker from 'react-toolbox/lib/date_picker'
 
 import React, { PropTypes } from 'react'
 import theme from './Datepicker.css'
+import { newDate } from '../../utils/dates'
 
 const ThemedDatepicker = ({
   label,
-  minDate = new Date('2017-01-01'),
+  minDate = newDate('2017-01-01'),
   onChange,
   defaultValue
 }) => (
@@ -14,7 +15,7 @@ const ThemedDatepicker = ({
     label={ label }
     minDate={ minDate || min_datetime }
     onChange={ onChange }
-    defaultValue={ defaultValue }
+    value={ defaultValue }
   />
 )
 

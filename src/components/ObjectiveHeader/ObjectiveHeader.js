@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import gql from 'graphql-tag'
 
 import styles from './ObjectiveHeader.css'
-import dateformat from 'dateformat'
+import { toLocalMonthDayYear } from '../../utils/dates'
 
 const ObjectiveHeader = p => {
   if (!p.objective) return null
@@ -26,7 +26,7 @@ const ObjectiveHeader = p => {
       { p.menuLeft && menu}
       <h3>{p.objective.name}</h3>
       <div className={styles.meta}>
-        Target end date: { dateformat(p.objective.endsAt, 'mmmm dd, yyyy') || 'N/A' }
+        Target end date: { toLocalMonthDayYear(p.objective.targetEndsAt) || 'N/A' }
       </div>
       { p.menuRight && menu}
     </div>
@@ -37,7 +37,7 @@ ObjectiveHeader.fragments = {
   objective: gql`
     fragment ObjectiveHeaderFragment on Objective {
       name
-      endsAt
+      targetEndsAt
       status
       owner {
         id
