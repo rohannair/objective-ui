@@ -15,7 +15,7 @@ const ThemedDatepicker = ({
     label={ label }
     minDate={ minDate || min_datetime }
     onChange={ onChange }
-    value={ defaultValue }
+    defaultValue={ defaultValue }
   />
 )
 

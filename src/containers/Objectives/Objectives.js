@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
-import { toTimestamp, timestampNow } from '../../utils/dates'
+import { timestamp } from '../../utils/dates'
 
 import LoadingBar from '../../components/LoadingBar'
 import ObjectiveFeed from '../../components/ObjectiveFeed'
@@ -37,7 +37,7 @@ class Objectives extends Component {
     this.defaultObjectiveState = {
       id: '',
       name: '',
-      targetEndsAt: timestampNow()
+      endsAt: timestamp()
     }
 
     this.state = { objective: this.defaultObjectiveState }
@@ -121,14 +121,10 @@ class Objectives extends Component {
   }
 
   _handleObjectiveChange = (name) => val => {
-    let sortedVal = val
-    if (name === 'targetEndsAt') {
-      sortedVal = toTimestamp(val)
-    }
     this.setState(prev => ({
       objective: {
         ...prev.objective,
-        [name]: sortedVal
+        [name]: name === 'endsAt' ? timestamp(val) : val
       }
     }))
   }
@@ -163,12 +159,12 @@ class Objectives extends Component {
       <ObjectiveChangeModal
         onChange={this._handleObjectiveChange}
         defaultName={this.state.objective.name}
-        defaultTargetEndsAt={this.state.objective.targetEndsAt}
+        defaultEndsAt={this.state.objective.endsAt}
       />
     ))
 
-  _showEditObjectiveModal = ({id, name, targetEndsAt}) => this.setState({
-    objective: { id, name, targetEndsAt }
+  _showEditObjectiveModal = ({id, name, endsAt}) => this.setState({
+    objective: { id, name, endsAt }
   }, () => this.props.dispatch(
     this._showModal(
       'Edit Objective',
@@ -177,7 +173,7 @@ class Objectives extends Component {
       <ObjectiveChangeModal
         onChange={this._handleObjectiveChange}
         defaultName={this.state.objective.name}
-        defaultTargetEndsAt={this.state.objective.targetEndsAt}
+        defaultEndsAt={this.state.objective.endsAt}
       />
     )
   ))
@@ -230,15 +226,15 @@ const NEW_OBJECTIVE = gql`
 
 const withEditMutation = graphql(EDIT_OBJECTIVE, {
   props: ({ mutate }) => ({
-    editObjective: ({ objective: { id, name, targetEndsAt, owner }}) => mutate ({
-      variables: { id, name, targetEndsAt, owner },
+    editObjective: ({ objective: { id, name, endsAt, owner }}) => mutate ({
+      variables: { id, name, endsAt, owner },
       optimisticResponse: {
         __typename: 'Mutation',
         editObjective: {
           __typename: 'Objective',
           id,
           name,
-          targetEndsAt,
+          endsAt,
           status: 'draft',
           owner: {
             id: owner
@@ -269,14 +265,14 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
 
 const withCreateMutation = graphql(NEW_OBJECTIVE, {
   props: ({ mutate }) => ({
-    createObjective: ({ objective: { name, targetEndsAt }}) => mutate ({
-      variables: { name, targetEndsAt },
+    createObjective: ({ objective: { name, endsAt }}) => mutate ({
+      variables: { name, endsAt },
       optimisticResponse: {
         __typename: 'Mutation',
         createObjective: {
           __typename: 'Objective',
           id: Math.random().toString(16).slice(2),
-          targetEndsAt,
+          endsAt,
           name,
           status: 'draft'
         }
