@@ -204,7 +204,6 @@ const EDIT_OBJECTIVE = gql`
       id
       name
       status
-      endsAt: targetEndsAt
       owner {
         id
         img
