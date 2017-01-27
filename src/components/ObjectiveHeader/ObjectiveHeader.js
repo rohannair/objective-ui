@@ -36,7 +36,7 @@ ObjectiveHeader.fragments = {
   objective: gql`
     fragment ObjectiveHeaderFragment on Objective {
       name
-      endsAt: targetEndsAt
+      endsAt
       status
       owner {
         id
