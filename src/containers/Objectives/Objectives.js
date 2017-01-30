@@ -20,6 +20,7 @@ import Button from '../../components/Button'
 import { StyledButton } from '../../components/Button/Button'
 
 import { ObjectiveChangeModal, SetOwnerModal } from './Modals'
+import AddCollaboratorModal from './Modals/AddCollaboratorModal'
 
 class Objectives extends Component {
   static propTypes = {
@@ -40,7 +41,11 @@ class Objectives extends Component {
       endsAt: timestamp()
     }
 
-    this.state = { objective: this.defaultObjectiveState }
+    this.defaultAddCollaboratorState = {
+      q: ''
+    }
+
+    this.state = { objective: this.defaultObjectiveState, addCollaborator: this.defaultAddCollaboratorState }
     this.modalAction = { type: 'SHOW_MODAL' }
   }
 
@@ -129,6 +134,15 @@ class Objectives extends Component {
     }))
   }
 
+  _handleAddCollaboratorChange = (name) => val => {
+    this.setState(prev => ({
+      addCollaborator: {
+        ...prev.addCollaborator,
+        [name]: val
+      }
+    }))
+  }
+
   _setOwner = () => {
     this.setState(prev => ({
       settingOwner: !prev.settingOwner
@@ -147,7 +161,10 @@ class Objectives extends Component {
       this._showModal(
         'Add Collaborator',
         'Add Collaborator',
-        console.warn,
+        undefined,
+        <AddCollaboratorModal
+          onChange={this._handleAddCollaboratorChange}
+        />
       )
     )
 
@@ -336,4 +353,3 @@ export default compose(
   withData,
   connect(state => state.global)
 )(Objectives)
-
