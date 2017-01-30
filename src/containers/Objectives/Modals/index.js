@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import TextInput from '../../../components/Forms/TextInput'
 import DatePicker from '../../../components/Datepicker'
+import { newDate } from '../../../utils/dates'
 
 export const ObjectiveChangeModal = ({
   defaultName,
@@ -17,7 +18,7 @@ export const ObjectiveChangeModal = ({
     <DatePicker
       label='End date'
       onChange={onChange('endsAt')}
-      defaultValue={defaultEndsAt}
+      defaultValue={newDate(defaultEndsAt)}
     />
   </div>
 )

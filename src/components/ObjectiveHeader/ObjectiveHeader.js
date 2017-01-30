@@ -2,11 +2,10 @@ import React, { PropTypes } from 'react'
 import gql from 'graphql-tag'
 
 import styles from './ObjectiveHeader.css'
-import dateformat from 'dateformat'
+import { toLocalMonthDayYear } from '../../utils/dates'
 
 const ObjectiveHeader = p => {
   if (!p.objective) return null
-
   const menu = (
     <div className={styles.moreMenu}>
       <i className="zmdi zmdi-more-vert" />
@@ -26,7 +25,7 @@ const ObjectiveHeader = p => {
       { p.menuLeft && menu}
       <h3>{p.objective.name}</h3>
       <div className={styles.meta}>
-        Target end date: { dateformat(p.objective.endsAt, 'mmmm dd, yyyy') || 'N/A' }
+       Target end date: { toLocalMonthDayYear(p.objective.endsAt) || 'N/A' }
       </div>
       { p.menuRight && menu}
     </div>

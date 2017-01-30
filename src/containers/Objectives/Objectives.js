@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import { timestamp } from '../../utils/dates'
 
 import LoadingBar from '../../components/LoadingBar'
 import ObjectiveFeed from '../../components/ObjectiveFeed'
@@ -36,7 +37,7 @@ class Objectives extends Component {
     this.defaultObjectiveState = {
       id: '',
       name: '',
-      endsAt: Date.now()
+      endsAt: timestamp()
     }
 
     this.state = { objective: this.defaultObjectiveState }
@@ -123,7 +124,7 @@ class Objectives extends Component {
     this.setState(prev => ({
       objective: {
         ...prev.objective,
-        [name]: val
+        [name]: name === 'endsAt' ? timestamp(val) : val
       }
     }))
   }
@@ -147,7 +148,6 @@ class Objectives extends Component {
         'Add Collaborator',
         'Add Collaborator',
         console.warn,
-
       )
     )
 
@@ -204,6 +204,7 @@ const EDIT_OBJECTIVE = gql`
       id
       name
       status
+      endsAt
       owner {
         id
         img
@@ -234,7 +235,7 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
           __typename: 'Objective',
           id,
           name,
-          endsAt: endsAt,
+          endsAt,
           status: 'draft',
           owner: {
             id: owner
@@ -272,7 +273,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
         createObjective: {
           __typename: 'Objective',
           id: Math.random().toString(16).slice(2),
-          endsAt: endsAt,
+          endsAt,
           name,
           status: 'draft'
         }
