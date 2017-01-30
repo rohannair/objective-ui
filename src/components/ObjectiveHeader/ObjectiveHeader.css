@@ -11,6 +11,10 @@
   line-height: 60px;
 
   h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 1000px;
+    white-space: nowrap;
     font-weight: normal;
 
     strong {
