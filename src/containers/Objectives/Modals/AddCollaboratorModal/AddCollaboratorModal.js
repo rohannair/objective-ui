@@ -4,7 +4,8 @@ import AutocompleteDropDown from '../../../../components/Forms/AutocompleteDropD
 
 const AddCollaboratorModal = ({
   source,
-  onQueryChange
+  onQueryChange,
+  onChange
 }) => {
   const users = source.reduce((acc, val) => {
     acc[val.email] = `${val.email} (${val.firstName} ${val.lastName})`
@@ -13,11 +14,19 @@ const AddCollaboratorModal = ({
 
   console.log('users', users)
 
+  const handleOnChange = (val) => {
+    const user = source.find((v) => {
+      return val == v.email
+    })
+
+    onChange(user.id)
+  }
+
   return (
     <div>
       <AutocompleteDropDown
         label="Collaborator email"
-        onChange={(v) => console.log('onChange', v)}
+        onChange={handleOnChange}
         onQueryChange={(v) => onQueryChange(v)}
         source={users}
       />
