@@ -9,6 +9,10 @@ export default connect(state => state.modal)(({
   dispatch
 }) => {
   const close = () => dispatch({ type: 'CLOSE_MODAL' })
+  const save = () => {
+    action.event()
+    close()
+  }
   return (
     <Dialog
       active={!!modalComponent}
@@ -17,7 +21,7 @@ export default connect(state => state.modal)(({
       title={title}
       actions={[
         { label: 'Cancel', onClick: close },
-        { label: action.label, onClick: action.event, primary: true }
+        { label: action.label, onClick: save, primary: true }
       ]}
     >
       { modalComponent }
