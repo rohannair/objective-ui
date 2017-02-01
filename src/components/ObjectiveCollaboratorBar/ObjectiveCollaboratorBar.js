@@ -18,7 +18,7 @@ const ObjectiveCollaboratorBar = styled(({
        <Avatar className={'noOwnerAvatar'} title="?" onClick={setOwner} />
      </Tooltip>)
 
-  let filteredCollborators = objective.collaborators
+  let filteredCollborators = objective.collaborators && objective.collaborators.map(c => c.user)
 
   if (filteredCollborators && objective.owner) {
     filteredCollborators = filteredCollborators.filter(u => u.id != objective.owner.id)

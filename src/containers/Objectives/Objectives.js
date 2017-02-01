@@ -230,7 +230,12 @@ class Objectives extends Component {
 const ADD_COLLABORATOR = gql`
   mutation addCollaborator($objective: String!, $user: String!) {
     addCollaborator(objective: $objective, user: $user) {
-      id
+      user {
+        id
+        firstName
+        lastName
+        img
+      }
     }
   }
 `
@@ -350,25 +355,34 @@ const withAddCollaboratorMutation = graphql(ADD_COLLABORATOR, {
       variables: {
         objective: objectiveId,
         user: userId
-      }
-    }),
-    updateQueries: {
-      ObjectiveList: (prev, { mutationResult }) => {
-        return ({
-          ...prev,
-          viewer: {
-            ...prev.viewer,
-            objective: {
-              ...prev.viewer.objective,
-              collaborators: [
-                ...prev.viewer.objective.collaborators,
-                mutationResult.data.addCollaborator
-              ]
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        addCollaborator: {
+          __typename: 'Collaborator',
+          id: Math.random().toString(16).slice(2),
+          user: {},
+          objective: {}
+        }
+      },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult }) => {
+          return ({
+            ...prev,
+            viewer: {
+              ...prev.viewer,
+              objective: {
+                ...prev.viewer.objective,
+                collaborators: [
+                  ...prev.viewer.objective.collaborators,
+                  mutationResult.data.addCollaborator
+                ]
+              }
             }
-          }
-        })
+          })
+        }
       }
-    }
+    })
   })
 })
 
