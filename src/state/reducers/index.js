@@ -15,11 +15,18 @@ export default {
         modalComponent: action.modalComponent
       }
 
-    default:
+    case 'CLOSE_MODAL':
       return {
         title: '',
         action: '',
         modalComponent: null
+      }
+
+    default:
+      return {
+        title: state.title || '',
+        action: state.action || '',
+        modalComponent: state.modalComponent || null
       }
     }
   },

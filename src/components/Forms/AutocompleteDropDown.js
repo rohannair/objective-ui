@@ -11,6 +11,7 @@ const AutocompleteDropDown = (props) => {
       multiple={false}
       label={props.label}
       onChange={props.onChange}
+      onQueryChange={props.onQueryChange}
       source={props.source}
       value={props.value}
     />
@@ -18,12 +19,12 @@ const AutocompleteDropDown = (props) => {
 }
 
 AutocompleteDropDown.propTypes = {
-  onChange: PropTypes.func,
+  onQueryChange: PropTypes.func,
   source: PropTypes.object,
 }
 
 AutocompleteDropDown.defaultProps = {
-  onChange: (e) => console.info('selected value changed'),
+  onQueryChange: (e) => console.info('selected value changed'),
   source: {}
 }
 
