@@ -42,6 +42,7 @@ class Objectives extends Component {
     }
 
     this.defaultAddCollaboratorState = {
+      id: '',
       query: ''
     }
 
@@ -103,6 +104,16 @@ class Objectives extends Component {
     })
   }
 
+  _addCollaborator = () => {
+    const { addCollaborator: { id } } = this.state
+    const objectiveId = this.props.data.viewer.objective.id
+
+    this.props.addCollaborator(objectiveId, id)
+    this.setState({
+      addCollaborator: this.defaultAddCollaboratorState
+    })
+  }
+
   _createNewObjective = () => {
     const { objective } = this.state
     this.props.createObjective({ objective })
@@ -161,15 +172,23 @@ class Objectives extends Component {
       this._showModal(
         'Add Collaborator',
         'Add Collaborator',
-        undefined,
+        this._addCollaborator,
         <AddCollaboratorModal
-          onChange={this._handleAddCollaboratorChange}
-          source={this.props.data.viewer.company.users}
+          onChange={this._handleAddCollaboratorChange('id')}
+          source={this._getAvailableUsers()}
           query={this.state.addCollaborator.query}
           onQueryChange={(this._handleAddCollaboratorChange('query'))}
         />
       )
     )
+  }
+
+  _getAvailableUsers = () => {
+    const users = this.props.data.viewer.company.users
+    const collaborators = this.props.data.viewer.objective.collaborators
+    return users.filter(u => {
+      return collaborators.some(c => c.id != u.id)
+    })
   }
 
   _showNewObjectiveModal = () => this.props.dispatch(
@@ -209,12 +228,9 @@ class Objectives extends Component {
 }
 
 const ADD_COLLABORATOR = gql`
-  mutation addCollaborator($id: String!, $user: String!) {
-    addCollaborator(id: $id, user: $user) {
+  mutation addCollaborator($objective: String!, $user: String!) {
+    addCollaborator(objective: $objective, user: $user) {
       id
-      img
-      firstName
-      lastName
     }
   }
 `
@@ -328,6 +344,34 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
   })
 })
 
+const withAddCollaboratorMutation = graphql(ADD_COLLABORATOR, {
+  props: ({mutate}) => ({
+    addCollaborator: (objectiveId, userId) => mutate ({
+      variables: {
+        objective: objectiveId,
+        user: userId
+      }
+    }),
+    updateQueries: {
+      ObjectiveList: (prev, { mutationResult }) => {
+        return ({
+          ...prev,
+          viewer: {
+            ...prev.viewer,
+            objective: {
+              ...prev.viewer.objective,
+              collaborators: [
+                ...prev.viewer.objective.collaborators,
+                mutationResult.data.addCollaborator
+              ]
+            }
+          }
+        })
+      }
+    }
+  })
+})
+
 const GET_OBJECTIVELIST_QUERY = gql`
   query ObjectiveList($id: String) {
     viewer {
@@ -371,6 +415,7 @@ const withData = graphql(GET_OBJECTIVELIST_QUERY, {
 export default compose(
   withEditMutation,
   withCreateMutation,
+  withAddCollaboratorMutation,
   withData,
   connect(state => state.global)
 )(Objectives)
