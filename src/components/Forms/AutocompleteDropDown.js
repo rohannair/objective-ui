@@ -13,14 +13,14 @@ const AutocompleteDropDown = (props) => {
       onChange={props.onChange}
       onQueryChange={props.onQueryChange}
       source={props.source}
-      value={props.value}
+      suggestionMatch={'anywhere'}
     />
   )
 }
 
 AutocompleteDropDown.propTypes = {
   onQueryChange: PropTypes.func,
-  source: PropTypes.object,
+  source: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 }
 
 AutocompleteDropDown.defaultProps = {

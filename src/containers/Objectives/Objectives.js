@@ -29,8 +29,7 @@ class Objectives extends Component {
       viewer: PropTypes.object,
     }).isRequired,
     createObjective: PropTypes.func.isRequired,
-    editObjective: PropTypes.func.isRequired,
-    refetchSearchResults: PropTypes.func.isRequired
+    editObjective: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -43,7 +42,7 @@ class Objectives extends Component {
     }
 
     this.defaultAddCollaboratorState = {
-      q: ''
+      query: ''
     }
 
     this.state = { objective: this.defaultObjectiveState, addCollaborator: this.defaultAddCollaboratorState }
@@ -56,9 +55,6 @@ class Objectives extends Component {
     if (loading && !viewer) {
       return <LoadingBar />
     }
-
-    console.log("this is the users from the search:", viewer.users)
-    console.log("these are the objectives:", viewer.objectives)
 
     return (
       <div className={styles.mainContainer}>
@@ -145,10 +141,6 @@ class Objectives extends Component {
         [name]: val
       }
     }))
-
-    if (name === 'q') {
-      this.props.refetchSearchResults(val)
-    }
   }
 
   _setOwner = () => {
@@ -164,7 +156,7 @@ class Objectives extends Component {
     modalComponent
   })
 
-  _showAddCollaboratorModal = () =>
+  _showAddCollaboratorModal = () => {
     this.props.dispatch(
       this._showModal(
         'Add Collaborator',
@@ -172,11 +164,13 @@ class Objectives extends Component {
         undefined,
         <AddCollaboratorModal
           onChange={this._handleAddCollaboratorChange}
-          value={this.state.addCollaborator.q}
-          source={this.props.data.viewer.users}
+          source={this.props.data.viewer.company.users}
+          query={this.state.addCollaborator.query}
+          onQueryChange={(this._handleAddCollaboratorChange('query'))}
         />
       )
     )
+  }
 
   _showNewObjectiveModal = () => this.props.dispatch(
     this._showModal(
@@ -262,38 +256,6 @@ const SEARCH_USERS = gql`
   }
 `
 
-// const withUserSearchData = graphql(SEARCH_USERS, {
-//   options: ownProps => ({
-//     variables: {
-//       q: ''
-//     },
-//     forceFetch: false
-//   }),
-//   props: ({ ownProps, data: { fetchMore } }) => ({
-//     ownProps,
-//     refetchSearchResults: (q) => fetchMore({
-//       variables: {
-//         q: q
-//       },
-//     // })
-//       // },
-//       updateQuery: (prev,  { fetchMoreResult }) => {
-//         // debugger
-//         //this is flawed
-//         console.log("fetchmore users returned:", fetchMoreResult.data.viewer.users)
-//         if (!fetchMoreResult) return prev
-//         return ({
-//           ...prev,
-//           viewer: {
-//             ...prev.viewer,
-//             users: fetchMoreResult.data.viewer.users
-//           }
-//         })
-//       }
-//     })
-//   })
-// })
-
 const withEditMutation = graphql(EDIT_OBJECTIVE, {
   props: ({ mutate }) => ({
     editObjective: ({ objective: { id, name, endsAt, owner }}) => mutate ({
@@ -373,6 +335,13 @@ const GET_OBJECTIVELIST_QUERY = gql`
       company {
         id
         name
+        users {
+          id
+          firstName
+          lastName
+          email
+          img
+        }
       }
       objectives {
         id
@@ -393,40 +362,15 @@ const GET_OBJECTIVELIST_QUERY = gql`
 const withData = graphql(GET_OBJECTIVELIST_QUERY, {
   options: ownProps => ({
     variables: {
-      id: null,
-      q: ''
+      id: null
     },
     forceFetch: true
-  }),
-  props: ({ data, data: { fetchMore } }) => ({
-    data,
-    refetchSearchResults: (q) => {}
-  //   fetchMore({
-  //     variables: {
-  //       q: q
-  //     },
-  //     query: SEARCH_USERS,
-  //     updateQuery: (prev,  { fetchMoreResult }) => {
-  //       debugger
-  //       //this is flawed
-  //       console.log("fetchmore users returned:", fetchMoreResult.data.viewer.users)
-  //       if (!fetchMoreResult) return prev
-  //       return ({
-  //         ...prev,
-  //         viewer: {
-  //           ...prev.viewer,
-  //           users: fetchMoreResult.data.viewer.users
-  //         }
-  //       })
-  //     }
-  //   })
   })
 })
 
 export default compose(
   withEditMutation,
   withCreateMutation,
-  // withUserSearchData,
   withData,
   connect(state => state.global)
 )(Objectives)
