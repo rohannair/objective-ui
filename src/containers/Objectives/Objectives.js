@@ -185,9 +185,9 @@ class Objectives extends Component {
 
   _getAvailableUsers = () => {
     const users = this.props.data.viewer.company.users
-    const collaborators = this.props.data.viewer.objective.collaborators
+    const collaborators = this.props.data.viewer.objective.collaborators.map(c => c.id)
     return users.filter(u => {
-      return collaborators.some(c => c.id != u.id)
+      return collaborators.indexOf(u.id) < 0
     })
   }
 
