@@ -12,8 +12,6 @@ const AddCollaboratorModal = ({
     return acc
   }, {})
 
-  console.log('users', users)
-
   const handleOnChange = (val) => {
     const user = source.find((v) => {
       return val == v.email
