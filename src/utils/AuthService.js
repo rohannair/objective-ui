@@ -5,6 +5,7 @@ const REDIRECT_URL = `${document.location.origin}/auth/login`
 
 const AuthService = (clientId, domain, onAuthenticate) => {
   const COOKIE_KEY = 'qm.tid'
+  const signUpSuccessText = 'Thanks for signing up! We just sent you a verification email!'
 
   const lock = new Auth0Lock(clientId, domain, {
     auth: {
@@ -16,7 +17,13 @@ const AuthService = (clientId, domain, onAuthenticate) => {
     },
     theme: {
       primaryColor: '#009ED9'
-    }
+    },
+    loginAfterSignUp: false,
+    languageDictionary: {
+      success: {
+        signUp: signUpSuccessText
+      }
+    },
   })
 
   lock.on('authenticated', result => {
