@@ -32,5 +32,4 @@ const AddCollaboratorModal = ({
   )
 }
 
-
 export default AddCollaboratorModal

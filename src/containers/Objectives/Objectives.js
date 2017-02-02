@@ -46,7 +46,10 @@ class Objectives extends Component {
       query: ''
     }
 
-    this.state = { objective: this.defaultObjectiveState, addCollaborator: this.defaultAddCollaboratorState }
+    this.state = {
+      objective: this.defaultObjectiveState,
+      addCollaborator: this.defaultAddCollaboratorState
+    }
     this.modalAction = { type: 'SHOW_MODAL' }
   }
 
@@ -167,7 +170,7 @@ class Objectives extends Component {
     modalComponent
   })
 
-  _showAddCollaboratorModal = () => {
+  _showAddCollaboratorModal = () =>
     this.props.dispatch(
       this._showModal(
         'Add Collaborator',
@@ -181,7 +184,6 @@ class Objectives extends Component {
         />
       )
     )
-  }
 
   _getAvailableUsers = () => {
     const users = this.props.data.viewer.company.users
