@@ -20,6 +20,7 @@ import Button from '../../components/Button'
 import { StyledButton } from '../../components/Button/Button'
 
 import { ObjectiveChangeModal, SetOwnerModal } from './Modals'
+import AddCollaboratorModal from './Modals/AddCollaboratorModal'
 
 class Objectives extends Component {
   static propTypes = {
@@ -40,7 +41,15 @@ class Objectives extends Component {
       endsAt: timestamp()
     }
 
-    this.state = { objective: this.defaultObjectiveState }
+    this.defaultAddCollaboratorState = {
+      id: '',
+      query: ''
+    }
+
+    this.state = {
+      objective: this.defaultObjectiveState,
+      addCollaborator: this.defaultAddCollaboratorState
+    }
     this.modalAction = { type: 'SHOW_MODAL' }
   }
 
@@ -98,6 +107,16 @@ class Objectives extends Component {
     })
   }
 
+  _addCollaborator = () => {
+    const { addCollaborator: { id } } = this.state
+    const objectiveId = this.props.data.viewer.objective.id
+
+    this.props.addCollaborator(objectiveId, id)
+    this.setState({
+      addCollaborator: this.defaultAddCollaboratorState
+    })
+  }
+
   _createNewObjective = () => {
     const { objective } = this.state
     this.props.createObjective({ objective })
@@ -129,6 +148,15 @@ class Objectives extends Component {
     }))
   }
 
+  _handleAddCollaboratorChange = (name) => val => {
+    this.setState(prev => ({
+      addCollaborator: {
+        ...prev.addCollaborator,
+        [name]: val
+      }
+    }))
+  }
+
   _setOwner = () => {
     this.setState(prev => ({
       settingOwner: !prev.settingOwner
@@ -147,9 +175,23 @@ class Objectives extends Component {
       this._showModal(
         'Add Collaborator',
         'Add Collaborator',
-        console.warn,
+        this._addCollaborator,
+        <AddCollaboratorModal
+          onChange={this._handleAddCollaboratorChange('id')}
+          source={this._getAvailableUsers()}
+          query={this.state.addCollaborator.query}
+          onQueryChange={(this._handleAddCollaboratorChange('query'))}
+        />
       )
     )
+
+  _getAvailableUsers = () => {
+    const users = this.props.data.viewer.company.users
+    const collaborators = this.props.data.viewer.objective.collaborators.map(c => c.user.id)
+    return users.filter(u => {
+      return collaborators.indexOf(u.id) < 0
+    })
+  }
 
   _showNewObjectiveModal = () => this.props.dispatch(
     this._showModal(
@@ -188,12 +230,14 @@ class Objectives extends Component {
 }
 
 const ADD_COLLABORATOR = gql`
-  mutation addCollaborator($id: String!, $user: String!) {
-    addCollaborator(id: $id, user: $user) {
-      id
-      img
-      firstName
-      lastName
+  mutation addCollaborator($objective: String!, $user: String!) {
+    addCollaborator(objective: $objective, user: $user) {
+      user {
+        id
+        firstName
+        lastName
+        img
+      }
     }
   }
 `
@@ -221,6 +265,16 @@ const NEW_OBJECTIVE = gql`
       id
       name
       status
+    }
+  }
+`
+
+const SEARCH_USERS = gql`
+  query searchUsers($q: String!) {
+    viewer {
+      users(q: $q) {
+        id, firstName, lastName
+      }
     }
   }
 `
@@ -297,6 +351,43 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
   })
 })
 
+const withAddCollaboratorMutation = graphql(ADD_COLLABORATOR, {
+  props: ({mutate}) => ({
+    addCollaborator: (objectiveId, userId) => mutate ({
+      variables: {
+        objective: objectiveId,
+        user: userId
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        addCollaborator: {
+          __typename: 'Collaborator',
+          id: Math.random().toString(16).slice(2),
+          user: {},
+          objective: {}
+        }
+      },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult }) => {
+          return ({
+            ...prev,
+            viewer: {
+              ...prev.viewer,
+              objective: {
+                ...prev.viewer.objective,
+                collaborators: [
+                  ...prev.viewer.objective.collaborators,
+                  mutationResult.data.addCollaborator
+                ]
+              }
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
 const GET_OBJECTIVELIST_QUERY = gql`
   query ObjectiveList($id: String) {
     viewer {
@@ -304,6 +395,13 @@ const GET_OBJECTIVELIST_QUERY = gql`
       company {
         id
         name
+        users {
+          id
+          firstName
+          lastName
+          email
+          img
+        }
       }
       objectives {
         id
@@ -333,7 +431,7 @@ const withData = graphql(GET_OBJECTIVELIST_QUERY, {
 export default compose(
   withEditMutation,
   withCreateMutation,
+  withAddCollaboratorMutation,
   withData,
   connect(state => state.global)
 )(Objectives)
-

@@ -8,7 +8,8 @@ const ObjectiveCollaboratorBar = styled(({
   objective,
   className,
   setOwner,
-  addCollaborator
+  addCollaborator,
+  isOwner
 }) => {
   if (!objective) return null
 
@@ -18,19 +19,33 @@ const ObjectiveCollaboratorBar = styled(({
        <Avatar className={'noOwnerAvatar'} title="?" onClick={setOwner} />
      </Tooltip>)
 
-  const collaborators = objective.collaborators && objective.collaborators.map(u => <Avatar key={u.id} className={'avatar'} image={u.img} />)
+  let filteredCollborators = objective.collaborators && objective.collaborators.map(c => c.user)
+
+  if (filteredCollborators && objective.owner) {
+    filteredCollborators = filteredCollborators.filter(u => u.id != objective.owner.id)
+  }
+
+  const collabTitle = (filteredCollborators && filteredCollborators.length > 0) || (filteredCollborators.length == 0 && isOwner)
+  ? 'Collaborators: '
+  : null
+
+  const avatars = filteredCollborators && filteredCollborators.map(u => <Avatar key={u.id} className={'avatar'} image={u.img} />)
+
+  const addCollaboratorAvatar = isOwner
+  ? (<Tooltip message="Add Collaborators" eventType="hover" direction="bottom">
+      <Avatar className={'addCollaboratorAvatar'} title="+" onClick={addCollaborator} />
+    </Tooltip>)
+  : null
+
 
   return (
     <div className={className}>
       Owner:
       { ownerAvatar }
 
-      Collaborators:
-      { collaborators }
-
-      <Tooltip message="Add Collaborators" eventType="hover" direction="bottom">
-        <Avatar className={'addCollaboratorAvatar'} title="+" onClick={addCollaborator} />
-      </Tooltip>
+      { collabTitle }
+      { avatars }
+      { addCollaboratorAvatar }
     </div>
   )
 })`

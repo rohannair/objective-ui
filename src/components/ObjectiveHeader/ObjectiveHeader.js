@@ -45,10 +45,12 @@ ObjectiveHeader.fragments = {
         lastName
       }
       collaborators {
-        id
-        firstName
-        lastName
-        img
+        user {
+          id
+          firstName
+          lastName
+          img
+        }
       }
     }
   `,
