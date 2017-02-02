@@ -1,4 +1,4 @@
 exports[`Test suite for Button component Button should exist 1`] = `
-<button
+<div
   className="undefined" />
 `;

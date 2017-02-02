@@ -4,6 +4,8 @@ import classNames from 'classnames/bind'
 
 import Button from '../Button'
 import Input from '../Forms/TextInput'
+import Uploader from '../Uploader'
+import { removeDataUrl } from '../../utils/image'
 
 let cx = classNames.bind(styles)
 
@@ -40,7 +42,13 @@ class SettingsProfile extends Component {
             { img }
           </div>
           <div className={styles.avatarButtonContainer}>
-            <Button primary onClick={e => e.preventDefault()}>Upload New Avatar</Button>
+            <Uploader
+              submitImage={this._handleChange.bind(this, 'img')}
+              imageExists={!!this.state.img}
+              resizeOptions={{ height: 250, width: 250, type: 'crop' }}>
+              <Button primary>Upload New Avatar</Button>
+            </Uploader>
+
           </div>
           <div className={styles.avatarButtonContainer}>
             <Button link onClick={e => {
@@ -92,7 +100,14 @@ class SettingsProfile extends Component {
 
   _handleSubmit = (e) => {
     e.preventDefault()
-    this.props.handleSubmit(this.state)
+    const img = removeDataUrl(this.state.img)
+
+    const state = {
+      ...this.state,
+      img
+    }
+
+    this.props.handleSubmit(state)
   };
 
 };

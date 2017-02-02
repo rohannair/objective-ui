@@ -1,0 +1,4 @@
+exports[`Test suite for ObjectiveSidebarList component ObjectiveSidebarList should exist 1`] = `
+<ObjectiveSidebarList
+  className="HaMDi" />
+`;

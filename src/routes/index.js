@@ -8,7 +8,7 @@ import CoreLayout from '../layouts/CoreLayout'
 
 // Containers
 import Feed from '../containers/Feed'
-import ObjectiveList from '../containers/ObjectiveList'
+import Objectives from '../containers/Objectives'
 import UserList from '../containers/UserList'
 
 import CreateUser from '../containers/CreateUser'
@@ -45,8 +45,7 @@ export default (store, history, lock) => {
         <Redirect from="signup" to="auth/signup" />
 
         <Route path="feed" component={ Feed } />
-        <Route path="objectives" component={ ObjectiveList } />
-        <Route path="users" component={ UserList } />
+        <Route path="objectives" component={ Objectives } />
         <Route path="settings" component={ Preferences } />
         <Route path="privacy" component={ Privacy } />
       </Route>

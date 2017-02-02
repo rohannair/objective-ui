@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 
 import styles from './Feed.css'
 import dateformat from 'dateformat'
+import Waypoint from 'react-waypoint'
+import debounce from 'lodash/debounce'
 
 // Components
 import LoadingBar from '../../components/LoadingBar'
@@ -26,12 +28,30 @@ class Feed extends Component {
 
     submit: PropTypes.func.isRequired,
     addReaction: PropTypes.func.isRequired,
-    deleteReaction: PropTypes.func.isRequired
+    deleteReaction: PropTypes.func.isRequired,
+    loadMoreSnapshots: PropTypes.func.isRequired
   }
 
   toggleReaction(isLiked, id) {
     if (isLiked) return this.props.deleteReaction(1, id)
     return this.props.addReaction(1, id)
+  }
+
+  _loadMore = debounce(() => {
+    const {snapshots, _snapshotsCount} = this.props.data.viewer
+    if (snapshots.length === _snapshotsCount) return
+    this.props.loadMoreSnapshots()
+  }, 100)
+
+  _renderWaypoint = () => {
+    const {snapshots, _snapshotsCount} = this.props.data.viewer
+    if (this.props.data.loading && snapshots.length === _snapshotsCount) return
+    return (
+      <Waypoint
+        onEnter={this._loadMore}
+        threshold={0.5}
+      />
+    )
   }
 
   render() {
@@ -70,6 +90,7 @@ class Feed extends Component {
               submit={this._submit}
             />
               {snapshots}
+              {this._renderWaypoint()}
           </div>
         </div>
       </div>
@@ -110,7 +131,7 @@ const withMutation = graphql(NEW_SNAPSHOT, {
             ...prev.viewer,
             snapshots: [
               mutationResult.data.addSnapshot,
-              ...prev.viewer.snapshots
+              ...prev.viewer.snapshots.slice(0, LIMIT_PER_PAGE - 1)
             ]
           }
         })
@@ -192,13 +213,13 @@ const withDeleteReactionMutation = graphql(SnapshotFooter.mutations.deleteReacti
 })
 
 const GET_FEED_QUERY = gql`
-  query Feed {
+  query Feed ($first: Int, $offset: Int) {
     viewer {
       id
       img
       firstName
       lastName
-      snapshots {
+      snapshots (first: $first, offset: $offset) {
         id
         body
         img
@@ -213,15 +234,42 @@ const GET_FEED_QUERY = gql`
         id
         name
       }
+      _snapshotsCount
     }
   }
   ${SnapshotHeader.fragments.header}
   ${SnapshotFooter.fragments.footer}
 `
-
+const LIMIT_PER_PAGE = 25
 const withData = graphql(GET_FEED_QUERY, {
   options: ownProps => ({
+    variables: {
+      first: LIMIT_PER_PAGE,
+      offset: 0
+    },
     forceFetch: true
+  }),
+  props: ({ data, data: { fetchMore, viewer} }) => ({
+    data,
+    loadMoreSnapshots: () => fetchMore({
+      variables: {
+        offset: viewer.snapshots.length,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult.data) return prev
+        const moreSnaphots = fetchMoreResult.data.viewer.snapshots
+        return ({
+          ...prev,
+          viewer: {
+            ...prev.viewer,
+            snapshots: [
+              ...prev.viewer.snapshots,
+              ...moreSnaphots
+            ]
+          }
+        })
+      }
+    })
   })
 })
 

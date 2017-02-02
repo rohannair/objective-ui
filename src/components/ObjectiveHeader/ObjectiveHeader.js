@@ -2,12 +2,10 @@ import React, { PropTypes } from 'react'
 import gql from 'graphql-tag'
 
 import styles from './ObjectiveHeader.css'
-import Avatar from 'react-toolbox/lib/avatar'
-import dateformat from 'dateformat'
+import { toLocalMonthDayYear } from '../../utils/dates'
 
 const ObjectiveHeader = p => {
   if (!p.objective) return null
-
   const menu = (
     <div className={styles.moreMenu}>
       <i className="zmdi zmdi-more-vert" />
@@ -24,25 +22,12 @@ const ObjectiveHeader = p => {
 
   return (
     <div className={styles.objectiveHeader}>
-      <div className={styles.contributorHeader}>
-        { p.menuLeft && menu}
-        <h3>{p.objective.name}</h3>
-        <div className={styles.meta}>
-          Target end date: { dateformat(p.objective.endsAt, 'mmmm dd, yyyy') || 'N/A' }
-        </div>
-        { p.menuRight && menu}
+      { p.menuLeft && menu}
+      <h3>{p.objective.name}</h3>
+      <div className={styles.meta}>
+       Target end date: { toLocalMonthDayYear(p.objective.endsAt) || 'N/A' }
       </div>
-
-      <div className={styles.contributorBar}>
-        Contributors:
-        {
-          p.squad && p.squad.users.map(u => (
-            <Avatar key={u.id} className={styles.avatar}>
-              <img src={u.img} />
-            </Avatar>
-          ))
-        }
-      </div>
+      { p.menuRight && menu}
     </div>
   )
 }
@@ -52,10 +37,15 @@ ObjectiveHeader.fragments = {
     fragment ObjectiveHeaderFragment on Objective {
       name
       endsAt
-      timeline
       status
-      squad {
-        users {
+      owner {
+        id
+        img
+        firstName
+        lastName
+      }
+      collaborators {
+        user {
           id
           firstName
           lastName

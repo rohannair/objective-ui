@@ -17,9 +17,9 @@ const Button = p => {
   })
 
   return (
-    <button className={className} onClick={p.onClick}>
+    <div className={className} onClick={p.onClick}>
       { p.children }
-    </button>
+    </div>
   )
 }
 

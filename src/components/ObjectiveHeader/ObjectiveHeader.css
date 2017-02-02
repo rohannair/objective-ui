@@ -2,28 +2,19 @@
 
 .objectiveHeader {
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   background-color: #fff;
   align-items: baseline;
   padding: 0 30px;
-}
-
-.contributorHeader,
-.contributorBar {
-  display: flex;
-  width: 100%;
-}
-
-.contributorHeader {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: baseline;
   height: 60px;
   line-height: 60px;
 
   h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 1000px;
+    white-space: nowrap;
     font-weight: normal;
 
     strong {
@@ -34,19 +25,7 @@
 
 .meta {
   margin-left: auto;
-}
-
-.contributorBar {
-  align-items: center;
-  line-height: 1;
-  border-top: 1px solid #e1e1e1;
-  padding: 10px 0;
-  font-size: 0.875rem;
-}
-
-.avatar {
-  height: 24px;
-  margin-left: 10px;
+  font-size: 0.85em;
 }
 
 .moreMenu {
@@ -84,7 +63,7 @@
     }
 
     &:hover {
-      color: $primary
+      color: $primary;
     }
   }
 

@@ -9,16 +9,17 @@ const Alert = p => {
     [styles[p.type]]: true
   })
 
-
   return (
     <div className={classname}>
       { getIcon(p.type) }
       <div className={styles.body}>
         { p.children }
       </div>
-      <div className={styles.close}>
-        <i className={'zmdi zmdi-close'} onClick={p.close}/>
-      </div>
+      { p.close && (
+        <div className={styles.close}>
+          <i className={'zmdi zmdi-close'} onClick={p.close}/>
+        </div>
+      )}
     </div>
   )
 }

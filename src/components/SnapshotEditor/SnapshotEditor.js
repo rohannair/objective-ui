@@ -13,6 +13,7 @@ import Uploader from '../Uploader'
 
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
+import { removeDataUrl } from '../../utils/image'
 
 class SnapshotEditor extends Component {
   constructor(props) {
@@ -40,12 +41,12 @@ class SnapshotEditor extends Component {
 
     return (
       <div className={styles.SnapshotEditor}>
-        <h4 className={styles.header}>Post New Snapshot</h4>
+        <h4 className={styles.header}>What are you working on?</h4>
         <div className={styles.body}>
           {
             this.state.img && (
               <img
-                src={`data:image/jpeg;base64,${this.state.img}`}
+                src={this.state.img}
                 className={styles.imgPreview}
               />
             )
@@ -73,10 +74,12 @@ class SnapshotEditor extends Component {
             onClick={this._handleChange.bind(this, 'blocker')}
           />
           <Uploader
-            icon="image"
             submitImage={this._handleChange.bind(this, 'img')}
             imageExists={!!this.state.img}
-           />
+            resizeOptions={{ height: 720, width: 1280, type: 'resize' }}
+           >
+            <i className={'zmdi zmdi-image'} />
+           </Uploader>
           <div className={styles.buttonContainer}>
             <Button primary small
               onClick={this._onSubmit}>Post Snapshot</Button>
@@ -107,7 +110,8 @@ class SnapshotEditor extends Component {
     e.preventDefault()
     e.stopPropagation()
 
-    const { editorState, objective, blocker, img } = this.state
+    const { editorState, objective, blocker } = this.state
+    const img = removeDataUrl(this.state.img)
     if (!(editorState.getCurrentContent().getBlockMap().reduce((acc, val) => acc + val.getText().trim().length, 0) > 5)) return
 
     const body = stateToHTML(editorState.getCurrentContent()).toString()
