@@ -1,13 +1,22 @@
 import React, { PropTypes } from 'react'
 import styled from 'styled-components'
+import FontIcon from 'react-toolbox/lib/font_icon'
 
 const ObjectiveSidebarList = ({ list, className, getObjective }) => {
+  const objectiveLock = (o) => {
+    console.log(o)
+    return o.isPrivate
+      ? <FontIcon value='lock' />
+      : null
+  }
+
   let children = list.map(o => (
     <div
       key={o.id}
       className="item"
       onClick={() => getObjective(o.id) }
     >
+      { objectiveLock(o) }
       { o.name }
     </div>
   ))
@@ -28,5 +37,12 @@ export default styled(ObjectiveSidebarList)`
     &:hover {
       background-color: rgba(255, 255, 255, 0.15);
     }
+  }
+
+  .material-icons {
+    font-size: 1rem;
+    padding-right: .2rem;
+    position: relative;
+    top: .2rem;
   }
 `

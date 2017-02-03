@@ -423,6 +423,7 @@ const GET_OBJECTIVELIST_QUERY = gql`
         id
         name
         status
+        isPrivate
       }
       objective(id: $id) {
         id
