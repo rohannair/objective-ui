@@ -5,8 +5,8 @@ import ToggleSwitch from '../Forms/ToggleSwitch'
 
 const ObjectiveAdmin = styled(({
   isOwner,
-  isPrivate,
-  onChange,
+  objective,
+  onPrivateChange,
   className
 }) => {
   if (!isOwner) return <div />
@@ -14,9 +14,9 @@ const ObjectiveAdmin = styled(({
   return (
     <div className={className}>
       <ToggleSwitch
-        isChecked={isPrivate}
+        isChecked={objective.isPrivate}
         label="Private to company"
-        onChange={onChange('isPrivate')}
+        onChange={onPrivateChange}
       />
     </div>
   )

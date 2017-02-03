@@ -94,8 +94,8 @@ class Objectives extends Component {
 
           <ObjectiveAdmin
             isOwner={isOwner}
-            onChange={this._handleObjectiveChange}
-            isPrivate={viewer.objective.isPrivate}/>
+            onPrivateChange={this._handleObjectivePrivacyChange.bind(this)}
+            objective={viewer.objective}/>
 
           <div className={styles.body}>
             { viewer.objective && <ObjectiveFeed {...viewer.objective} viewer={viewer} /> }
@@ -145,6 +145,14 @@ class Objectives extends Component {
 
   _getObjective = (id) => {
     this.props.data.refetch({ id })
+  }
+
+  _handleObjectivePrivacyChange = (v) => {
+    const objective = {
+      ...this.props.data.viewer.objective,
+      isPrivate: v
+    }
+    this.props.editObjective({objective})
   }
 
   _handleObjectiveChange = (name) => val => {
@@ -257,6 +265,7 @@ const EDIT_OBJECTIVE = gql`
       name
       status
       endsAt
+      isPrivate
       owner {
         id
         img
@@ -289,8 +298,8 @@ const SEARCH_USERS = gql`
 
 const withEditMutation = graphql(EDIT_OBJECTIVE, {
   props: ({ mutate }) => ({
-    editObjective: ({ objective: { id, name, endsAt, owner }}) => mutate ({
-      variables: { id, name, endsAt, owner },
+    editObjective: ({ objective: { id, name, endsAt, owner, isPrivate }}) => mutate ({
+      variables: { id, name, endsAt, owner, isPrivate },
       optimisticResponse: {
         __typename: 'Mutation',
         editObjective: {
@@ -299,9 +308,8 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
           name,
           endsAt,
           status: 'draft',
-          owner: {
-            id: owner
-          }
+          isPrivate,
+          owner: owner.id
         }
       },
 

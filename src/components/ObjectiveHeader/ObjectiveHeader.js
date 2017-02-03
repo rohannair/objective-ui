@@ -38,6 +38,7 @@ ObjectiveHeader.fragments = {
       name
       endsAt
       status
+      isPrivate
       owner {
         id
         img
