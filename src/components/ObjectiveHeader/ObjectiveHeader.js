@@ -8,7 +8,7 @@ import FontIcon from 'react-toolbox/lib/font_icon'
 const ObjectiveHeader = p => {
   if (!p.objective) return null
 
-  const objectiveLock = p.objective && p.objective.isPrivate
+  const objectiveLock = p.objective.isPrivate
   ? <FontIcon value='lock' className={styles.lockIcon} />
   : null
 

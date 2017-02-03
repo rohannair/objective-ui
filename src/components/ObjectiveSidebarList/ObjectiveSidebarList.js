@@ -3,12 +3,7 @@ import styled from 'styled-components'
 import FontIcon from 'react-toolbox/lib/font_icon'
 
 const ObjectiveSidebarList = ({ list, className, getObjective }) => {
-  const objectiveLock = (o) => {
-    console.log(o)
-    return o.isPrivate
-      ? <FontIcon value='lock' />
-      : null
-  }
+  const objectiveLock = ({ isPrivate }) => isPrivate ? <FontIcon value='lock' /> : null
 
   let children = list.map(o => (
     <div
