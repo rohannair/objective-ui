@@ -345,6 +345,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
           id: Math.random().toString(16).slice(2),
           endsAt,
           name,
+          isPrivate: false,
           status: 'draft'
         }
       },
