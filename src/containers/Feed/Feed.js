@@ -240,13 +240,14 @@ const GET_FEED_QUERY = gql`
   ${SnapshotHeader.fragments.header}
   ${SnapshotFooter.fragments.footer}
 `
-const LIMIT_PER_PAGE = 25
+const LIMIT_PER_PAGE = 15
 const withData = graphql(GET_FEED_QUERY, {
   options: ownProps => ({
     variables: {
       first: LIMIT_PER_PAGE,
       offset: 0
     },
+    pollInterval: 20000,
     forceFetch: true
   }),
   props: ({ data, data: { fetchMore, viewer} }) => ({
