@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import { connect } from 'react-redux'
 
 import styles from './Feed.css'
 import dateformat from 'dateformat'
 import Waypoint from 'react-waypoint'
 import debounce from 'lodash/debounce'
+import update from 'immutability-helper'
 
 // Components
 import LoadingBar from '../../components/LoadingBar'
@@ -18,6 +20,7 @@ import SnapshotContainer from '../../components/SnapshotContainer'
 import SnapshotHeader from '../../components/SnapshotHeader'
 import SnapshotBody from '../../components/SnapshotBody'
 import SnapshotFooter from '../../components/SnapshotFooter'
+import EditSnapshotObjectiveModal from './Modals/EditSnapshotObjectiveModal/EditSnapshotObjectiveModal'
 
 class Feed extends Component {
   static propTypes = {
@@ -30,6 +33,27 @@ class Feed extends Component {
     addReaction: PropTypes.func.isRequired,
     deleteReaction: PropTypes.func.isRequired,
     loadMoreSnapshots: PropTypes.func.isRequired
+  };
+
+  constructor(props) {
+    super(props)
+
+    this.defaultEditSnapshotObjectiveState = {
+      id: '',
+      query: ''
+    }
+
+    this.defaultSnapshotState = {
+      id: '',
+      name: '',
+    }
+
+    this.state = {
+      snapshot: this.defaultSnapshotState,
+      editSnapshotObjective: this.defaultEditSnapshotObjectiveState
+    }
+
+    this.modalAction = { type: 'SHOW_MODAL' }
   }
 
   toggleReaction(isLiked, id) {
@@ -55,7 +79,7 @@ class Feed extends Component {
   }
 
   render() {
-    const {data: { viewer, loading }} = this.props
+    const {dispatch, data: { viewer, loading }} = this.props
 
     if (loading && !viewer) {
       return <LoadingBar />
@@ -65,7 +89,8 @@ class Feed extends Component {
       const isLiked = snap.reactions.some(r => r && r.user.id === viewer.id)
       return (
         <SnapshotContainer key={snap.id}>
-          <SnapshotHeader {...snap} />
+          <SnapshotHeader {...snap }
+            editObjective = {this._showEditSnapshotObjectiveModal.bind(this, snap)} />
           <SnapshotBody
             className={styles.snapshot__body}
             body={snap.body}
@@ -104,7 +129,55 @@ class Feed extends Component {
 
     cb()
   };
-}
+
+  _showModal = (title, label, event, modalComponent) => ({
+    ...this.modalAction,
+    title,
+    action: { label, event },
+    modalComponent
+  })
+
+  _handleEditSnapshotObjectiveChange = (name) => val => {
+    this.setState(prev => ({
+      editSnapshotObjective: {
+        ...prev.editSnapshotObjective,
+        [name]: val
+      }
+    }))
+  }
+
+  _getAvailableObjectives = () => {
+    const objectives = this.props.data.viewer.objectives
+    return objectives
+  }
+
+  _editSnapshotObjective = () => {
+    const objectiveId = this.state.editSnapshotObjective.id
+    const snapId = this.state.snapshot.id
+    this.props.editSnapshotObjective(objectiveId, snapId)
+    this.setState({
+      editSnapshotObjective: this.defaultEditSnapshotObjectiveState,
+      snapshot: this.defaultSnapshotState
+    })
+  }
+
+  _showEditSnapshotObjectiveModal = ({ name, id }) => this.setState({
+    snapshot: { name, id }
+  }, () => this.props.dispatch(
+        this._showModal(
+          'Edit Objective',
+          'Edit Objective',
+          this._editSnapshotObjective,
+          <EditSnapshotObjectiveModal
+            onChange={this._handleEditSnapshotObjectiveChange('id')}
+            source={this._getAvailableObjectives()}
+            query={this.state.editSnapshotObjective.query}
+            onQueryChange={(this._handleEditSnapshotObjectiveChange('query'))}
+          />
+        )
+      )
+    )
+  }
 
 const NEW_SNAPSHOT = gql`
   mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean, $img: String) {
@@ -171,6 +244,38 @@ const withAddReactionMutation = graphql(SnapshotFooter.mutations.addReaction, {
                 },
                 ...prev.viewer.snapshots.slice(snapshotIdx + 1),
               ]
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
+const withEditSnapshotObjectiveMutation = graphql(SnapshotHeader.mutations.editSnapshotObjective, {
+  props: ({mutate}) => ({
+    editSnapshotObjective: (objectiveId, snapshotId) => mutate ({
+      variables: {
+        objectiveId,
+        snapshotId
+      },
+      updateQueries: {
+        Feed: (prev, { mutationResult }) => {
+          const { editSnapshotObjective } = mutationResult.data
+          const snapshotIdx = prev.viewer.snapshots.findIndex(s => s.id === editSnapshotObjective.id)
+          const editedSnapshot = {
+            ...prev.viewer.snapshots[snapshotIdx],
+            objective: {
+              ...prev.viewer.snapshots.objective,
+              ...editSnapshotObjective.objective
+            }
+          }
+          const snapshots = update(prev.viewer.snapshots, {
+            $splice: [[snapshotIdx, 1, editedSnapshot]]
+          })
+          return update(prev, {
+            viewer: {
+              snapshots: { $set: snapshots },
             }
           })
         }
@@ -277,6 +382,8 @@ export default compose(
   withData,
   withMutation,
   withAddReactionMutation,
-  withDeleteReactionMutation
+  withDeleteReactionMutation,
+  withEditSnapshotObjectiveMutation,
+  connect(state => state.global)
 )(Feed)
 
