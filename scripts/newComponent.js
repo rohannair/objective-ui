@@ -22,7 +22,6 @@ const ${componentName} = p => (
   </div>
 )
 
-
 export default styled(${componentName})\`
 
 \`
