@@ -13,23 +13,19 @@ if (!name) {
 const componentName   = _.flowRight(_.upperFirst, _.camelCase)(name)
 const dest            = path.join(__dirname, '..', 'src', 'components', componentName)
 
-const styleFile = `.${componentName.toLowerCase()} {
-
-}`
-
 const componentFile = `import React, { PropTypes } from 'react'
-import styles from './${componentName}.css'
+import styled from 'styled-components'
 
-const ${componentName} = p => {
+const ${componentName} = p => (
+  <div className={styles.${componentName.toLowerCase()}}>
+    { p.children }
+  </div>
+)
 
-  return (
-    <div className={styles.${componentName.toLowerCase()}}>
-      { p.children }
-    </div>
-  )
-}
 
-export default ${componentName}
+export default styled(${componentName})\`
+
+\`
 `
 
 const indexFile = `import ${componentName} from './${componentName}'
@@ -49,7 +45,6 @@ describe('Test suite for ${componentName} component', () => {
 
 `
 
-
 if (isDir.sync(dest)) {
   console.error(chalk.red(`Component ${componentName} exists`))
   process.exit(0)
@@ -58,6 +53,5 @@ if (isDir.sync(dest)) {
 fs.mkdir(dest)
 fs.writeFileSync(path.join(dest, 'index.js'), indexFile)
 fs.writeFileSync(path.join(dest, `${componentName}.js`), componentFile)
-fs.writeFileSync(path.join(dest, `${componentName}.css`), styleFile)
 fs.writeFileSync(path.join(dest, `${componentName.toLowerCase()}.test.js`), tests)
 console.log(chalk.green('Component Created'))
