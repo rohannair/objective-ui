@@ -94,7 +94,7 @@ class Objectives extends Component {
 
           <ObjectiveAdmin
             isOwner={isOwner}
-            onPrivateChange={this._handleObjectivePrivacyChange.bind(this)}
+            onPrivateChange={this._handleObjectivePrivacyChange}
             objective={viewer.objective}/>
 
           <div className={styles.body}>
