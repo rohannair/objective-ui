@@ -69,6 +69,7 @@ class Editor extends Component {
           editorState={this.props.editorState}
           onChange={this.props.onChange}
           plugins={plugins}
+          spellCheck={true}
           ref={(element) => {
             this.editor = element
           }}

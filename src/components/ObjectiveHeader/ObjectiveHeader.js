@@ -3,9 +3,16 @@ import gql from 'graphql-tag'
 
 import styles from './ObjectiveHeader.css'
 import { toLocalMonthDayYear } from '../../utils/dates'
+import FontIcon from 'react-toolbox/lib/font_icon'
 
 const ObjectiveHeader = p => {
   if (!p.objective) return null
+
+  const objectiveLock = p.objective.isPrivate
+  ? <FontIcon value='lock' className={styles.lockIcon} />
+  : null
+
+
   const menu = (
     <div className={styles.moreMenu}>
       <i className="zmdi zmdi-more-vert" />
@@ -23,7 +30,10 @@ const ObjectiveHeader = p => {
   return (
     <div className={styles.objectiveHeader}>
       { p.menuLeft && menu}
-      <h3>{p.objective.name}</h3>
+      <h3>
+        {objectiveLock}
+        {p.objective.name}
+      </h3>
       <div className={styles.meta}>
        Target end date: { toLocalMonthDayYear(p.objective.endsAt) || 'N/A' }
       </div>
@@ -38,6 +48,7 @@ ObjectiveHeader.fragments = {
       name
       endsAt
       status
+      isPrivate
       owner {
         id
         img

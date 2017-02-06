@@ -13,6 +13,7 @@ import ObjectiveHeader from '../../components/ObjectiveHeader'
 import ObjectiveCollaboratorBar from '../../components/ObjectiveCollaboratorBar'
 import ObjectivesSidebar from '../../components/ObjectivesSidebar'
 import ObjectiveSidebarList from '../../components/ObjectiveSidebarList'
+import ObjectiveAdmin from '../../components/ObjectiveAdmin'
 
 
 import Button from '../../components/Button'
@@ -38,7 +39,8 @@ class Objectives extends Component {
     this.defaultObjectiveState = {
       id: '',
       name: '',
-      endsAt: timestamp()
+      endsAt: timestamp(),
+      isPrivate: false
     }
 
     this.defaultAddCollaboratorState = {
@@ -56,6 +58,7 @@ class Objectives extends Component {
 
   render() {
     const { dispatch, data: { viewer, loading } } = this.props
+    const isOwner = viewer && viewer.objective && viewer.objective.owner && viewer.objective.owner.id === viewer.id
 
     if (loading && !viewer) {
       return <LoadingBar />
@@ -87,8 +90,13 @@ class Objectives extends Component {
             objective={viewer.objective}
             setOwner={this._showSetOwnerModal}
             addCollaborator={ this._showAddCollaboratorModal }
-            isOwner={viewer.objective && viewer.objective.owner && viewer.objective.owner.id === viewer.id}
+            isOwner={isOwner}
           />
+
+          <ObjectiveAdmin
+            isOwner={isOwner}
+            onPrivateChange={this._handleObjectivePrivacyChange}
+            objective={viewer.objective}/>
 
           <div className={styles.body}>
             { viewer.objective && <ObjectiveFeed {...viewer.objective} viewer={viewer} /> }
@@ -138,6 +146,14 @@ class Objectives extends Component {
 
   _getObjective = (id) => {
     this.props.data.refetch({ id })
+  }
+
+  _handleObjectivePrivacyChange = (isPrivate) => {
+    const objective = {
+      ...this.props.data.viewer.objective,
+      isPrivate: isPrivate
+    }
+    this.props.editObjective({objective})
   }
 
   _handleObjectiveChange = (name) => val => {
@@ -250,6 +266,7 @@ const EDIT_OBJECTIVE = gql`
       name
       status
       endsAt
+      isPrivate
       owner {
         id
         img
@@ -282,8 +299,8 @@ const SEARCH_USERS = gql`
 
 const withEditMutation = graphql(EDIT_OBJECTIVE, {
   props: ({ mutate }) => ({
-    editObjective: ({ objective: { id, name, endsAt, owner }}) => mutate ({
-      variables: { id, name, endsAt, owner },
+    editObjective: ({ objective: { id, name, endsAt, owner, isPrivate }}) => mutate ({
+      variables: { id, name, endsAt, owner, isPrivate },
       optimisticResponse: {
         __typename: 'Mutation',
         editObjective: {
@@ -292,9 +309,8 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
           name,
           endsAt,
           status: 'draft',
-          owner: {
-            id: owner
-          }
+          isPrivate,
+          owner: owner.id
         }
       },
       updateQueries: {
@@ -329,6 +345,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
           id: Math.random().toString(16).slice(2),
           endsAt,
           name,
+          isPrivate: false,
           status: 'draft'
         }
       },
@@ -406,6 +423,7 @@ const GET_OBJECTIVELIST_QUERY = gql`
         id
         name
         status
+        isPrivate
       }
       objective(id: $id) {
         id

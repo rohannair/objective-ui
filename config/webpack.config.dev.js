@@ -56,7 +56,8 @@ module.exports = {
     path: path.join(basePath, 'dist'),
     pathinfo: true,
     filename: '[name].js',
-    publicPath: '/'
+    publicPath: '/',
+    devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
   },
 
   devServer: {
@@ -161,6 +162,7 @@ module.exports = {
   plugins: [
     new CaseSensitivePaths(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
