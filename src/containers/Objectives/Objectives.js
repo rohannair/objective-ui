@@ -147,10 +147,10 @@ class Objectives extends Component {
     this.props.data.refetch({ id })
   }
 
-  _handleObjectivePrivacyChange = (v) => {
+  _handleObjectivePrivacyChange = (isPrivate) => {
     const objective = {
       ...this.props.data.viewer.objective,
-      isPrivate: v
+      isPrivate: isPrivate
     }
     this.props.editObjective({objective})
   }
