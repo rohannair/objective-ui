@@ -13,7 +13,8 @@ const Button = p => {
     [styles.transparent]: p.transparent,
     [styles.sm]: p.size === 'sm',
     [styles.right]: p.right,
-    [styles.link]: p.link || (!p.primary && !p.secondary)
+    [styles.link]: p.link || (!p.primary && !p.secondary),
+    [styles.inline]: p.inline
   })
 
   return (
@@ -50,11 +51,12 @@ export const StyledButton = styled.button`
   background-color: ${props => {
     if (props.primary) return '#009ed9'
     if (props.secondary) return '#011627'
+    if (props.cancel) return '#fff'
     return 'transparent'
   }};
 
   border: none;
-  color: #fff;
+  color: ${props => props.cancel ? '#000' : '#fff' };
   cursor: pointer;
   font-size: 0.875rem;
   letter-spacing: 0.03em;
