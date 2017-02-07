@@ -1,0 +1,58 @@
+@import '../../styles/globals';
+
+.objectiveEditor {
+  &:hover {
+    .editButton {
+      display: inline-block;
+      visibility: visible;
+      cursor: pointer
+    }
+  }
+}
+
+.editButton {
+  color: #616161;
+  visibility: hidden;
+  font-size: 85%;
+  height: 1rem;
+  margin-left: 0.3em;
+
+  &:hover {
+    color: #009ED9;
+  }
+
+  &:active {
+    position: relative;
+    top: 1px;
+   }
+}
+
+.addButton {
+	span {
+  color: #777;
+  vertical-align: middle;
+  line-height: 1;
+  font-size: 62%;
+  background-color: transparent;
+  border: dashed;
+  border-color: #ccc;
+  border-width: 2px;
+  padding: 2px 4px;
+	}
+
+  &:hover {
+    cursor: pointer;
+
+    span {
+      cursor: pointer;
+      color: #009ED9;
+      border-color: #009ED9;
+    }
+  }
+
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+}
+

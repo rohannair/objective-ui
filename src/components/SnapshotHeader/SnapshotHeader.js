@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
+import styles from './SnapshotHeader.css'
 
 import dateformat from 'dateformat'
-import Button from '../Button'
 
 import Pill from '../Pill'
 import UserTab from '../UserTab'
@@ -11,9 +11,20 @@ import UserTab from '../UserTab'
 const SnapshotHeader = styled(({ ...snap, editObjective }) => (
   <div className={snap.className}>
     <UserTab {...snap.user} >
-      { snap.objective ? <Pill info>{snap.objective.name}</Pill> : <Button onClick = {editObjective}> + </Button> }
-      { snap.blocker && <Pill danger><i className={'zmdi zmdi-alert-circle-o'} /> BLOCKER!</Pill>}
-      <small>{dateformat(snap.createdAt, 'mmm dd h:MM TT')}</small>
+      { snap.objective ?
+        <div className={styles.objectiveEditor}>
+          <Pill info>{snap.objective.name}</Pill>
+           { snap.blocker && <Pill danger><i className={'zmdi zmdi-alert-circle-o'} /> BLOCKER!</Pill>}
+          <small>{dateformat(snap.createdAt, 'mmm dd h:MM TT')}</small>
+          <label onClick={editObjective} className={styles.editButton}><i className={'zmdi zmdi-edit'}/> edit</label>
+        </div>
+        :
+        <div>
+          <label onClick={editObjective} className={styles.addButton}><Pill info> + Add Objective </Pill></label>
+          { snap.blocker && <Pill danger><i className={'zmdi zmdi-alert-circle-o'}/> BLOCKER!</Pill>}
+          <small>{dateformat(snap.createdAt, 'mmm dd h:MM TT')}</small>
+        </div>
+      }
     </UserTab>
   </div>
   ))`

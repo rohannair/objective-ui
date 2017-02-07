@@ -20,7 +20,7 @@ import SnapshotContainer from '../../components/SnapshotContainer'
 import SnapshotHeader from '../../components/SnapshotHeader'
 import SnapshotBody from '../../components/SnapshotBody'
 import SnapshotFooter from '../../components/SnapshotFooter'
-import EditSnapshotObjectiveModal from './Modals/EditSnapshotObjectiveModal/EditSnapshotObjectiveModal'
+import EditSnapshotObjectiveModal from './Modals/EditSnapshotObjectiveModal'
 
 class Feed extends Component {
   static propTypes = {
@@ -89,8 +89,10 @@ class Feed extends Component {
       const isLiked = snap.reactions.some(r => r && r.user.id === viewer.id)
       return (
         <SnapshotContainer key={snap.id}>
-          <SnapshotHeader {...snap }
-            editObjective = {this._showEditSnapshotObjectiveModal.bind(this, snap)} />
+          <SnapshotHeader
+            {...snap }
+            editObjective = {this._showEditSnapshotObjectiveModal.bind(this, snap)}
+          />
           <SnapshotBody
             className={styles.snapshot__body}
             body={snap.body}
@@ -254,7 +256,7 @@ const withAddReactionMutation = graphql(SnapshotFooter.mutations.addReaction, {
 
 const withEditSnapshotObjectiveMutation = graphql(SnapshotHeader.mutations.editSnapshotObjective, {
   props: ({mutate}) => ({
-    editSnapshotObjective: (objectiveId, snapshotId) => mutate ({
+    editSnapshotObjective: (objectiveId, snapshotId) => mutate({
       variables: {
         objectiveId,
         snapshotId
@@ -265,10 +267,10 @@ const withEditSnapshotObjectiveMutation = graphql(SnapshotHeader.mutations.editS
           const snapshotIdx = prev.viewer.snapshots.findIndex(s => s.id === editSnapshotObjective.id)
           const editedSnapshot = {
             ...prev.viewer.snapshots[snapshotIdx],
-            objective: {
+            objective: editSnapshotObjective.objective ? {
               ...prev.viewer.snapshots.objective,
               ...editSnapshotObjective.objective
-            }
+            } : null
           }
           const snapshots = update(prev.viewer.snapshots, {
             $splice: [[snapshotIdx, 1, editedSnapshot]]
