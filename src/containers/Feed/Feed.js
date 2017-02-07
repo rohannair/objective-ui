@@ -247,7 +247,6 @@ const withData = graphql(GET_FEED_QUERY, {
       first: LIMIT_PER_PAGE,
       offset: 0
     },
-    pollInterval: 20000,
     forceFetch: true
   }),
   props: ({ data, data: { fetchMore, viewer} }) => ({
