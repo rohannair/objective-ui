@@ -256,10 +256,10 @@ const withAddReactionMutation = graphql(SnapshotFooter.mutations.addReaction, {
 
 const withEditSnapshotObjectiveMutation = graphql(SnapshotHeader.mutations.editSnapshotObjective, {
   props: ({mutate}) => ({
-    editSnapshotObjective: (objectiveId, snapshotId) => mutate({
+    editSnapshotObjective: (objectiveId, id) => mutate({
       variables: {
         objectiveId,
-        snapshotId
+        id
       },
       updateQueries: {
         Feed: (prev, { mutationResult }) => {
