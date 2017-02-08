@@ -25,7 +25,7 @@ const EditSnapshotObjectiveModal = ({
       <AutocompleteDropDown
         label="Objective name"
         onChange={handleOnChange}
-        onQueryChange={(v) => onQueryChange(v)}
+        onQueryChange={onQueryChange}
         source={objectives}
       />
     </div>

@@ -1,0 +1,11 @@
+exports[`Test suite for SplitIconPill component SplitIconPill should exist 1`] = `
+<div
+  className="spliticonpill">
+  <Pill
+    transparent={true}>
+    <i
+      className="zmdi zmdi-undefined" />
+  </Pill>
+  <Pill />
+</div>
+`;

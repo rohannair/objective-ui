@@ -9,25 +9,16 @@ const ObjectiveTab = p => (
     display: 'flex',
     alignItems: 'baseline'
   }}
-  className={'objectiveTab'}
+  className='objectiveTab'
   >
-  	{ p.objective ?
-  	<SplitIconPill
-      info
-      iconAction={p.editObjective}
-      icon='edit'
-      >
-      {p.objective.name}
-      </SplitIconPill>
-  	  :
-      <SplitIconPill
-        transparent
-        iconAction={p.editObjective}
-        icon='plus'
-      >
-        Add Objective
-      </SplitIconPill>
-  	}
+  	{ p.objective
+      ? (
+        	<SplitIconPill info iconAction={p.editObjective} icon='edit'>{p.objective.name}</SplitIconPill>
+        )
+  	  : (
+          <SplitIconPill transparent action={p.editObjective} iconAction={p.editObjective} icon='plus'>Add Objective</SplitIconPill>
+        )
+    }
 	{ p.blocker && <Pill danger><i className={'zmdi zmdi-alert-circle-o'} /> BLOCKER!</Pill>}
 	<small>{toMonthDayHour(p.createdAt)}</small>
   </div>

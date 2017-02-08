@@ -39,7 +39,7 @@ class Feed extends Component {
     super(props)
 
     this.defaultEditSnapshotObjectiveState = {
-      id: '',
+      objectiveId: '',
       query: ''
     }
 
@@ -90,7 +90,7 @@ class Feed extends Component {
       return (
         <SnapshotContainer key={snap.id}>
           <SnapshotHeader
-            {...snap }
+            {...snap}
             editObjective = {this._showEditSnapshotObjectiveModal.bind(this, snap)}
           />
           <SnapshotBody
@@ -139,7 +139,7 @@ class Feed extends Component {
     modalComponent
   })
 
-  _handleEditSnapshotObjectiveChange = (name) => val => {
+  _handleEditSnapshotObjectiveChange = name => val => {
     this.setState(prev => ({
       editSnapshotObjective: {
         ...prev.editSnapshotObjective,
@@ -148,15 +148,10 @@ class Feed extends Component {
     }))
   }
 
-  _getAvailableObjectives = () => {
-    const objectives = this.props.data.viewer.objectives
-    return objectives
-  }
-
   _editSnapshotObjective = () => {
-    const objectiveId = this.state.editSnapshotObjective.id
-    const snapId = this.state.snapshot.id
-    this.props.editSnapshotObjective(objectiveId, snapId)
+    const { objectiveId } = this.state.editSnapshotObjective
+    const { id } = this.state.snapshot
+    this.props.editSnapshotObjective(objectiveId, id)
     this.setState({
       editSnapshotObjective: this.defaultEditSnapshotObjectiveState,
       snapshot: this.defaultSnapshotState
@@ -171,10 +166,10 @@ class Feed extends Component {
           'Edit Objective',
           this._editSnapshotObjective,
           <EditSnapshotObjectiveModal
-            onChange={this._handleEditSnapshotObjectiveChange('id')}
-            source={this._getAvailableObjectives()}
+            onChange={this._handleEditSnapshotObjectiveChange('objectiveId')}
+            source={this.props.data.viewer.objectives}
             query={this.state.editSnapshotObjective.query}
-            onQueryChange={(this._handleEditSnapshotObjectiveChange('query'))}
+            onQueryChange={this._handleEditSnapshotObjectiveChange('query')}
           />
         )
       )
@@ -265,13 +260,8 @@ const withEditSnapshotObjectiveMutation = graphql(SnapshotHeader.mutations.editS
         Feed: (prev, { mutationResult }) => {
           const { editSnapshotObjective } = mutationResult.data
           const snapshotIdx = prev.viewer.snapshots.findIndex(s => s.id === editSnapshotObjective.id)
-          const editedSnapshot = {
-            ...prev.viewer.snapshots[snapshotIdx],
-            objective: editSnapshotObjective.objective ? {
-              ...prev.viewer.snapshots.objective,
-              ...editSnapshotObjective.objective
-            } : null
-          }
+          const prevSnapshot = prev.viewer.snapshots[snapshotIdx]
+          const editedSnapshot = update(prevSnapshot, { $merge: { objective: editSnapshotObjective.objective }})
           const snapshots = update(prev.viewer.snapshots, {
             $splice: [[snapshotIdx, 1, editedSnapshot]]
           })

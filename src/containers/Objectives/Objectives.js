@@ -52,7 +52,6 @@ class Objectives extends Component {
       objective: this.defaultObjectiveState,
       addCollaborator: this.defaultAddCollaboratorState
     }
-
     this.modalAction = { type: 'SHOW_MODAL' }
   }
 
@@ -313,6 +312,7 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
           owner: owner.id
         }
       },
+
       updateQueries: {
         ObjectiveList: (prev, { mutationResult }) => {
           const { editObjective } = mutationResult.data
@@ -349,6 +349,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
           status: 'draft'
         }
       },
+
       updateQueries: {
         ObjectiveList: (prev, { mutationResult }) => {
           const { createObjective } = mutationResult.data
@@ -369,7 +370,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
 
 const withAddCollaboratorMutation = graphql(ADD_COLLABORATOR, {
   props: ({mutate}) => ({
-    addCollaborator: (objectiveId, userId) => mutate({
+    addCollaborator: (objectiveId, userId) => mutate ({
       variables: {
         objective: objectiveId,
         user: userId

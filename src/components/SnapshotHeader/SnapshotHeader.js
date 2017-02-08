@@ -8,12 +8,12 @@ import Pill from '../Pill'
 import UserTab from '../UserTab'
 import ObjectiveTab from '../ObjectiveTab'
 
-const SnapshotHeader = styled(({ ...snap, editObjective }) => (
+const SnapshotHeader = styled((snap) => (
   <div className={snap.className}>
     <UserTab {...snap.user} >
       <ObjectiveTab
       objective={snap.objective}
-      editObjective={editObjective}
+      editObjective={snap.editObjective}
       blocker={snap.blocker}
       createdAt={snap.createdAt}
       />

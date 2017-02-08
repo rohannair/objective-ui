@@ -1,0 +1,19 @@
+exports[`Test suite for ObjectiveTab component ObjectiveTab should exist 1`] = `
+<div
+  className="objectiveTab"
+  style={
+    Object {
+      "alignItems": "baseline",
+      "display": "flex",
+    }
+  }>
+  <SplitIconPill
+    icon="plus"
+    transparent={true}>
+    Add Objective
+  </SplitIconPill>
+  <small>
+    Feb 08 11:26 AM
+  </small>
+</div>
+`;
