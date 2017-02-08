@@ -13,7 +13,7 @@ const ObjectiveTab = p => (
   >
   	{ p.objective
       ? (
-        	<SplitIconPill info iconAction={p.editObjective} icon='edit'>{p.objective.name}</SplitIconPill>
+        	<SplitIconPill readOnly={p.readOnly} info iconAction={p.editObjective} icon='edit'>{p.objective.name}</SplitIconPill>
         )
   	  : (
           <SplitIconPill transparent action={p.editObjective} iconAction={p.editObjective} icon='plus'>Add Objective</SplitIconPill>

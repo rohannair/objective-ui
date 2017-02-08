@@ -10,6 +10,7 @@ const SnapshotHeader = styled((snap) => (
   <div className={snap.className}>
     <UserTab {...snap.user} >
       <ObjectiveTab
+      readOnly={snap.readOnly}
       objective={snap.objective}
       editObjective={snap.editObjective}
       blocker={snap.blocker}
