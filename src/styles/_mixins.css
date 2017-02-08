@@ -31,3 +31,8 @@
   border-color: #ebccd1;
 }
 
+@define-mixin transparent {
+  background: transparent;
+  border: 1px dashed #ccc;
+  color: #777;
+}
