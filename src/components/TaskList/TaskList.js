@@ -9,14 +9,15 @@ import AddView from './AddView'
 const TaskList = styled(({
   tasks,
   saveTask,
-  completeTask,
+  editTask,
   className,
   isCollaborator
 }) => {
-  const handleCompleteTask = (task) => v => (isCollaborator ? completeTask({...task, isComplete: v}) : null)
+  const handleCompleteTask = (task) => v => (isCollaborator ? editTask({...task, isComplete: v}) : null)
+  const handleEditTask = (task) => v => (isCollaborator ? editTask({...task, title: v}) : null)
 
   const taskListBody = tasks && tasks.length
-    ? tasks.map(t => <TaskListItem task={t} key={t.id} completeTask={handleCompleteTask(t)} />)
+    ? tasks.map(t => <TaskListItem task={t} key={t.id} completeTask={handleCompleteTask(t)} editTask={handleEditTask(t)} />)
     : <div>No tasks :( Add some!</div>
 
   return (

@@ -15,14 +15,16 @@ class AddView extends Component {
       isComplete: false
     }
 
-    this.state = this.defaultTaskState
+    this.state = props.task
+    ? props.task
+    : this.defaultTaskState
   }
 
   render() {
     const task = this.state
 
     const input = <TextInput
-      value={task.title}
+      defaultValue={task.title}
       type='text'
       onChange={this._updateTask('title')}
       className={'title'} />
@@ -58,6 +60,15 @@ class AddView extends Component {
       [name]: val
     }))
   }
+}
+
+AddView.propTypes = {
+  onCancel: PropTypes.func,
+  saveTask: PropTypes.func.isRequired
+}
+
+AddView.defaultProps = {
+  onCancel: () => {}
 }
 
 const StyledAddView = styled(AddView)`

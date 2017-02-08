@@ -127,7 +127,7 @@ class Objectives extends Component {
               <TaskList
                 tasks={viewer.objective.tasks}
                 saveTask={this._saveTask(objective.id)}
-                completeTask={this._completeTask(objective.id)}
+                editTask={this._editTask(objective.id)}
                 isCollaborator={isCollaborator} />
             </ObjectiveStatistics>
           </ObjectiveFeedSidebar>
@@ -136,7 +136,7 @@ class Objectives extends Component {
     )
   }
 
-  _completeTask = (objectiveId) => task => (this.props.editTask(task, objectiveId))
+  _editTask = (objectiveId) => task => (this.props.editTask(task, objectiveId))
   _saveTask = (objectiveId) => task => (this.props.createTask(task, objectiveId))
 
 
