@@ -425,7 +425,7 @@ const withCreateTaskMutation = graphql(TaskList.mutations.CREATE_TASK, {
           if (!prev.viewer.objective) return prev
           const { createTask } = mutationResult.data
           const tasks = update(prev.viewer.objective.tasks, {
-            $unshift: [createTask]
+            $push: [createTask]
           })
 
           return update(prev, {

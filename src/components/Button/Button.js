@@ -44,14 +44,17 @@ export const StyledButton = styled.button`
   white-space: nowrap;
   user-select: none;
 
-  height: ${ props => props.small ? '27px' : '36px'};
+  height: ${ props => {
+    if (props.small || props.icon) return '27px'
+    return '36px'
+  }};
   padding: ${ props => props.small ? '0 15px' : '0 20px'};
   border-radius: ${props => props.squared ? '12px' : '36px' };
 
   background-color: ${props => {
     if (props.primary) return '#009ed9'
     if (props.secondary) return '#011627'
-    if (props.cancel || props.icon) return '#fff'
+    if (props.cancel) return '#fff'
     return 'transparent'
   }};
 

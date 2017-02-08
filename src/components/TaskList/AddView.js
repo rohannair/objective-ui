@@ -77,15 +77,20 @@ const StyledAddView = styled(AddView)`
   justify-content: space-around;
   align-items: baseline;
   align-content: center;
+  width: 100%;
 
   .checkbox {
     flex: 0 0 auto;
+    margin: 0;
   }
 
   .title {
     flex: 1 0 auto;
-    margin: 0 5px;
-    padding: 0;
+    padding: 0 0 0 0.625rem;
+
+    & input {
+      padding: 0;
+    }
   }
 
   .actions {

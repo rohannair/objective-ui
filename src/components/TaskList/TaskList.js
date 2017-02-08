@@ -17,7 +17,7 @@ const TaskList = styled(({
   const handleEditTask = (task) => v => (isCollaborator ? editTask({...task, title: v}) : null)
 
   const taskListBody = tasks && tasks.length
-    ? tasks.map(t => <TaskListItem task={t} key={t.id} completeTask={handleCompleteTask(t)} editTask={handleEditTask(t)} />)
+    ? tasks.map(t => <TaskListItem task={t} key={t.id} completeTask={handleCompleteTask(t)} editTask={handleEditTask(t)} className='task' />)
     : <div>No tasks :( Add some!</div>
 
   return (
@@ -27,7 +27,7 @@ const TaskList = styled(({
       <div className={'list'}>
         { taskListBody }
 
-        { isCollaborator ? <AddViewToggle saveTask={saveTask} /> : null }
+        { isCollaborator ? <AddTaskListItem saveTask={saveTask} className='task' /> : null }
       </div>
     </div>
   )
@@ -35,9 +35,14 @@ const TaskList = styled(({
   .list {
     margin: 20px 0;
   }
+
+  .task {
+    margin: 2px 0;
+    padding: 7px 3px;
+  }
 `
 
-class AddViewToggle extends Component {
+class AddTaskListItem extends Component {
   constructor(props) {
     super(props)
 
@@ -49,7 +54,7 @@ class AddViewToggle extends Component {
   render() {
     return !this.state.isAdding
       ? <Button inline onClick={this._toggleView}>+ Add Task</Button>
-      : <AddView saveTask={this._handleSave} onCancel={this._toggleView} />
+      : <AddView saveTask={this._handleSave} onCancel={this._toggleView} className={this.props.className} />
   }
 
   _toggleView = () => {

@@ -20,22 +20,25 @@ class TaskListItem extends Component {
   render() {
     const { task, completeTask } = this.props
 
-    if (this.state.isEditing) return <AddView task={task} saveTask={this._handleEdit} onCancel={this._toggleEditing} />
-
     const checkboxStyle = classNames({
       completed: task.isComplete,
-      checkbox: true
+      chk: true
     })
 
-    return (
-      <div className={this.props.className}>
-        <Checkbox
+    const body = this.state.isEditing
+    ? <AddView task={task} saveTask={this._handleEdit} onCancel={this._toggleEditing} />
+    : <div className='container'>
+        <Checkbox key='checkbox'
           isChecked={task.isComplete}
           label={task.title}
           onChange={completeTask}
-          className={checkboxStyle}
-        />
-        <Button className={'edit'} icon onClick={this._toggleEditing}><i className="zmdi zmdi-edit" /></Button>
+          className={checkboxStyle} />
+        <Button key='edit' className={'edit'} icon onClick={this._toggleEditing}><i className="zmdi zmdi-edit" /></Button>
+      </div>
+
+    return (
+      <div className={this.props.className}>
+        { body }
       </div>
     )
   }
@@ -53,15 +56,23 @@ class TaskListItem extends Component {
 }
 
 const StyledTaskListItem = styled(TaskListItem)`
-  display: flex;
-  margin: 2px 0;
+  .container {
+    display: flex;
+    align-items: baseline;
+    align-content: center;
+  }
 
-  .checkbox {
+  .chk {
     flex: 1 0 auto;
+    margin: 0;
 
     &.completed span {
       color: #666;
       text-decoration: line-through;
+    }
+
+    & span {
+      font-size: 1rem;
     }
   }
 
@@ -70,8 +81,12 @@ const StyledTaskListItem = styled(TaskListItem)`
     visibility: hidden;
   }
 
-  &:hover .edit {
-    visibility: visible;
+  &:hover {
+    background-color: #ccc;
+
+      .edit {
+      visibility: visible;
+    }
   }
 `
 
