@@ -51,12 +51,12 @@ export const StyledButton = styled.button`
   background-color: ${props => {
     if (props.primary) return '#009ed9'
     if (props.secondary) return '#011627'
-    if (props.cancel) return '#fff'
+    if (props.cancel || props.icon) return '#fff'
     return 'transparent'
   }};
 
   border: none;
-  color: ${props => props.cancel ? '#000' : '#fff' };
+  color: ${props => props.cancel || props.icon ? '#333' : '#fff' };
   cursor: pointer;
   font-size: 0.875rem;
   letter-spacing: 0.03em;

@@ -5,8 +5,7 @@ import gql from 'graphql-tag'
 import Checkbox from '../Forms/Checkbox'
 import TextInput from '../Forms/TextInput'
 import Button, { StyledButton } from '../Button'
-
-import classNames from 'classnames'
+import TaskListItem from './TaskListItem'
 
 const TaskList = styled(({
   tasks,
@@ -38,30 +37,8 @@ const TaskList = styled(({
   }
 `
 
-const TaskListItem = styled(({
-  task,
-  completeTask,
-  className
-}) => {
-  const style = classNames({
-    completed: task.isComplete,
-    [className]: true
-  })
 
-  return (
-    <Checkbox
-      isChecked={task.isComplete}
-      label={task.title}
-      onChange={completeTask}
-      className={style}
-    />
-  )
-})`
-  &.completed span {
-    color: #666;
-    text-decoration: line-through;
   }
-`
 
 class AddView extends Component {
   constructor(props) {
