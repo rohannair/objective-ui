@@ -2,8 +2,6 @@ import React, { PropTypes } from 'react'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
-import dateformat from 'dateformat'
-
 import Pill from '../Pill'
 import UserTab from '../UserTab'
 import ObjectiveTab from '../ObjectiveTab'
