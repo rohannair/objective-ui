@@ -13,7 +13,8 @@ const Button = p => {
     [styles.transparent]: p.transparent,
     [styles.sm]: p.size === 'sm',
     [styles.right]: p.right,
-    [styles.link]: p.link || (!p.primary && !p.secondary)
+    [styles.link]: p.link || (!p.primary && !p.secondary),
+    [styles.inline]: p.inline
   })
 
   return (
@@ -43,18 +44,22 @@ export const StyledButton = styled.button`
   white-space: nowrap;
   user-select: none;
 
-  height: ${ props => props.small ? '27px' : '36px'};
+  height: ${ props => {
+    if (props.small || props.icon) return '27px'
+    return '36px'
+  }};
   padding: ${ props => props.small ? '0 15px' : '0 20px'};
   border-radius: ${props => props.squared ? '12px' : '36px' };
 
   background-color: ${props => {
     if (props.primary) return '#009ed9'
     if (props.secondary) return '#011627'
+    if (props.cancel) return '#fff'
     return 'transparent'
   }};
 
   border: none;
-  color: #fff;
+  color: ${props => props.cancel || props.icon ? '#333' : '#fff' };
   cursor: pointer;
   font-size: 0.875rem;
   letter-spacing: 0.03em;
