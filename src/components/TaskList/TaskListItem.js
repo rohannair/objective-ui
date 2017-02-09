@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import styled from 'styled-components'
 import classNames from 'classnames'
 
@@ -7,6 +7,11 @@ import { StyledButton as Button } from '../Button'
 import AddView from './AddView'
 
 class TaskListItem extends Component {
+  static propTypes = {
+    task: PropTypes.object.isRequired,
+    deleteTask: PropTypes.func
+  }
+
   constructor(props) {
     super(props)
 
@@ -16,7 +21,7 @@ class TaskListItem extends Component {
   }
 
   render() {
-    const { task, completeTask } = this.props
+    const { task, completeTask, deleteTask } = this.props
 
     const checkboxStyle = classNames({
       completed: task.isComplete,
@@ -43,6 +48,8 @@ class TaskListItem extends Component {
         >
           <i className="zmdi zmdi-edit" />
         </Button>
+
+        { deleteTask && <Button className={'edit'} icon onClick={this.props.deleteTask}><i className="zmdi zmdi-delete" /></Button> }
       </div>
     )
   }

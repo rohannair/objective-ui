@@ -128,6 +128,7 @@ class Objectives extends Component {
                 tasks={viewer.objective.tasks}
                 saveTask={this._saveTask(objective.id)}
                 editTask={this._editTask(objective.id)}
+                deleteTask={this._deleteTask(objective.id)}
                 isCollaborator={isCollaborator} />
             </ObjectiveStatistics>
           </ObjectiveFeedSidebar>
@@ -138,6 +139,7 @@ class Objectives extends Component {
 
   _editTask = (objectiveId) => task => (this.props.editTask(task, objectiveId))
   _saveTask = (objectiveId) => task => (this.props.createTask(task, objectiveId))
+  _deleteTask = (objectiveId) => task => (this.props.deleteTask(task, objectiveId))
 
 
   _claimOwnership = (owner) => {
@@ -475,6 +477,38 @@ const withEditTaskMutation = graphql(TaskList.mutations.EDIT_TASK, {
   })
 })
 
+const withDeleteTaskMutation = graphql(TaskList.mutations.DELETE_TASK, {
+  props: ({mutate}) => ({
+    deleteTask: (id) => mutate({
+      variables: {id},
+      optimisticResponse: {
+        __typename: 'Mutation',
+        deleteTask: id
+      },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult }) => {
+          if (!prev.viewer.objective) return prev
+
+          const { deleteTask } = mutationResult.data
+          const idx = prev.viewer.objective.tasks.findIndex(o => o.id === deleteTask)
+
+          const tasks = update(prev.viewer.objective.tasks, {
+            $splice: [[idx, 1]]
+          })
+
+          return update(prev, {
+            viewer: {
+              objective: {
+                tasks: { $set: tasks }
+              }
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
 const withAddCollaboratorMutation = graphql(ADD_COLLABORATOR, {
   props: ({mutate}) => ({
     addCollaborator: (objectiveId, userId) => mutate ({
@@ -563,6 +597,7 @@ export default compose(
   withCreateMutation,
   withCreateTaskMutation,
   withEditTaskMutation,
+  withDeleteTaskMutation,
   withAddCollaboratorMutation,
   withData,
   connect(state => state.global)
