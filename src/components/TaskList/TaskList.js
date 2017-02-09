@@ -16,7 +16,7 @@ const TaskList = styled(({
 }) => {
   const handleCompleteTask = (task) => v => (isCollaborator ? editTask({...task, isComplete: v}) : null)
   const handleEditTask = (task) => v => (isCollaborator ? editTask({...task, title: v}) : null)
-  const handleDeleteTask = (task) => () => (deleteTask(task.id))
+  const handleDeleteTask = (task) => () => (deleteTask(task))
 
   const buildTaskListItem = (task) => (
     <TaskListItem
@@ -94,7 +94,7 @@ const CREATE_TASK = gql`
 `
 
 const EDIT_TASK = gql`
-  mutation editTask($id: Int!) {
+  mutation editTask($id: String!) {
     editTask(id: $id) {
       id
       title
@@ -104,7 +104,7 @@ const EDIT_TASK = gql`
 `
 
 const DELETE_TASK = gql`
-  mutation deleteTask($id: Int!) {
+  mutation deleteTask($id: String!) {
     deleteTask(id: $id)
   }
 `

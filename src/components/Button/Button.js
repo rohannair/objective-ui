@@ -48,7 +48,7 @@ export const StyledButton = styled.button`
     if (props.small || props.icon) return '27px'
     return '36px'
   }};
-  padding: ${ props => props.small ? '0 15px' : '0 20px'};
+  padding: ${ props => props.small || props.icon ? '0 15px' : '0 20px'};
   border-radius: ${props => props.squared ? '12px' : '36px' };
 
   background-color: ${props => {
