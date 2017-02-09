@@ -29,7 +29,7 @@ const ObjectiveHeader = p => {
 
   return (
     <div className={styles.objectiveHeader}>
-      { p.menuLeft && menu}
+      { p.menuLeft && p.isOwner && menu}
       <h3>
         {objectiveLock}
         {p.objective.name}
