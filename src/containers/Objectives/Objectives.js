@@ -80,6 +80,7 @@ class Objectives extends Component {
         <div className={styles.objectivelist}>
           <ObjectiveHeader
             menuLeft
+            isOwner={isOwner}
             objective={viewer.objective}
             dropdownOptions={[
               { name: 'Edit', onClick: e => this._showEditObjectiveModal(viewer.objective), icon: 'edit' }
@@ -135,7 +136,9 @@ class Objectives extends Component {
   }
 
   _editObjective = () => {
-    const { objective } = this.state
+    const prevObjective = this.props.data.viewer.objective
+    const objective = update(prevObjective, { $merge: { ...this.state.objective }})
+
     this.props.editObjective({ objective })
 
     this.setState({
@@ -155,7 +158,16 @@ class Objectives extends Component {
     this.props.editObjective({objective})
   }
 
-  _handleObjectiveChange = (name) => val => {
+  _handleObjectiveModalPrivacyChange = (isPrivate) => {
+    this.setState(prev => ({
+      objective: {
+        ...prev.objective,
+        isPrivate: isPrivate
+      }
+    }))
+  }
+
+  _handleObjectiveChange = (name) => (val) => {
     this.setState(prev => ({
       objective: {
         ...prev.objective,
@@ -164,7 +176,7 @@ class Objectives extends Component {
     }))
   }
 
-  _handleAddCollaboratorChange = (name) => val => {
+  _handleAddCollaboratorChange = (name) => (val) => {
     this.setState(prev => ({
       addCollaborator: {
         ...prev.addCollaborator,
@@ -196,7 +208,7 @@ class Objectives extends Component {
           onChange={this._handleAddCollaboratorChange('id')}
           source={this._getAvailableUsers()}
           query={this.state.addCollaborator.query}
-          onQueryChange={(this._handleAddCollaboratorChange('query'))}
+          onQueryChange={this._handleAddCollaboratorChange('query')}
         />
       )
     )
@@ -218,6 +230,8 @@ class Objectives extends Component {
         onChange={this._handleObjectiveChange}
         defaultName={this.state.objective.name}
         defaultEndsAt={this.state.objective.endsAt}
+        isPrivate={this.state.objective.isPrivate}
+        onPrivacyChange={this._handleObjectiveModalPrivacyChange}
       />
     ))
 
@@ -232,6 +246,8 @@ class Objectives extends Component {
         onChange={this._handleObjectiveChange}
         defaultName={this.state.objective.name}
         defaultEndsAt={this.state.objective.endsAt}
+        isPrivate={this.props.data.viewer.objective.isPrivate}
+        onPrivacyChange={this._handleObjectiveModalPrivacyChange}
       />
     )
   ))
@@ -259,8 +275,8 @@ const ADD_COLLABORATOR = gql`
 `
 
 const EDIT_OBJECTIVE = gql`
-  mutation editObjective($id: String!, $name: String) {
-    editObjective(id: $id, name: $name) {
+  mutation editObjective($id: String!, $name: String, $isPrivate: Boolean!) {
+    editObjective(id: $id, name: $name, isPrivate: $isPrivate) {
       id
       name
       status
@@ -277,11 +293,12 @@ const EDIT_OBJECTIVE = gql`
 `
 
 const NEW_OBJECTIVE = gql`
-  mutation createObjective($name: String!) {
-    createObjective(name: $name) {
+  mutation createObjective($name: String!, $isPrivate: Boolean!) {
+    createObjective(name: $name, isPrivate: $isPrivate) {
       id
       name
       status
+      isPrivate
     }
   }
 `
@@ -336,8 +353,8 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
 
 const withCreateMutation = graphql(NEW_OBJECTIVE, {
   props: ({ mutate }) => ({
-    createObjective: ({ objective: { name, endsAt }}) => mutate ({
-      variables: { name, endsAt },
+    createObjective: ({ objective: { name, endsAt, isPrivate }}) => mutate ({
+      variables: { name, endsAt, isPrivate },
       optimisticResponse: {
         __typename: 'Mutation',
         createObjective: {
@@ -345,7 +362,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
           id: Math.random().toString(16).slice(2),
           endsAt,
           name,
-          isPrivate: false,
+          isPrivate,
           status: 'draft'
         }
       },
