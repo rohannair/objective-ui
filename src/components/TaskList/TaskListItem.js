@@ -54,6 +54,16 @@ class TaskListItem extends Component {
     )
   }
 
+  _canEdit = () => {
+    return this.props.isCollaborator
+  }
+
+  _handleCheckboxChange = (v) => {
+    if (!this._canEdit()) return
+
+    this.props.completeTask(v)
+  }
+
   _handleEdit = (task) => {
     this.props.editTask(task.title)
     this._toggleEditing()
@@ -70,6 +80,11 @@ export default styled(TaskListItem)`
   display: flex;
   align-items: baseline;
   align-content: center;
+
+  .actions {
+    visibility: hidden;
+    display: flex;
+  }
 
   .chk {
     display: flex;
@@ -91,21 +106,11 @@ export default styled(TaskListItem)`
     }
   }
 
-  .edit {
-    margin-left: auto;
-    visibility: hidden;
-
-    &:hover {
-      color: #009ED9;
-    }
-  }
-
   &:hover {
     cursor: pointer;
 
-    .edit {
+    .actions {
       visibility: visible;
     }
-
   }
 `

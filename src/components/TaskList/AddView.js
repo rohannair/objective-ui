@@ -39,11 +39,11 @@ class AddView extends Component {
         />
 
         <div className={'actions'}>
-          <Button primary small onClick={this._handleSave}>
-            Save
+          <Button link icon onClick={this._handleSave}>
+            <i className="zmdi zmdi-save" />
           </Button>
 
-          <Button cancel link small onClick={this.props.onCancel}>
+          <Button cancel link icon onClick={this.props.onCancel}>
             &times;
           </Button>
         </div>
@@ -106,12 +106,7 @@ const StyledAddView = styled(AddView)`
 
   .actions {
     display: flex;
-    flex: 0 0 auto;
 
-    & > * {
-      flex: 0 0 auto;
-      margin: 0 2px;
-    }
   }
 
 `
