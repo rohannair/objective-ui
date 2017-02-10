@@ -22,6 +22,7 @@ class AddView extends Component {
 
   render() {
     const { title, isComplete} = this.state
+
     return (
       <div className={this.props.className}>
         <Checkbox
@@ -48,6 +49,12 @@ class AddView extends Component {
         </div>
       </div>
     )
+  }
+
+  _handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      this._handleSave()
+    }
   }
 
   _handleSave = () => {
