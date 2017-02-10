@@ -104,7 +104,7 @@ const EDIT_TASK = gql`
 `
 
 const DELETE_TASK = gql`
-  mutation deleteTask($id: String!) {
+  mutation deleteTask($id: Int!) {
     deleteTask(id: $id)
   }
 `
