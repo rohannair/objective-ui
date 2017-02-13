@@ -22,4 +22,4 @@ dependencies:
 
 test:
   override:
-    - yarn test
+    - npm test
