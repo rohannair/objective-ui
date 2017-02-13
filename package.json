@@ -3,22 +3,22 @@
   "version": "0.7.1",
   "main": "index.js",
   "scripts": {
-    "clean": "rimraf dist",
-    "test": "jest",
-    "test:update": "jest -u",
-    "dev": "better-npm-run dev",
+    "build": "npm run clean && npm run build:webpack",
     "build:dll": "webpack --config ./config/webpack.dll.js",
     "build:webpack": "better-npm-run build:webpack",
-    "build": "npm run clean && npm run build:webpack",
+    "clean": "rimraf dist",
+    "dev": "better-npm-run dev",
     "lint": "npm run lint:js && npm run lint:css",
+    "lint:css": "stylelint src/**/*.css",
     "lint:js": "eslint --ext .js src",
     "lint:js:fix": "eslint --ext .js src --fix",
-    "lint:css": "stylelint src/**/*.css",
     "new:comp": "babel-node ./scripts/newComponent.js",
     "new:cont": "babel-node ./scripts/newContainer.js",
-    "test:watch": "npm test -- --watch",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "precommit": "npm run lint",
+    "prepush": "npm run lint && npm run test",
+    "test": "jest",
+    "test:update": "jest -u",
+    "test:watch": "npm test -- --watch"
   },
   "betterScripts": {
     "build:webpack": {
