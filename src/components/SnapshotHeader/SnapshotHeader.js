@@ -23,7 +23,6 @@ const SnapshotHeader = styled((snap) => (
   flex-direction: row;
   flex-wrap: wrap;
   padding: 0 10px;
-}
 `
 
 SnapshotHeader.mutations = {

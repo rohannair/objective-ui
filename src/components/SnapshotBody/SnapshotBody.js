@@ -22,7 +22,7 @@ const SnapshotBody = p => {
 
 export default styled(SnapshotBody)`
   padding: 20px 0;
-
+  
   .imgContainer {
     object-fit: cover;
     margin-bottom: 10px;
