@@ -16,7 +16,7 @@
     "new:cont": "babel-node ./scripts/newContainer.js",
     "precommit": "npm run lint",
     "prepush": "npm run lint && npm run test",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:update": "jest -u",
     "test:watch": "npm test -- --watch"
   },
