@@ -7,8 +7,8 @@
 2. [Yarn](https://github.com/yarnpkg/yarn)
 
 ### Set Up
-1. `$ yarn`
-2. `yarn run dev`
+1. `$ yarn` - installs deps
+2. `$ yarn dev`
 
 ### Testing
 - Tests are written in [Jest](https://facebook.github.io/jest/) with React tests being done using [Enzyme](https://github.com/airbnb/enzyme)
