@@ -23,8 +23,7 @@ import Alert from '../../components/Alert'
 
 import { StyledButton } from '../../components/Button/Button'
 
-import { ObjectiveChangeModal, SetOwnerModal } from './Modals'
-import AddCollaboratorModal from './Modals/AddCollaboratorModal'
+import { ObjectiveChangeModal, SetOwnerModal, AddCollaboratorModal } from './Modals'
 
 class Objectives extends Component {
   static propTypes = {
@@ -39,11 +38,9 @@ class Objectives extends Component {
   constructor(props) {
     super(props)
 
-    this.defaultObjectiveState = {
-      id: '',
-      name: '',
-      endsAt: timestamp(),
-      isPrivate: false
+    this.defaultObjectiveModalState = {
+      edit: false,
+      new: false
     }
 
     this.defaultAddCollaboratorState = {
@@ -52,9 +49,10 @@ class Objectives extends Component {
     }
 
     this.state = {
-      objective: this.defaultObjectiveState,
-      addCollaborator: this.defaultAddCollaboratorState
+      addCollaborator: this.defaultAddCollaboratorState,
+      showObjectiveModal: this.defaultObjectiveModalState
     }
+
     this.modalAction = { type: 'SHOW_MODAL' }
   }
 
@@ -75,7 +73,7 @@ class Objectives extends Component {
             <StyledButton
               secondary
               squared
-              onClick={this._showNewObjectiveModal}
+              onClick={this._handleObjectiveModalView('new')}
             >+</StyledButton>
           </div>
         </ObjectivesSidebar>
@@ -83,9 +81,10 @@ class Objectives extends Component {
         <div className={styles.objectivelist}>
           <ObjectiveHeader
             menuLeft
+            isOwner={isOwner}
             objective={viewer.objective}
             dropdownOptions={[
-              { name: 'Edit', onClick: e => this._showEditObjectiveModal(viewer.objective), icon: 'edit' }
+              { name: 'Edit', onClick: this._handleObjectiveModalView('edit') , icon: 'edit' }
             ]}
           />
           <ObjectiveCollaboratorBar
@@ -100,9 +99,56 @@ class Objectives extends Component {
             onPrivateChange={this._handleObjectivePrivacyChange}
             objective={viewer.objective}/>
 
+          { this.state.showObjectiveModal.edit && this._objectiveModal('edit', viewer.objective) }
+          { this.state.showObjectiveModal.new && this._objectiveModal('new', null) }
+
           { this._objectiveBody(viewer, viewer.objective) }
         </div>
       </div>
+    )
+  }
+
+  _objectiveModal = (modalType, objective = null) => {
+    let modalOptions
+    let defaultObjective
+
+    switch (modalType) {
+    case ('new'):
+      modalOptions = {
+        title: 'Create Objective',
+        submit: this._createNewObjective,
+        label: 'Create Objective'
+      }
+
+      defaultObjective = {
+        id: '',
+        name: '',
+        endsAt: timestamp(),
+        isPrivate: false
+      }
+      break
+    case ('edit'):
+      modalOptions = {
+        title : 'Edit Objective',
+        submit : this._editObjective,
+        label : 'Edit Objective'
+      }
+
+      const { id, name, endsAt, isPrivate } = objective
+      defaultObjective = { id, name ,endsAt, isPrivate }
+
+      break
+    default:
+      return
+    }
+
+    return (
+     <ObjectiveChangeModal
+       active={this.state.showObjectiveModal[modalType]}
+       close={this._handleObjectiveModalView(modalType)}
+       defaultValues={{ ...defaultObjective }}
+       { ...modalOptions }
+      />
     )
   }
 
@@ -160,22 +206,17 @@ class Objectives extends Component {
     })
   }
 
-  _createNewObjective = () => {
-    const { objective } = this.state
+  _createNewObjective = (objective) => {
     this.props.createObjective({ objective })
-
-    this.setState({
-      objective: this.defaultObjectiveState
-    })
+    this._handleObjectiveModalView('new')()
   }
 
-  _editObjective = () => {
-    const { objective } = this.state
-    this.props.editObjective({ objective })
+  _editObjective = (editedObjective) => {
+    const prevObjective = this.props.data.viewer.objective
+    const objective = update(prevObjective, { $merge: { ...editedObjective }})
 
-    this.setState({
-      objective: this.defaultObjectiveState
-    })
+    this.props.editObjective({ objective })
+    this._handleObjectiveModalView('edit')()
   }
 
   _getObjective = (id) => {
@@ -190,16 +231,7 @@ class Objectives extends Component {
     this.props.editObjective({objective})
   }
 
-  _handleObjectiveChange = (name) => val => {
-    this.setState(prev => ({
-      objective: {
-        ...prev.objective,
-        [name]: name === 'endsAt' ? timestamp(val) : val
-      }
-    }))
-  }
-
-  _handleAddCollaboratorChange = (name) => val => {
+  _handleAddCollaboratorChange = (name) => (val) => {
     this.setState(prev => ({
       addCollaborator: {
         ...prev.addCollaborator,
@@ -231,7 +263,7 @@ class Objectives extends Component {
           onChange={this._handleAddCollaboratorChange('id')}
           source={this._getAvailableUsers()}
           query={this.state.addCollaborator.query}
-          onQueryChange={(this._handleAddCollaboratorChange('query'))}
+          onQueryChange={this._handleAddCollaboratorChange('query')}
         />
       )
     )
@@ -244,32 +276,14 @@ class Objectives extends Component {
     })
   }
 
-  _showNewObjectiveModal = () => this.props.dispatch(
-    this._showModal(
-      'Create New Objective',
-      'Create Objective',
-      this._createNewObjective,
-      <ObjectiveChangeModal
-        onChange={this._handleObjectiveChange}
-        defaultName={this.state.objective.name}
-        defaultEndsAt={this.state.objective.endsAt}
-      />
-    ))
-
-  _showEditObjectiveModal = ({id, name, endsAt}) => this.setState({
-    objective: { id, name, endsAt }
-  }, () => this.props.dispatch(
-    this._showModal(
-      'Edit Objective',
-      'Save Objective',
-      this._editObjective,
-      <ObjectiveChangeModal
-        onChange={this._handleObjectiveChange}
-        defaultName={this.state.objective.name}
-        defaultEndsAt={this.state.objective.endsAt}
-      />
-    )
-  ))
+  _handleObjectiveModalView = (name) => () => {
+    this.setState(prev => ({
+      showObjectiveModal: {
+        ...prev.showObjectiveModal,
+        [name]: !prev.showObjectiveModal[name]
+      }
+    }))
+  }
 
   _showSetOwnerModal = () =>
     this.props.dispatch(this._showModal(
@@ -294,8 +308,8 @@ const ADD_COLLABORATOR = gql`
 `
 
 const EDIT_OBJECTIVE = gql`
-  mutation editObjective($id: String!, $name: String) {
-    editObjective(id: $id, name: $name) {
+  mutation editObjective($id: String!, $name: String, $isPrivate: Boolean!) {
+    editObjective(id: $id, name: $name, isPrivate: $isPrivate) {
       id
       name
       status
@@ -312,11 +326,12 @@ const EDIT_OBJECTIVE = gql`
 `
 
 const NEW_OBJECTIVE = gql`
-  mutation createObjective($name: String!) {
-    createObjective(name: $name) {
+  mutation createObjective($name: String!, $isPrivate: Boolean!) {
+    createObjective(name: $name, isPrivate: $isPrivate) {
       id
       name
       status
+      isPrivate
     }
   }
 `
@@ -371,8 +386,8 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
 
 const withCreateMutation = graphql(NEW_OBJECTIVE, {
   props: ({ mutate }) => ({
-    createObjective: ({ objective: { name, endsAt }}) => mutate ({
-      variables: { name, endsAt },
+    createObjective: ({ objective: { name, endsAt, isPrivate }}) => mutate ({
+      variables: { name, endsAt, isPrivate },
       optimisticResponse: {
         __typename: 'Mutation',
         createObjective: {
@@ -380,7 +395,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
           id: Math.random().toString(16).slice(2),
           endsAt,
           name,
-          isPrivate: false,
+          isPrivate,
           status: 'draft'
         }
       },
