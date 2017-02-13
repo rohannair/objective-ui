@@ -109,7 +109,6 @@ class Feed extends Component {
 
     return (
       <div className={styles.Feed}>
-        <PageHeader title="Feed" />
         <div className={styles.body}>
           <div className={styles.feedBody}>
             <SnapshotEditor
