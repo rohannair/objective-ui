@@ -11,8 +11,8 @@ const TextInput = (props) => {
       onChange = { props.onChange }
       onKeyPress = { props.onKeyPress }
       type = { props.type }
-      defaultValue = { props.defaultValue }
       className = { props.className }
+      value = { props.value }
     />
   )
 }
