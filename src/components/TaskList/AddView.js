@@ -21,26 +21,30 @@ class AddView extends Component {
   }
 
   render() {
-    const task = this.state
-
-    const input = <TextInput
-      defaultValue={task.title}
-      type='text'
-      onChange={this._updateTask('title')}
-      className={'title'} />
-
-    const checkbox = <Checkbox
-      isChecked={task.isComplete}
-      onChange={this._updateTask('isComplete')}
-      className={'checkbox'} />
-
+    const { title, isComplete} = this.state
     return (
       <div className={this.props.className}>
-        { checkbox }
-        { input }
+        <Checkbox
+          isChecked={isComplete}
+          onChange={this._updateTask('isComplete')}
+          className="checkbox"
+        />
+
+        <TextInput
+          defaultValue={title}
+          type="text"
+          onChange={this._updateTask('title')}
+          className="title"
+        />
+
         <div className={'actions'}>
-          <Button primary small onClick={this._handleSave}>+</Button>
-          <Button cancel link small onClick={this.props.onCancel}>&times;</Button>
+          <Button primary small onClick={this._handleSave}>
+            Save
+          </Button>
+
+          <Button cancel link small onClick={this.props.onCancel}>
+            &times;
+          </Button>
         </div>
       </div>
     )

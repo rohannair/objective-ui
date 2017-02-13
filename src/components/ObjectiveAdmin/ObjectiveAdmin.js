@@ -22,10 +22,11 @@ const ObjectiveAdmin = styled(({
   )
 })`
   display: flex;
+  flex-direction: row;
+  align-items: center;
+
   background-color: #fff;
   width: 100%;
-  align-items: center;
-  height: 60px;
   border-top: 1px solid #efefef;
   padding: 10px 30px;
   font-size: 0.875rem;

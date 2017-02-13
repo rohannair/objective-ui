@@ -10,11 +10,9 @@ class TaskListItem extends Component {
   constructor(props) {
     super(props)
 
-    this.defaultState = {
+    this.state = {
       isEditing: false
     }
-
-    this.state = this.defaultState
   }
 
   render() {
@@ -25,20 +23,26 @@ class TaskListItem extends Component {
       chk: true
     })
 
-    const body = this.state.isEditing
-    ? <AddView task={task} saveTask={this._handleEdit} onCancel={this._toggleEditing} />
-    : <div className='container'>
-        <Checkbox key='checkbox'
-          isChecked={task.isComplete}
-          label={task.title}
-          onChange={completeTask}
-          className={checkboxStyle} />
-        <Button key='edit' className={'edit'} icon onClick={this._toggleEditing}><i className="zmdi zmdi-edit" /></Button>
-      </div>
+    if (this.state.isEditing) return <AddView task={task} saveTask={this._handleEdit} onCancel={this._toggleEditing} />
 
     return (
       <div className={this.props.className}>
-        { body }
+        <Checkbox
+          key="checkbox"
+          isChecked={task.isComplete}
+          label={task.title}
+          onChange={completeTask}
+          className={checkboxStyle}
+        />
+
+        <Button
+          key="edit"
+          className="edit"
+          icon
+          onClick={this._toggleEditing}
+        >
+          <i className="zmdi zmdi-edit" />
+        </Button>
       </div>
     )
   }
@@ -55,39 +59,46 @@ class TaskListItem extends Component {
   }
 }
 
-const StyledTaskListItem = styled(TaskListItem)`
-  .container {
-    display: flex;
-    align-items: baseline;
-    align-content: center;
-  }
+export default styled(TaskListItem)`
+  display: flex;
+  align-items: baseline;
+  align-content: center;
 
   .chk {
-    flex: 1 0 auto;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
     margin: 0;
 
     &.completed span {
-      color: #666;
-      text-decoration: line-through;
+      color: #009ED9;
+      opacity: 0.7;
     }
 
-    & span {
+    span {
       font-size: 1rem;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
   }
 
   .edit {
-    flex: 0 0 auto;
+    margin-left: auto;
     visibility: hidden;
+
+    &:hover {
+      color: #009ED9;
+    }
   }
 
   &:hover {
-    background-color: #ccc;
+    cursor: pointer;
 
-      .edit {
+    .edit {
       visibility: visible;
     }
+
   }
 `
-
-export default StyledTaskListItem

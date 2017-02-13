@@ -23,22 +23,16 @@ const TaskList = styled(({
   return (
     <div className={className}>
       <h3>Task List:</h3>
-
-      <div className={'list'}>
+      <div className="list">
         { taskListBody }
 
-        { isCollaborator ? <AddTaskListItem saveTask={saveTask} className='task' /> : null }
+        {  isCollaborator && <AddTaskListItem saveTask={saveTask} className='task' /> }
       </div>
     </div>
   )
 })`
-  .list {
-    margin: 20px 0;
-  }
-
   .task {
-    margin: 2px 0;
-    padding: 7px 3px;
+    padding: 10px 0;
   }
 `
 
@@ -52,22 +46,30 @@ class AddTaskListItem extends Component {
   }
 
   render() {
-    return !this.state.isAdding
-      ? <Button inline onClick={this._toggleView}>+ Add Task</Button>
-      : <AddView saveTask={this._handleSave} onCancel={this._toggleView} className={this.props.className} />
+    return <AddTask
+      isAdding={this.state.isAdding}
+      onClick={this._toggleView}
+      onSave={this._handleSave}
+    />
   }
 
-  _toggleView = () => {
-    this.setState(prev => ({
-      isAdding: !prev.isAdding
-    }))
-  }
+  _toggleView = e => this.setState(prev => ({ isAdding: !prev.isAdding }))
 
   _handleSave = (task) => {
     this._toggleView()
     this.props.saveTask(task)
   }
 }
+
+const AddTask = styled(({ isAdding, className, onClick, onSave }) => {
+  if (!isAdding) return <div className={className} onClick={onClick}>+ Add Task</div>
+
+  return <AddView saveTask={onSave} onCancel={onClick} className={className} />
+})`
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #777;
+`
 
 const CREATE_TASK = gql`
   mutation createTask($title: String!, $isComplete: Boolean!, $objective: String!) {

@@ -6,6 +6,7 @@
   width: 100%;
   background-color: color($primary lightness(+55%));
   border: 1px solid color($primary lightness(+40%));
+  margin-bottom: 30px;
 }
 
 .header {
