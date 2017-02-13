@@ -23,7 +23,7 @@ import Alert from '../../components/Alert'
 
 import { StyledButton } from '../../components/Button/Button'
 
-import { ObjectiveChangeModal, SetOwnerModal } from './Modals'
+import { ObjectiveChangeModal, SetOwnerModal, ConfirmTaskDeleteModal } from './Modals'
 import AddCollaboratorModal from './Modals/AddCollaboratorModal'
 
 class Objectives extends Component {
@@ -128,6 +128,7 @@ class Objectives extends Component {
                 tasks={viewer.objective.tasks}
                 saveTask={this._saveTask(objective.id)}
                 editTask={this._editTask(objective.id)}
+                deleteTask={this._confirmDeleteTask(objective.id)}
                 isCollaborator={isCollaborator} />
             </ObjectiveStatistics>
           </ObjectiveFeedSidebar>
@@ -138,7 +139,20 @@ class Objectives extends Component {
 
   _editTask = (objectiveId) => task => (this.props.editTask(task, objectiveId))
   _saveTask = (objectiveId) => task => (this.props.createTask(task, objectiveId))
+  _confirmDeleteTask = (objectiveId) => task => {
+    this.props.dispatch(
+      this._showModal(
+        'Delete Task',
+        'Delete Task',
+        this._deleteTask(task),
+        <ConfirmTaskDeleteModal task={task} />
+      )
+    )
+  }
 
+  _deleteTask = (task) => () => {
+    this.props.deleteTask(task)
+  }
 
   _claimOwnership = (owner) => {
     const { editObjective, data: {viewer} } = this.props
@@ -475,6 +489,38 @@ const withEditTaskMutation = graphql(TaskList.mutations.EDIT_TASK, {
   })
 })
 
+const withDeleteTaskMutation = graphql(TaskList.mutations.DELETE_TASK, {
+  props: ({mutate}) => ({
+    deleteTask: ({ id }) => mutate({
+      variables: {id},
+      optimisticResponse: {
+        __typename: 'Mutation',
+        deleteTask: id
+      },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult }) => {
+          if (!prev.viewer.objective) return prev
+
+          const { deleteTask } = mutationResult.data
+          const idx = prev.viewer.objective.tasks.findIndex(o => o.id === deleteTask)
+
+          const tasks = update(prev.viewer.objective.tasks, {
+            $splice: [[idx, 1]]
+          })
+
+          return update(prev, {
+            viewer: {
+              objective: {
+                tasks: { $set: tasks }
+              }
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
 const withAddCollaboratorMutation = graphql(ADD_COLLABORATOR, {
   props: ({mutate}) => ({
     addCollaborator: (objectiveId, userId) => mutate ({
@@ -563,6 +609,7 @@ export default compose(
   withCreateMutation,
   withCreateTaskMutation,
   withEditTaskMutation,
+  withDeleteTaskMutation,
   withAddCollaboratorMutation,
   withData,
   connect(state => state.global)

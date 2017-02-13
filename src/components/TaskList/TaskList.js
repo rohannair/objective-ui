@@ -10,14 +10,27 @@ const TaskList = styled(({
   tasks,
   saveTask,
   editTask,
+  deleteTask,
   className,
   isCollaborator
 }) => {
-  const handleCompleteTask = (task) => v => (isCollaborator ? editTask({...task, isComplete: v}) : null)
-  const handleEditTask = (task) => v => (isCollaborator ? editTask({...task, title: v}) : null)
+  const handleCompleteTask = (task) => v => editTask({...task, isComplete: v})
+  const handleEditTask = (task) => v => editTask({...task, title: v})
+  const handleDeleteTask = (task) => () => deleteTask(task)
+
+  const buildTaskListItem = (task) => (
+    <TaskListItem
+      key={task.id}
+      task={task}
+      completeTask={handleCompleteTask(task)}
+      editTask={handleEditTask(task)}
+      deleteTask={handleDeleteTask(task)}
+      className='task'
+      isCollaborator={isCollaborator}/>
+  )
 
   const taskListBody = tasks && tasks.length
-    ? tasks.map(t => <TaskListItem task={t} key={t.id} completeTask={handleCompleteTask(t)} editTask={handleEditTask(t)} className='task' />)
+    ? tasks.map(t => buildTaskListItem(t))
     : <div>No tasks :( Add some!</div>
 
   return (
@@ -82,7 +95,7 @@ const CREATE_TASK = gql`
 `
 
 const EDIT_TASK = gql`
-  mutation editTask($id: String!) {
+  mutation editTask($id: Int!) {
     editTask(id: $id) {
       id
       title
@@ -91,9 +104,16 @@ const EDIT_TASK = gql`
   }
 `
 
+const DELETE_TASK = gql`
+  mutation deleteTask($id: Int!) {
+    deleteTask(id: $id)
+  }
+`
+
 TaskList.mutations = {
   CREATE_TASK,
-  EDIT_TASK
+  EDIT_TASK,
+  DELETE_TASK
 }
 
 export default TaskList
