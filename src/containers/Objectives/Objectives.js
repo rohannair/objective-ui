@@ -276,6 +276,15 @@ class Objectives extends Component {
     })
   }
 
+  _handleObjectiveModalView = (name) => () => {
+    this.setState(prev => ({
+      showObjectiveModal: {
+        ...prev.showObjectiveModal,
+        [name]: !prev.showObjectiveModal[name]
+      }
+    }))
+  }
+
   _showSetOwnerModal = () =>
     this.props.dispatch(this._showModal(
       'This Objective need an Owner!',
