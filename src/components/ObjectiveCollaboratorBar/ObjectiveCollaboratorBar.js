@@ -14,7 +14,14 @@ const ObjectiveCollaboratorBar = styled(({
   if (!objective) return null
 
   const ownerAvatar = objective.owner
-  ? (<Avatar className={'ownerAvatar'} image={objective.owner.img} cover />)
+  ? (<Tooltip
+      message={`${objective.owner.firstName} ${objective.owner.lastName}`}
+      eventType="hover"
+      direction="bottom"
+    >
+      <Avatar className={'ownerAvatar'} image={objective.owner.img} cover />
+    </Tooltip>
+    )
   : (<Tooltip message="Claim ownership" eventType="hover" direction="bottom">
        <Avatar className={'noOwnerAvatar'} title="?" onClick={setOwner} />
      </Tooltip>)
@@ -28,8 +35,16 @@ const ObjectiveCollaboratorBar = styled(({
   const collabTitle = (filteredCollborators && filteredCollborators.length > 0) || (filteredCollborators.length == 0 && isOwner)
   ? 'Collaborators: '
   : null
-
-  const avatars = filteredCollborators && filteredCollborators.map(u => <Avatar key={u.id} className={'avatar'} image={u.img} />)
+  const avatars = filteredCollborators && filteredCollborators.map(u => (
+    <Tooltip
+      key={u.id}
+      message={`${u.firstName} ${u.lastName}`}
+      eventType="hover"
+      direction="bottom"
+    >
+      <Avatar className={'avatar'} image={u.img} />
+    </Tooltip>)
+  )
 
   const addCollaboratorAvatar = isOwner
   ? (<Tooltip message="Add Collaborators" eventType="hover" direction="bottom">

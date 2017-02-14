@@ -14,7 +14,6 @@
     "lint:js:fix": "eslint --ext .js src --fix",
     "new:comp": "babel-node ./scripts/newComponent.js",
     "new:cont": "babel-node ./scripts/newContainer.js",
-    "precommit": "npm run lint",
     "prepush": "npm run lint && npm run test",
     "test": "jest --runInBand",
     "test:update": "jest -u",
