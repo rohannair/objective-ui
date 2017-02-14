@@ -13,13 +13,17 @@ import ObjectiveHeader from '../../components/ObjectiveHeader'
 import ObjectiveCollaboratorBar from '../../components/ObjectiveCollaboratorBar'
 import ObjectivesSidebar from '../../components/ObjectivesSidebar'
 import ObjectiveSidebarList from '../../components/ObjectiveSidebarList'
-
+import ObjectiveAdmin from '../../components/ObjectiveAdmin'
+import ObjectiveStatistics from '../../components/ObjectiveStatistics'
+import ObjectiveFeedSidebar from '../../components/ObjectiveFeedSidebar'
+import TaskList from '../../components/TaskList'
 
 import Button from '../../components/Button'
+import Alert from '../../components/Alert'
 
 import { StyledButton } from '../../components/Button/Button'
 
-import { ObjectiveChangeModal, SetOwnerModal } from './Modals'
+import { ObjectiveChangeModal, SetOwnerModal, ConfirmTaskDeleteModal } from './Modals'
 import AddCollaboratorModal from './Modals/AddCollaboratorModal'
 
 class Objectives extends Component {
@@ -38,7 +42,8 @@ class Objectives extends Component {
     this.defaultObjectiveState = {
       id: '',
       name: '',
-      endsAt: timestamp()
+      endsAt: timestamp(),
+      isPrivate: false
     }
 
     this.defaultAddCollaboratorState = {
@@ -55,6 +60,7 @@ class Objectives extends Component {
 
   render() {
     const { dispatch, data: { viewer, loading } } = this.props
+    const isOwner = viewer && viewer.objective && viewer.objective.owner && viewer.objective.owner.id === viewer.id
 
     if (loading && !viewer) {
       return <LoadingBar />
@@ -86,15 +92,66 @@ class Objectives extends Component {
             objective={viewer.objective}
             setOwner={this._showSetOwnerModal}
             addCollaborator={ this._showAddCollaboratorModal }
-            isOwner={viewer.objective && viewer.objective.owner && viewer.objective.owner.id === viewer.id}
+            isOwner={isOwner}
           />
 
-          <div className={styles.body}>
-            { viewer.objective && <ObjectiveFeed {...viewer.objective} viewer={viewer} /> }
-          </div>
+          <ObjectiveAdmin
+            isOwner={isOwner}
+            onPrivateChange={this._handleObjectivePrivacyChange}
+            objective={viewer.objective}/>
+
+          { this._objectiveBody(viewer, viewer.objective) }
         </div>
       </div>
     )
+  }
+
+  _objectiveBody = (viewer, objective) => {
+    if (!objective) return null
+
+    const isCollaborator = objective.owner && viewer.id == objective.owner.id ||
+      objective.collaborators.some(c => c.user_id == viewer.id)
+
+    return (
+      <div>
+        {
+          !viewer.objective.owner && (
+            <Alert type="warn">This objective has no owner. To claim it as your own, click the <strong>?</strong> above</Alert>
+          )
+        }
+        <div className={styles.body}>
+
+          <ObjectiveFeed {...viewer.objective} viewer={viewer} />
+          <ObjectiveFeedSidebar>
+            <ObjectiveStatistics>
+              <TaskList
+                tasks={viewer.objective.tasks}
+                saveTask={this._saveTask(objective.id)}
+                editTask={this._editTask(objective.id)}
+                deleteTask={this._confirmDeleteTask(objective.id)}
+                isCollaborator={isCollaborator} />
+            </ObjectiveStatistics>
+          </ObjectiveFeedSidebar>
+        </div>
+      </div>
+    )
+  }
+
+  _editTask = (objectiveId) => task => (this.props.editTask(task, objectiveId))
+  _saveTask = (objectiveId) => task => (this.props.createTask(task, objectiveId))
+  _confirmDeleteTask = (objectiveId) => task => {
+    this.props.dispatch(
+      this._showModal(
+        'Delete Task',
+        'Delete Task',
+        this._deleteTask(task),
+        <ConfirmTaskDeleteModal task={task} />
+      )
+    )
+  }
+
+  _deleteTask = (task) => () => {
+    this.props.deleteTask(task)
   }
 
   _claimOwnership = (owner) => {
@@ -137,6 +194,14 @@ class Objectives extends Component {
 
   _getObjective = (id) => {
     this.props.data.refetch({ id })
+  }
+
+  _handleObjectivePrivacyChange = (isPrivate) => {
+    const objective = {
+      ...this.props.data.viewer.objective,
+      isPrivate: isPrivate
+    }
+    this.props.editObjective({objective})
   }
 
   _handleObjectiveChange = (name) => val => {
@@ -249,6 +314,7 @@ const EDIT_OBJECTIVE = gql`
       name
       status
       endsAt
+      isPrivate
       owner {
         id
         img
@@ -281,8 +347,8 @@ const SEARCH_USERS = gql`
 
 const withEditMutation = graphql(EDIT_OBJECTIVE, {
   props: ({ mutate }) => ({
-    editObjective: ({ objective: { id, name, endsAt, owner }}) => mutate ({
-      variables: { id, name, endsAt, owner },
+    editObjective: ({ objective: { id, name, endsAt, owner, isPrivate }}) => mutate ({
+      variables: { id, name, endsAt, owner, isPrivate },
       optimisticResponse: {
         __typename: 'Mutation',
         editObjective: {
@@ -291,9 +357,8 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
           name,
           endsAt,
           status: 'draft',
-          owner: {
-            id: owner
-          }
+          isPrivate,
+          owner: owner.id
         }
       },
 
@@ -329,6 +394,7 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
           id: Math.random().toString(16).slice(2),
           endsAt,
           name,
+          isPrivate: false,
           status: 'draft'
         }
       },
@@ -343,6 +409,110 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
           return update(prev, {
             viewer: {
               objectives: { $set: objectives },
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
+const withCreateTaskMutation = graphql(TaskList.mutations.CREATE_TASK, {
+  props: ({mutate}) => ({
+    createTask: ({title, isComplete}, objectiveId) => mutate({
+      variables: {
+        title,
+        isComplete,
+        objective: objectiveId
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        createTask: {
+          __typename: 'Task',
+          id: Math.random().toString(16).slice(2),
+          title,
+          isComplete
+        }
+      },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult }) => {
+          if (!prev.viewer.objective) return prev
+          const { createTask } = mutationResult.data
+          const tasks = update(prev.viewer.objective.tasks, {
+            $push: [createTask]
+          })
+
+          return update(prev, {
+            viewer: {
+              objective: {
+                tasks: { $set: tasks }
+              }
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
+const withEditTaskMutation = graphql(TaskList.mutations.EDIT_TASK, {
+  props: ({mutate}) => ({
+    editTask: (task) => mutate({
+      variables: task,
+      optimisticResponse: {
+        __typename: 'Mutation',
+        editTask: {
+          __typename: 'Task',
+          ...task
+        }
+      },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult }) => {
+          if (!prev.viewer.objective) return prev
+          const { editTask } = mutationResult.data
+          const idx = prev.viewer.objective.tasks.findIndex(o => o.id === editTask.id)
+
+          const tasks = update(prev.viewer.objective.tasks, {
+            $splice: [[idx, 1, editTask]]
+          })
+
+          return update(prev, {
+            viewer: {
+              objective: {
+                tasks : { $set: tasks }
+              }
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
+const withDeleteTaskMutation = graphql(TaskList.mutations.DELETE_TASK, {
+  props: ({mutate}) => ({
+    deleteTask: ({ id }) => mutate({
+      variables: {id},
+      optimisticResponse: {
+        __typename: 'Mutation',
+        deleteTask: id
+      },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult }) => {
+          if (!prev.viewer.objective) return prev
+
+          const { deleteTask } = mutationResult.data
+          const idx = prev.viewer.objective.tasks.findIndex(o => o.id === deleteTask)
+
+          const tasks = update(prev.viewer.objective.tasks, {
+            $splice: [[idx, 1]]
+          })
+
+          return update(prev, {
+            viewer: {
+              objective: {
+                tasks: { $set: tasks }
+              }
             }
           })
         }
@@ -407,9 +577,15 @@ const GET_OBJECTIVELIST_QUERY = gql`
         id
         name
         status
+        isPrivate
       }
       objective(id: $id) {
         id
+        tasks {
+          id
+          title
+          isComplete
+        }
         ...ObjectiveHeaderFragment
         ...ObjectiveFeedFragment
       }
@@ -431,6 +607,9 @@ const withData = graphql(GET_OBJECTIVELIST_QUERY, {
 export default compose(
   withEditMutation,
   withCreateMutation,
+  withCreateTaskMutation,
+  withEditTaskMutation,
+  withDeleteTaskMutation,
   withAddCollaboratorMutation,
   withData,
   connect(state => state.global)

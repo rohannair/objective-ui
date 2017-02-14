@@ -23,6 +23,12 @@
   }
 }
 
+
+.lockIcon {
+  position: relative;
+  top: 0.2rem;
+}
+
 .meta {
   margin-left: auto;
   font-size: 0.85em;

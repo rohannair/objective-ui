@@ -1,0 +1,4 @@
+exports[`Test suite for ObjectiveTab component ObjectiveTab should exist 1`] = `
+<ObjectiveTab
+  className="iPXcnY" />
+`;

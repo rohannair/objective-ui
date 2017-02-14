@@ -7,9 +7,7 @@ const SnapshotContainer = styled.div`
   background-color: #fff;
   width: 100%;
   padding: 20px 0;
-  border: 1px solid #ddd;
-  border-top: 0;
-  margin-top: 20px;
+  margin-bottom: 30px;
 `
 
 export default SnapshotContainer

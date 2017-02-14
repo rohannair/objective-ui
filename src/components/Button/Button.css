@@ -61,6 +61,15 @@
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+.inline {
+  @extend regularbutton;
+
+  background-color: transparent;
+  color: $secondary;
+  border: none;
+  display: inline;
+}
+
 .sm {
   padding: 0 12px;
 }

@@ -24,3 +24,7 @@ export const ObjectiveChangeModal = ({
 )
 
 export const SetOwnerModal = () => (<p>It seems like this Objective was created without an owner. Would you like to set yourself as the owner?</p>)
+
+export const ConfirmTaskDeleteModal = ({task}) => (
+  <p>Are you sure you want to delete {task.title}?</p>
+)

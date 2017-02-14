@@ -1,0 +1,2 @@
+import EditSnapshotObjectiveModal from './EditSnapshotObjectiveModal'
+export default EditSnapshotObjectiveModal

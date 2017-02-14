@@ -6,10 +6,13 @@ import { Input } from 'react-toolbox/lib/input'
 const TextInput = (props) => {
   return (
     <Input
+      icon = { props.icon }
       label = { props.label || props.placeholder }
       onChange = { props.onChange }
+      onKeyPress = { props.onKeyPress }
       type = { props.type }
       defaultValue = { props.defaultValue }
+      className = { props.className }
     />
   )
 }
