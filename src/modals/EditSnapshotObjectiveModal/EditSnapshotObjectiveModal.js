@@ -1,6 +1,6 @@
 import React from 'react'
 
-import AutocompleteDropDown from '../../../../components/Forms/AutocompleteDropDown'
+import AutocompleteDropDown from '../../components/Forms/AutocompleteDropDown'
 
 const EditSnapshotObjectiveModal = ({
   source,
