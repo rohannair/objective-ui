@@ -107,12 +107,14 @@ class Feed extends Component {
       )
     })
 
+    const posteableObjectives = viewer.objectives.filter(v => (v.owner && v.owner.id === viewer.id) || (v.collaborators.reduce((acc, c) => c.user.id === viewer.id, false)))
+
     return (
       <div className={styles.Feed}>
         <div className={styles.body}>
           <div className={styles.feedBody}>
             <SnapshotEditor
-              dropdownValues={viewer.objectives}
+              dropdownValues={posteableObjectives}
               submit={this._submit}
             />
               {snapshots}
@@ -325,6 +327,14 @@ const GET_FEED_QUERY = gql`
       objectives {
         id
         name
+        owner {
+          id
+        }
+        collaborators {
+          user {
+            id
+          }
+        }
       }
       squads {
         id

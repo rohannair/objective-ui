@@ -109,8 +109,7 @@ class Objectives extends Component {
   _objectiveBody = (viewer, objective) => {
     if (!objective) return null
 
-    const isCollaborator = objective.owner && viewer.id == objective.owner.id ||
-      objective.collaborators.some(c => c.user_id == viewer.id)
+    const isCollaborator = (objective.owner && viewer.id === objective.owner.id) || (objective.collaborators.reduce((acc, c) => c.user.id === viewer.id, false))
 
     return (
       <div>
