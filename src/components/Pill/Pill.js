@@ -9,11 +9,12 @@ const Pill = p => {
     [styles.info]: p.info,
     [styles.warning]: p.warning,
     [styles.danger]: p.danger,
-    [styles.success]: p.success || (!p.info && !p.warning && !p.danger)
+    [styles.transparent]: p.transparent,
+    [styles.success]: p.success || (!p.info && !p.warning && !p.danger && !p.transparent)
   })
 
   return (
-    <span className={className}>
+    <span onClick={p.onClick} className={className}>
       { p.children }
     </span>
   )

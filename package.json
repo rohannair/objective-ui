@@ -16,7 +16,7 @@
     "new:cont": "babel-node ./scripts/newContainer.js",
     "precommit": "npm run lint",
     "prepush": "npm run lint && npm run test",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:update": "jest -u",
     "test:watch": "npm test -- --watch"
   },
@@ -113,6 +113,7 @@
     "apollo-client": "^0.8.2",
     "auth0-lock": "10.7.2",
     "axios": "0.15.2",
+    "babel-cli": "^6.22.2",
     "classnames": "2.2.5",
     "cookies-js": "1.2.2",
     "dateformat": "1.0.12",

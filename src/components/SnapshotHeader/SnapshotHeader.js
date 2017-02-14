@@ -2,25 +2,41 @@ import React, { PropTypes } from 'react'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
-import dateformat from 'dateformat'
-
 import Pill from '../Pill'
 import UserTab from '../UserTab'
+import ObjectiveTab from '../ObjectiveTab'
 
 const SnapshotHeader = styled((snap) => (
   <div className={snap.className}>
     <UserTab {...snap.user} >
-      { snap.objective && <Pill info>{snap.objective.name}</Pill>}
-      { snap.blocker && <Pill danger><i className={'zmdi zmdi-alert-circle-o'} /> BLOCKER!</Pill>}
-      <small>{dateformat(snap.createdAt, 'mmm dd h:MM TT')}</small>
+      <ObjectiveTab
+        readOnly={snap.readOnly}
+        objective={snap.objective}
+        editObjective={snap.editObjective}
+        blocker={snap.blocker}
+        createdAt={snap.createdAt}
+      />
     </UserTab>
   </div>
-))`
+  ))`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   padding: 0 10px;
 `
+
+SnapshotHeader.mutations = {
+  editSnapshotObjective : gql`
+    mutation editSnapshotObjective($objectiveId: String, $id: Int!) {
+      editSnapshotObjective(objectiveId: $objectiveId, id: $id) {
+        id
+        objective {
+          name
+        }
+      }
+    }
+  `
+}
 
 SnapshotHeader.fragments = {
   header: gql`
