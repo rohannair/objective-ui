@@ -107,10 +107,7 @@ class Feed extends Component {
       )
     })
 
-    const posteableObjectives = viewer.objectives.filter(v => {
-      return (v.owner && v.owner.id === viewer.id)
-        || (v.collaborators.reduce((acc, c) => c.id === viewer.id, false))
-    })
+    const posteableObjectives = viewer.objectives.filter(v => (v.owner && v.owner.id === viewer.id) || (v.collaborators.reduce((acc, c) => c.user.id === viewer.id, false)))
 
     return (
       <div className={styles.Feed}>
@@ -334,7 +331,9 @@ const GET_FEED_QUERY = gql`
           id
         }
         collaborators {
-          id
+          user {
+            id
+          }
         }
       }
       squads {
