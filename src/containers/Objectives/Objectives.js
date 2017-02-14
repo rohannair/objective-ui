@@ -17,6 +17,7 @@ import ObjectiveAdmin from '../../components/ObjectiveAdmin'
 import ObjectiveStatistics from '../../components/ObjectiveStatistics'
 import ObjectiveFeedSidebar from '../../components/ObjectiveFeedSidebar'
 import TaskList from '../../components/TaskList'
+import SnapshotHeader from '../../components/SnapshotHeader'
 
 import Button from '../../components/Button'
 import Alert from '../../components/Alert'
@@ -24,6 +25,8 @@ import Alert from '../../components/Alert'
 import { StyledButton } from '../../components/Button/Button'
 
 import { ObjectiveChangeModal, SetOwnerModal, ConfirmTaskDeleteModal } from './Modals'
+import EditSnapshotObjectiveModal from '../../modals/EditSnapshotObjectiveModal'
+
 import AddCollaboratorModal from './Modals/AddCollaboratorModal'
 
 class Objectives extends Component {
@@ -51,10 +54,23 @@ class Objectives extends Component {
       query: ''
     }
 
+    this.defaultEditSnapshotObjectiveState = {
+      objectiveId: '',
+      query: ''
+    }
+
+    this.defaultSnapshotState = {
+      id: '',
+      name: '',
+    }
+
     this.state = {
       objective: this.defaultObjectiveState,
-      addCollaborator: this.defaultAddCollaboratorState
+      addCollaborator: this.defaultAddCollaboratorState,
+      snapshot: this.defaultSnapshotState,
+      editSnapshotObjective: this.defaultEditSnapshotObjectiveState
     }
+
     this.modalAction = { type: 'SHOW_MODAL' }
   }
 
@@ -120,7 +136,7 @@ class Objectives extends Component {
         }
         <div className={styles.body}>
 
-          <ObjectiveFeed {...viewer.objective} viewer={viewer} />
+          <ObjectiveFeed {...viewer.objective} viewer={viewer} editSnapshotObjective={this._showEditSnapshotObjectiveModal} />
           <ObjectiveFeedSidebar>
             <ObjectiveStatistics>
               <TaskList
@@ -162,6 +178,42 @@ class Objectives extends Component {
       }
     })
   }
+
+  _handleEditSnapshotObjectiveChange = name => val => {
+    this.setState(prev => ({
+      editSnapshotObjective: {
+        ...prev.editSnapshotObjective,
+        [name]: val
+      }
+    }))
+  }
+
+  _editSnapshotObjective = () => {
+    const { objectiveId } = this.state.editSnapshotObjective
+    const { id } = this.state.snapshot
+    this.props.editSnapshotObjective(objectiveId, id)
+    this.setState({
+      editSnapshotObjective: this.defaultEditSnapshotObjectiveState,
+      snapshot: this.defaultSnapshotState
+    })
+  }
+
+  _showEditSnapshotObjectiveModal = ({ name, id }) => this.setState({
+    snapshot: { name, id }
+  }, () => this.props.dispatch(
+        this._showModal(
+          'Edit Objective',
+          'Edit Objective',
+          this._editSnapshotObjective,
+          <EditSnapshotObjectiveModal
+            onChange={this._handleEditSnapshotObjectiveChange('objectiveId')}
+            source={this.props.data.viewer.objectives}
+            query={this.state.editSnapshotObjective.query}
+            onQueryChange={this._handleEditSnapshotObjectiveChange('query')}
+          />
+        )
+      )
+    )
 
   _addCollaborator = () => {
     const { addCollaborator: { id } } = this.state
@@ -357,7 +409,7 @@ const withEditMutation = graphql(EDIT_OBJECTIVE, {
           endsAt,
           status: 'draft',
           isPrivate,
-          owner: owner.id
+          owner: owner && owner.id
         }
       },
 
@@ -557,6 +609,37 @@ const withAddCollaboratorMutation = graphql(ADD_COLLABORATOR, {
   })
 })
 
+const withEditSnapshotObjectiveMutation = graphql(SnapshotHeader.mutations.editSnapshotObjective, {
+  props: ({mutate}) => ({
+    editSnapshotObjective: (objectiveId, id) => mutate({
+      variables: {
+        objectiveId,
+        id
+      },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult }) => {
+          if (!prev.viewer.objective) return prev
+          const { editSnapshotObjective } = mutationResult.data
+          const snapshotIdx = prev.viewer.objective.snapshots.findIndex(s => s.id === editSnapshotObjective.id)
+          const prevSnapshot = prev.viewer.objective.snapshots[snapshotIdx]
+          const editedSnapshot = update(prevSnapshot, { $merge: { objective: editSnapshotObjective.objective }})
+          const snapshots = update(prev.viewer.objective.snapshots, {
+            $splice: [[snapshotIdx, 1, editedSnapshot]]
+          })
+
+          return update(prev, {
+            viewer: {
+              objective: {
+                snapshots: { $set: snapshots }
+              }
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
 const GET_OBJECTIVELIST_QUERY = gql`
   query ObjectiveList($id: String) {
     viewer {
@@ -610,6 +693,7 @@ export default compose(
   withEditTaskMutation,
   withDeleteTaskMutation,
   withAddCollaboratorMutation,
+  withEditSnapshotObjectiveMutation,
   withData,
   connect(state => state.global)
 )(Objectives)

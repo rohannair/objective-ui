@@ -20,7 +20,7 @@ import SnapshotContainer from '../../components/SnapshotContainer'
 import SnapshotHeader from '../../components/SnapshotHeader'
 import SnapshotBody from '../../components/SnapshotBody'
 import SnapshotFooter from '../../components/SnapshotFooter'
-import EditSnapshotObjectiveModal from './Modals/EditSnapshotObjectiveModal'
+import EditSnapshotObjectiveModal from '../../modals/EditSnapshotObjectiveModal'
 
 class Feed extends Component {
   static propTypes = {

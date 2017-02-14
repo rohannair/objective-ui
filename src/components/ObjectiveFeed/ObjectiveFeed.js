@@ -16,7 +16,7 @@ const ObjectiveFeed = p => {
     const isLiked = snap.reactions.some(r => r && r.user.id === p.viewer.id)
     return (
       <SnapshotContainer key={snap.id}>
-        <SnapshotHeader {...snap} readOnly />
+        <SnapshotHeader {...snap} editObjective={p.editSnapshotObjective.bind(this, snap)}/>
         <SnapshotBody
           img={snap.img}
           body= {snap.body }
