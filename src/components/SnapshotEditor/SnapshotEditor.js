@@ -19,17 +19,34 @@ class SnapshotEditor extends Component {
   constructor(props) {
     super(props)
 
-    this.getDefaultState = () => ({
-      blocker: false,
-      body: '',
-      objective: '',
-      img: '',
-      editorState: EditorState.createEmpty(),
-    })
+    this.getDefaultState = (dropdownValues) => {
+      let objective = ''
+      let objectiveEditable = true
+      if (dropdownValues.length == 1) {
+        objective = {
+          value: dropdownValues[0].id,
+          label: dropdownValues[0].name
+        }
+        objectiveEditable = false
+      }
+
+      return {
+        blocker: false,
+        body: '',
+        objective,
+        img: '',
+        editorState: EditorState.createEmpty(),
+        objectiveEditable
+      }
+    }
 
     this.state = {
-      ...this.getDefaultState()
+      ...this.getDefaultState(props.dropdownValues)
     }
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({...this.getDefaultState(props.dropdownValues)})
   }
 
   render() {
@@ -93,15 +110,16 @@ class SnapshotEditor extends Component {
     const editorState = EditorState.push(this.state.editorState, ContentState.createFromText(''))
 
     this.setState({
-      ...this.getDefaultState(),
+      ...this.getDefaultState(this.props.dropdownValues),
       editorState
     })
   }
 
   _clearStateProperty = (property) => {
+    if (property === 'objective' && !this.state.objectiveEditable) return
     this.setState(prev => ({
       ...prev.state,
-      [property]: this.getDefaultState()[property]
+      [property]: this.getDefaultState(this.props.dropdownValues)[property]
     }))
   }
   _handleChange = (name, val) => this.setState({ [name]: val })

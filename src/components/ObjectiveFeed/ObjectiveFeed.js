@@ -8,6 +8,7 @@ import SnapshotContainer from '../SnapshotContainer'
 import SnapshotHeader from '../SnapshotHeader'
 import SnapshotBody from '../SnapshotBody'
 import SnapshotFooter from '../SnapshotFooter'
+import SnapshotEditor from '../SnapshotEditor'
 
 const ObjectiveFeed = p => {
   const snapshots = (p.snapshots.length < 1)
@@ -32,6 +33,10 @@ const ObjectiveFeed = p => {
 
   return (
     <div className={styles.objectivefeed}>
+      <SnapshotEditor
+        dropdownValues={[p.objective]}
+        submit={p.submit}
+      />
       { snapshots }
     </div>
   )
@@ -40,6 +45,24 @@ const ObjectiveFeed = p => {
 const EmptyObjectiveFeed = () => (
   <Link to="/feed">Add some snapshots from the Feed</Link>
 )
+
+const NEW_SNAPSHOT = gql`
+  mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean, $img: String) {
+    addSnapshot(body: $body, objective: $objective, blocker: $blocker, img: $img) {
+      id
+      body
+      img
+      ...SnapshotHeaderFragment
+      ...SnapshotFooterFragment
+    }
+  }
+  ${SnapshotHeader.fragments.header}
+  ${SnapshotFooter.fragments.footer}
+`
+
+ObjectiveFeed.mutations = {
+  NEW_SNAPSHOT
+}
 
 ObjectiveFeed.fragments = {
   feed: gql`

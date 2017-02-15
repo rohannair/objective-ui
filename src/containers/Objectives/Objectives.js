@@ -136,7 +136,11 @@ class Objectives extends Component {
         }
         <div className={styles.body}>
 
-          <ObjectiveFeed {...viewer.objective} viewer={viewer} editSnapshotObjective={this._showEditSnapshotObjectiveModal} />
+          <ObjectiveFeed {...viewer.objective}
+            objective={viewer.objective}
+            viewer={viewer}
+            editSnapshotObjective={this._showEditSnapshotObjectiveModal}
+            submit={this._submit} />
           <ObjectiveFeedSidebar>
             <ObjectiveStatistics>
               <TaskList
@@ -151,6 +155,14 @@ class Objectives extends Component {
       </div>
     )
   }
+
+  _submit = (cb, vals) => {
+    const { submit } = this.props
+    const { body, blocker, objective, img } = vals
+    submit(body, blocker, objective, img)
+
+    cb()
+  };
 
   _editTask = (objectiveId) => task => (this.props.editTask(task, objectiveId))
   _saveTask = (objectiveId) => task => (this.props.createTask(task, objectiveId))
@@ -468,6 +480,30 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
   })
 })
 
+const withCreateSnapshotMutation = graphql(ObjectiveFeed.mutations.NEW_SNAPSHOT, {
+  props: ({ mutate }) => ({
+    submit: (body, blocker, objective, img) => mutate({
+      variables: { body, blocker, objective, img },
+      updateQueries: {
+        ObjectiveList: (prev, { mutationResult}) => {
+          const { addSnapshot } = mutationResult.data
+          const snapshots = update(prev.viewer.objective.snapshots, {
+            $splice: [[0, 0, addSnapshot]]
+          })
+
+          return update(prev, {
+            viewer: {
+              objective: {
+                snapshots : { $set: snapshots }
+              }
+            }
+          })
+        }
+      }
+    })
+  })
+})
+
 const withCreateTaskMutation = graphql(TaskList.mutations.CREATE_TASK, {
   props: ({mutate}) => ({
     createTask: ({title, isComplete}, objectiveId) => mutate({
@@ -694,6 +730,7 @@ export default compose(
   withDeleteTaskMutation,
   withAddCollaboratorMutation,
   withEditSnapshotObjectiveMutation,
+  withCreateSnapshotMutation,
   withData,
   connect(state => state.global)
 )(Objectives)
