@@ -387,4 +387,3 @@ export default compose(
   withEditSnapshotObjectiveMutation,
   connect(state => state.global)
 )(Feed)
-
