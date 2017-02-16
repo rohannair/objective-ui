@@ -22,6 +22,10 @@ const CoreLayout = ({ children }) =>
           <i className="zmdi zmdi-compass" />
           <span className={classes.nav__legend}>Objectives</span>
         </Link>
+        <Link to={'/users'}>
+          <i className="zmdi zmdi-account" />
+          <span className={classes.nav__legend}>People</span>
+        </Link>
       </nav>
 
       <nav className={classes.bottomNav}>

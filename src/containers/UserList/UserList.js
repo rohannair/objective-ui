@@ -1,6 +1,6 @@
 // Deps
 import React, { Component, PropTypes } from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import styles from './UserList.css'
@@ -147,57 +147,6 @@ class UserList extends Component {
   };
 }
 
-const NEW_USER_MUTATION = gql`
-  mutation inviteUser($email: String!) {
-    inviteUser(email: $email) {
-      ...UserMetaFields
-    }
-  }
-  ${UserMetaFields}
-`
-
-const withMutation = graphql(NEW_USER_MUTATION, {
-  props: ({ mutate }) => ({
-    invite: (email) => mutate({
-      variables: { email },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        inviteUser: {
-          __typename: 'User',
-          id: Math.random().toString(16).slice(2),
-          email,
-          firstName: '',
-          lastName: '',
-          img: '',
-          role: '',
-          jobTitle: '',
-          pending: true
-        }
-      },
-
-      updateQueries: {
-        UserList: (prev, { mutationResult }) => {
-          const newUser = mutationResult.data.inviteUser
-          return {
-            ...prev,
-            viewer: {
-              ...prev.viewer,
-              company: {
-                ...prev.viewer.company,
-                users: [
-                  newUser,
-                  ...prev.viewer.company.users
-                ]
-              }
-            }
-          }
-        }
-      }
-
-    })
-  })
-})
-
 const GET_USER_QUERY = gql`
   query UserList {
     viewer {
@@ -223,4 +172,4 @@ const GET_USER_QUERY = gql`
 
 const withData = graphql(GET_USER_QUERY)
 
-export default withData(withMutation(UserList))
+export default compose(withData)(UserList)
