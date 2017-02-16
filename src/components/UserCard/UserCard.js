@@ -45,7 +45,6 @@ const UserCard = ({ user }) => {
       </div>
 
       <div className={ styles.body }>
-        <p className={styles.squads}>{ returnSquadPill(user.squads) }</p>
         <p className={styles.missions}>{ returnObjectivesPill(user.objectives) }</p>
       </div>
 
