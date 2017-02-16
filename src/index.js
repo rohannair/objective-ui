@@ -28,7 +28,7 @@ const auth = new AuthService('t1FpGvQBC9DqqbaIzhKedem3yca1CQNB', 'objective.auth
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'api/graphql',
+    uri: '/api/graphql',
     dataIdFromObject: o => o.id
   })
 })
