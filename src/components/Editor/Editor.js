@@ -13,7 +13,7 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import createEmojiPlugin from 'draft-js-emoji-plugin'
 import { stateToHTML } from 'draft-js-export-html'
 
-const linkifyPlugin = createLinkifyPlugin()
+const linkifyPlugin = createLinkifyPlugin({ target: '_blank' })
 const mentionPlugin = createMentionPlugin()
 const emojiPlugin = createEmojiPlugin()
 

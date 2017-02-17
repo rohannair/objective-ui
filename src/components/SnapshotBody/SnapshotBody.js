@@ -1,8 +1,20 @@
 import React, { PropTypes } from 'react'
 import styled from 'styled-components'
+import Draft from 'draft-js-plugins-editor'
+import { EditorState, ContentState, convertFromRaw, CompositeDecorator, convertFromHTML, ContentBlock } from 'draft-js'
+import createLinkifyPlugin from 'draft-js-linkify-plugin'
 
 const SnapshotBody = p => {
-  const { img, body, className } = p
+  const { img, body, className, bodyJson } = p
+  let editorState = ''
+
+  if (bodyJson) {
+    const contentState = convertFromRaw(JSON.parse(bodyJson))
+    const linkifyPlugin = createLinkifyPlugin({ target: '_blank'})
+    const decorator = new CompositeDecorator(linkifyPlugin.decorators)
+
+    editorState = EditorState.createWithContent(contentState, decorator)
+  }
 
   return (
     <div className={className}>
@@ -15,7 +27,17 @@ const SnapshotBody = p => {
           </div>
         )
       }
-      { body && <div className="body" dangerouslySetInnerHTML={{ __html: body} }/>}
+      { bodyJson && editorState
+        ? (
+            <div className='body'>
+              <Draft readOnly editorState={editorState} onChange={() => {}}/>
+            </div>
+          )
+        :
+          (
+            body && <div className="body" dangerouslySetInnerHTML={{ __html: body} }/>
+          )
+      }
     </div>
   )
 }
