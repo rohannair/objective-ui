@@ -8,7 +8,7 @@ const SnapshotBody = p => {
   const { img, body, className, bodyJson } = p
 
   const _body = () => {
-    if (body) return <div className="body" dangerouslySetInnerHTML={{ __html: body }}/>
+    if (body && !bodyJson) return <div className="body" dangerouslySetInnerHTML={{ __html: body }}/>
 
     const linkifyPlugin = createLinkifyPlugin({ target: '_blank'})
 
