@@ -6,14 +6,23 @@ import createLinkifyPlugin from 'draft-js-linkify-plugin'
 
 const SnapshotBody = p => {
   const { img, body, className, bodyJson } = p
-  let editorState = ''
 
-  if (bodyJson) {
-    const contentState = convertFromRaw(JSON.parse(bodyJson))
-    const linkifyPlugin = createLinkifyPlugin({ target: '_blank'})
-    const decorator = new CompositeDecorator(linkifyPlugin.decorators)
+  const _body = () => {
+    if (bodyJson) {
+      const linkifyPlugin = createLinkifyPlugin({ target: '_blank'})
+      const decorator = new CompositeDecorator(linkifyPlugin.decorators)
+      const contentState = convertFromRaw(JSON.parse(bodyJson))
+      const editorState = EditorState.createWithContent(contentState, decorator)
 
-    editorState = EditorState.createWithContent(contentState, decorator)
+      return (
+        <div className='body'>
+          <Draft readOnly editorState={editorState} onChange={() => {}}/>
+        </div>
+      )
+    }
+    return (
+      body && <div className="body" dangerouslySetInnerHTML={{ __html: body }}/>
+    )
   }
 
   return (
@@ -27,17 +36,7 @@ const SnapshotBody = p => {
           </div>
         )
       }
-      { bodyJson && editorState
-        ? (
-            <div className='body'>
-              <Draft readOnly editorState={editorState} onChange={() => {}}/>
-            </div>
-          )
-        :
-          (
-            body && <div className="body" dangerouslySetInnerHTML={{ __html: body} }/>
-          )
-      }
+      { _body() }
     </div>
   )
 }
