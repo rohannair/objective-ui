@@ -8,21 +8,16 @@ const SnapshotBody = p => {
   const { img, body, className, bodyJson } = p
 
   const _body = () => {
-    if (bodyJson) {
-      const linkifyPlugin = createLinkifyPlugin({ target: '_blank'})
-      const decorator = new CompositeDecorator(linkifyPlugin.decorators)
-      const contentState = convertFromRaw(JSON.parse(bodyJson))
-      const editorState = EditorState.createWithContent(contentState, decorator)
+    if (body) return <div className="body" dangerouslySetInnerHTML={{ __html: body }}/>
 
-      return (
-        <div className='body'>
-          <Draft readOnly editorState={editorState} onChange={() => {}}/>
-        </div>
-      )
-    }
-    return (
-      body && <div className="body" dangerouslySetInnerHTML={{ __html: body }}/>
+    const linkifyPlugin = createLinkifyPlugin({ target: '_blank'})
+
+    const editorState = EditorState.createWithContent(
+      convertFromRaw(JSON.parse(bodyJson)),
+      new CompositeDecorator(linkifyPlugin.decorators)
     )
+
+    return <div className="body"><Draft readOnly editorState={editorState} onChange={() => {}}/></div>
   }
 
   return (
