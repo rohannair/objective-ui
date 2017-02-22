@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import styled from 'styled-components'
 import Draft from 'draft-js-plugins-editor'
-import { EditorState, ContentState, convertFromRaw, CompositeDecorator, convertFromHTML, ContentBlock } from 'draft-js'
+import { EditorState, ContentState, convertFromRaw, CompositeDecorator } from 'draft-js'
 import createLinkifyPlugin from 'draft-js-linkify-plugin'
 
 const SnapshotBody = p => {

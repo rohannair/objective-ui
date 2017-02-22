@@ -46,7 +46,12 @@ class SnapshotEditor extends Component {
   }
 
   componentWillReceiveProps(props) {
-    this.setState({...this.getDefaultState(props.dropdownValues)})
+    const editorState = EditorState.push(this.state.editorState, ContentState.createFromText(''))
+
+    this.setState({
+      ...this.getDefaultState(props.dropdownValues),
+      editorState
+    })
   }
 
   render() {
