@@ -132,11 +132,13 @@ class SnapshotEditor extends Component {
     const img = removeDataUrl(this.state.img)
     if (!(editorState.getCurrentContent().getBlockMap().reduce((acc, val) => acc + val.getText().trim().length, 0) > 5)) return
 
-    const body = stateToHTML(editorState.getCurrentContent()).toString()
+    const rawBody = convertToRaw(editorState.getCurrentContent())
+    const bodyJson = JSON.stringify(rawBody)
+
     this.props.submit(this._clearState, {
       objective: objective.value,
       blocker,
-      body,
+      bodyJson,
       img
     })
   }

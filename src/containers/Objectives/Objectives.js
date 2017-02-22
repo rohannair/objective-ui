@@ -158,8 +158,8 @@ class Objectives extends Component {
 
   _submit = (cb, vals) => {
     const { submit } = this.props
-    const { body, blocker, objective, img } = vals
-    submit(body, blocker, objective, img)
+    const { bodyJson, blocker, objective, img } = vals
+    submit(bodyJson, blocker, objective, img)
 
     cb()
   };
@@ -482,8 +482,8 @@ const withCreateMutation = graphql(NEW_OBJECTIVE, {
 
 const withCreateSnapshotMutation = graphql(ObjectiveFeed.mutations.NEW_SNAPSHOT, {
   props: ({ mutate }) => ({
-    submit: (body, blocker, objective, img) => mutate({
-      variables: { body, blocker, objective, img },
+    submit: (bodyJson, blocker, objective, img) => mutate({
+      variables: { bodyJson, blocker, objective, img },
       updateQueries: {
         ObjectiveList: (prev, { mutationResult}) => {
           const { addSnapshot } = mutationResult.data

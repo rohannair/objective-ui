@@ -21,6 +21,7 @@ const ObjectiveFeed = p => {
         <SnapshotBody
           img={snap.img}
           body= {snap.body }
+          bodyJson={snap.bodyJson}
         />
         <SnapshotFooter
           count={snap.reactions.length}
@@ -47,10 +48,11 @@ const EmptyObjectiveFeed = () => (
 )
 
 const NEW_SNAPSHOT = gql`
-  mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean, $img: String) {
-    addSnapshot(body: $body, objective: $objective, blocker: $blocker, img: $img) {
+  mutation addSnapshot($bodyJson: String, $objective: String, $blocker: Boolean, $img: String) {
+    addSnapshot(bodyJson: $bodyJson, objective: $objective, blocker: $blocker, img: $img) {
       id
       body
+      bodyJson
       img
       ...SnapshotHeaderFragment
       ...SnapshotFooterFragment
@@ -70,6 +72,7 @@ ObjectiveFeed.fragments = {
       snapshots {
         id
         body
+        bodyJson
         img
         ...SnapshotHeaderFragment
         ...SnapshotFooterFragment

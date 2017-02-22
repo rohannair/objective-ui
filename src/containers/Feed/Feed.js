@@ -96,6 +96,7 @@ class Feed extends Component {
           <SnapshotBody
             className={styles.snapshot__body}
             body={snap.body}
+            bodyJson={snap.bodyJson}
             img={snap.img}
           />
           <SnapshotFooter
@@ -127,8 +128,8 @@ class Feed extends Component {
 
   _submit = (cb, vals) => {
     const { submit } = this.props
-    const { body, blocker, objective, img } = vals
-    submit(body, blocker, objective, img)
+    const { bodyJson, blocker, objective, img } = vals
+    submit(bodyJson, blocker, objective, img)
 
     cb()
   };
@@ -178,10 +179,11 @@ class Feed extends Component {
   }
 
 const NEW_SNAPSHOT = gql`
-  mutation addSnapshot($body: String!, $objective: String, $blocker: Boolean, $img: String) {
-    addSnapshot(body: $body, objective: $objective, blocker: $blocker, img: $img) {
+  mutation addSnapshot($bodyJson: String, $objective: String, $blocker: Boolean, $img: String) {
+    addSnapshot(bodyJson: $bodyJson, objective: $objective, blocker: $blocker, img: $img) {
       id
       body
+      bodyJson
       img
       ...SnapshotHeaderFragment
       ...SnapshotFooterFragment
@@ -193,8 +195,8 @@ const NEW_SNAPSHOT = gql`
 
 const withMutation = graphql(NEW_SNAPSHOT, {
   props: ({ mutate }) => ({
-    submit: (body, blocker, objective, img) => mutate({
-      variables: { body, blocker, objective, img },
+    submit: (bodyJson, blocker, objective, img) => mutate({
+      variables: { bodyJson, blocker, objective, img },
       updateQueries: {
         Feed: (prev, { mutationResult}) => ({
           ...prev,
@@ -320,6 +322,7 @@ const GET_FEED_QUERY = gql`
       snapshots (first: $first, offset: $offset) {
         id
         body
+        bodyJson
         img
         ...SnapshotHeaderFragment
         ...SnapshotFooterFragment
