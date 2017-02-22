@@ -1,7 +1,52 @@
-@import '../../styles/globals'
-@import '../../styles/mixins'
-@import '../../styles/layout'
+@import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
 
 .userdetail {
-  @extend container
+  @extend container;
+}
+
+.container {
+  display: flex;
+}
+
+.avatarContainer {
+  flex: 0 0 auto;
+}
+
+.snapshotContainer {
+  flex: 1 0 auto;
+}
+
+.snapshotContainer,
+.avatarContainer {
+  margin: 15px;
+}
+
+.card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 5px 5px 1px #ccc;
+  background: white;
+}
+
+.avatar,
+.name,
+.jobTitle {
+  flex: 0 0 auto;
+}
+
+.avatar {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+}
+
+.jobTitle,
+.name  {
+  width: 75%;
+  margin: 2px auto;
+  text-align: center;
+  padding: 5px;
 }
