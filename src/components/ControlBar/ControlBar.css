@@ -1,0 +1,8 @@
+@import '../../styles/globals';
+@import '../../styles/mixins';
+@import '../../styles/layout';
+
+.controlBar {
+  @extend row;
+  @extend controlBar;
+}

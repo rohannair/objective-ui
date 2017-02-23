@@ -12,12 +12,6 @@ exports[`Test suite for UserCard component UserCard should exist 1`] = `
     <p>
       <Pill
         danger={true}>
-        No Squads
-      </Pill>
-    </p>
-    <p>
-      <Pill
-        danger={true}>
         No OKRs
       </Pill>
     </p>

@@ -1,7 +1,8 @@
 // Deps
 import React, { Component, PropTypes } from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
+import { Link } from 'react-router'
 
 import styles from './UserList.css'
 
@@ -12,7 +13,6 @@ import UserMetaFields from '../../fragments/UserMetaFields'
 import Button from '../../components/Button'
 import LoadingBar from '../../components/LoadingBar'
 
-import SkyLight from 'react-skylight'
 import TextInput from '../../components/Forms/TextInput'
 import UserCard from '../../components/UserCard'
 
@@ -36,9 +36,7 @@ class UserList extends Component {
     data: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
       viewer: PropTypes.object
-    }).isRequired,
-
-    invite: PropTypes.func.isRequired
+    }).isRequired
   }
 
   render() {
@@ -49,9 +47,9 @@ class UserList extends Component {
 
     const userCount = viewer.company.users.length
     const userItems = viewer.company.users.map(user =>
-      <div className={styles.listItem} key={user.id}>
+      <Link to={`/users/${user.id}`} className={styles.listItem} key={user.id}>
         <UserCard user={user} />
-      </div>)
+      </Link>)
 
     const skylightStyles = {
       width: '40%',
@@ -77,44 +75,6 @@ class UserList extends Component {
         <div className={styles.cardContainer}>
           { userItems }
         </div>
-
-        <SkyLight
-          hideOnOverlayClicked
-          title="Invite New User"
-          ref="dialog"
-          dialogStyles={ skylightStyles }
-          afterClose={this._clearState}
-        >
-          <form className={styles.addUserModal} onSubmit={ this._validateInviteUserInputs }>
-            <label className={styles.modal__item}>
-              <TextInput
-                type='email'
-                placeholder='Email'
-                value={this.state.newUser.email}
-                onChange={ val => this.setState({
-                  newUser: {
-                    ...this.state.newUser,
-                    email: val
-                  }
-                })}
-                />
-            </label>
-
-            <label className={styles.modal__item}>
-              <TextInput
-                placeholder='Job Title'
-                value={this.state.newUser.jobTitle}
-                onChange={ val => this.setState({
-                  newUser: {
-                    ...this.state.newUser,
-                    jobTitle: val
-                  }
-                })}
-                />
-            </label>
-            <Button primary onClick={ this._validateInviteUserInputs }>Send Invite</Button>
-          </form>
-        </SkyLight>
 
       </div>
     )
@@ -147,57 +107,6 @@ class UserList extends Component {
   };
 }
 
-const NEW_USER_MUTATION = gql`
-  mutation inviteUser($email: String!) {
-    inviteUser(email: $email) {
-      ...UserMetaFields
-    }
-  }
-  ${UserMetaFields}
-`
-
-const withMutation = graphql(NEW_USER_MUTATION, {
-  props: ({ mutate }) => ({
-    invite: (email) => mutate({
-      variables: { email },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        inviteUser: {
-          __typename: 'User',
-          id: Math.random().toString(16).slice(2),
-          email,
-          firstName: '',
-          lastName: '',
-          img: '',
-          role: '',
-          jobTitle: '',
-          pending: true
-        }
-      },
-
-      updateQueries: {
-        UserList: (prev, { mutationResult }) => {
-          const newUser = mutationResult.data.inviteUser
-          return {
-            ...prev,
-            viewer: {
-              ...prev.viewer,
-              company: {
-                ...prev.viewer.company,
-                users: [
-                  newUser,
-                  ...prev.viewer.company.users
-                ]
-              }
-            }
-          }
-        }
-      }
-
-    })
-  })
-})
-
 const GET_USER_QUERY = gql`
   query UserList {
     viewer {
@@ -223,4 +132,4 @@ const GET_USER_QUERY = gql`
 
 const withData = graphql(GET_USER_QUERY)
 
-export default withData(withMutation(UserList))
+export default compose(withData)(UserList)
